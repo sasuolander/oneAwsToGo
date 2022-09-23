@@ -16,6 +16,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//Add routes to the app
 routes.push(new UserRoutes(app));
 routes.push(new TemplateRoutes(app));
 
@@ -28,6 +29,7 @@ app.get("/",
 );
 
 app.listen(port, () => {
+    //Log routes
     routes.forEach((route: CommonRoutesConfig) => {
         console.log(`Routes configured for ${route.getName()}`);
     });

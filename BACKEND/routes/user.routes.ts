@@ -17,7 +17,7 @@ export class UserRoutes extends CommonRoutesConfig {
 
     this.app.route(`/templates/:templateId`)
         .all((req: Request, res: Response, next: NextFunction) => {
-            //This is called before any CRUD calls, can be used to authorize users maybe
+            //This is called before any CRUD calls, can be used to authorize users for example
             next();
         })
         .get((req: Request, res: Response) => {
