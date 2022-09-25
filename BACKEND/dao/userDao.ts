@@ -1,4 +1,4 @@
-import User from "../types/user.type";
+import User from "../types/userType";
 
 class UserDao {
     users: Array<User> = [];
@@ -12,7 +12,7 @@ class UserDao {
         user.id = this.idCount;
         this.users.push(user);
         this.idCount++;
-        return user.id;
+        return user;
     }
 
     async getUsers() {
@@ -27,6 +27,7 @@ class UserDao {
         const objIndex = this.users.findIndex(
             (obj: { id: number }) => obj.id === userId
         );
+        user.id = userId;
         this.users.splice(objIndex, 1, user);
         return `${user.id} updated via put`;
     }
@@ -41,4 +42,4 @@ class UserDao {
 
 }
 
-export default new UserDao();
+export default new UserDao;

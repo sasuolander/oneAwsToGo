@@ -1,9 +1,9 @@
-import TemplateDao from '../dao/template.dao';
-import Template from "../types/template.type";
+import TemplateDao from '../dao/templateDao';
+import Template from "../types/templateType";
 
 class TemplateService {
-    async create(resource: Template) {
-        return TemplateDao.addTemplate(resource);
+    async create(template: Template) {
+        return TemplateDao.addTemplate(template);
     }
 
     async deleteById(id: number) {
@@ -24,4 +24,4 @@ class TemplateService {
 
 }
 
-export default new TemplateService();
+export default new TemplateService;

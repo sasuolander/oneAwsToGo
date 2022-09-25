@@ -1,7 +1,7 @@
 import {Application} from 'express';
 
 //Abstract class used to config routes
-export abstract class CommonRoutesConfig {
+export abstract class CommonControllerConfig {
     app: Application;
     name: string;
 
