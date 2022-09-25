@@ -2,7 +2,7 @@ import {CommonControllerConfig} from '../utils/CommonRoutesConfig';
 import TemplateService from '../services/templateService';
 import {Application, Request, Response, NextFunction} from 'express';
 
-export class TemplateController extends CommonControllerConfig {
+export default class TemplateController extends CommonControllerConfig {
     constructor(app: Application) {
         super(app, 'TemplateRoutes');
     }

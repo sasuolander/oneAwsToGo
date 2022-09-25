@@ -2,8 +2,8 @@ import express, { Application, Request, Response } from "express";
 import {CommonControllerConfig} from './utils/CommonRoutesConfig';
 import bodyParser from "body-parser";
 import cors from "cors";
-import { UserController } from "./controllers/userController";
-import { TemplateController } from './controllers/templateController';
+import UserController  from "./controllers/userController";
+import TemplateController from './controllers/templateController';
 
 const app: Application = express();
 const port = 3000;

@@ -2,7 +2,7 @@ import {CommonControllerConfig} from '../utils/CommonRoutesConfig';
 import {Application, Request, Response, NextFunction} from 'express';
 import UserService from '../services/userService';
 
-export class UserController extends CommonControllerConfig {
+export default class UserController extends CommonControllerConfig {
     constructor(app: Application) {
         super(app, 'UserRoutes');
     }
@@ -36,3 +36,4 @@ export class UserController extends CommonControllerConfig {
     }
 
 }
+
