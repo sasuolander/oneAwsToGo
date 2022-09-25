@@ -25,11 +25,11 @@ export class UserController extends CommonControllerConfig {
         })
         .put(async (req: Request, res: Response) => {
             const responseMessage = await UserService.putById(parseInt(req.params.id), req.body);
-            res.status(204).send(responseMessage); 
+            res.status(204).send(); 
         })
         .delete(async (req: Request, res: Response) => {
             const responseMessage = await UserService.deleteById(parseInt(req.params.id));
-            res.status(204).send(responseMessage);
+            res.status(204).send();
         });
 
         return this.app;

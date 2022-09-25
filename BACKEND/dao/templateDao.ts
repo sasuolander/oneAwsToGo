@@ -10,7 +10,6 @@ class TemplateDao {
 
     async addTemplate(template: Template) {
         template.id = this.idCount;
-        console.log(template);
         this.templates.push(template);
         this.idCount++;
         return template;
@@ -24,10 +23,7 @@ class TemplateDao {
         return this.templates.find((Template: { id: number }) => Template.id === TemplateId);
     }
 
-    //TODO: The Template updated to the array doesn't have an id.
-    //TODO: Implement not found functionalities
     async putTemplateById(templateId: number, template: Template) {
-        console.log(templateId);
         const objIndex = this.templates.findIndex(
             obj => obj.id === templateId
         );
@@ -36,7 +32,6 @@ class TemplateDao {
         return `${template.id} updated via put`;
     }
 
-    //TODO: Implement not found functionalities
     async removeTemplateById(templateId: number) {
         const objIndex = this.templates.findIndex(
             (obj: { id: number }) => obj.id === templateId
