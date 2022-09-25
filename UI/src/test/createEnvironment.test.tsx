@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import CreateEnvironment from './components/createEnvironment';
+import CreateEnvironment from '../components/createEnvironment';
 
 test('renders learn react link', () => {
   render(<CreateEnvironment />);
