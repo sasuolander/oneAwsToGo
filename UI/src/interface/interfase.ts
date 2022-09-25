@@ -1,8 +1,8 @@
-export interface Template {
+export interface ITemplate {
     id: number;
     name: string;
 };
-export interface  User  {
+export interface  IUser  {
     id: number;
     name: string;
 };
