@@ -24,4 +24,4 @@ class TemplateService {
 
 }
 
-export default new TemplateService;
+export default TemplateService;

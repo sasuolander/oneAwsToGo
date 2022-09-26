@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import UserController  from "./controllers/userController";
 import TemplateController from './controllers/templateController';
+import TemplateService from "./services/templateService";
+import UserService from "./services/userService";
 
 const app: Application = express();
 const port = 3000;
@@ -17,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //Add routes to the app
-routes.push(new UserController(app));
-routes.push(new TemplateController(app));
+routes.push(new UserController(app, new UserService()));
+routes.push(new TemplateController(app, new TemplateService()));
 
 app.get("/",
     async (req: Request, res: Response): Promise<Response> => {
