@@ -6,6 +6,8 @@ class TemplateDao {
 
     constructor() {
         console.log("TemplateDao created");
+        const firstTemplate : ITemplate = {id : 0, name: "Placeholder Template"};
+        this.addTemplate(firstTemplate);
     }
 
     async addTemplate(template: ITemplate) {
