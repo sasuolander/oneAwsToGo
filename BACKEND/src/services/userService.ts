@@ -1,8 +1,8 @@
 import UserDao from '../dao/userDao';
-import User from "../types/userType";
+import IUser from "../interfaces/userInterface";
 
 class UserService {
-    async create(user: User) {
+    async create(user: IUser) {
         return UserDao.addUser(user);
     }
 
@@ -18,7 +18,7 @@ class UserService {
         return UserDao.getUserById(id);
     }
 
-    async putById(id: number, user: User) {
+    async putById(id: number, user: IUser) {
         return UserDao.putUserById(id, user);
     }
 

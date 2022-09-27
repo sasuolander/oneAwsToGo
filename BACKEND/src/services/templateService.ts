@@ -1,8 +1,8 @@
 import TemplateDao from '../dao/templateDao';
-import Template from "../types/templateType";
+import ITemplate from "../interfaces/templateInterface";
 
 class TemplateService {
-    async create(template: Template) {
+    async create(template: ITemplate) {
         return TemplateDao.addTemplate(template);
     }
 
@@ -18,7 +18,7 @@ class TemplateService {
         return TemplateDao.getTemplateById(id);
     }
 
-    async putById(id: number, resource: Template) {
+    async putById(id: number, resource: ITemplate) {
         return TemplateDao.putTemplateById(id, resource);
     }
 

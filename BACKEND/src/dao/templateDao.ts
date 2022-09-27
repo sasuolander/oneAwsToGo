@@ -1,14 +1,14 @@
-import Template from "../types/templateType";
+import ITemplate from "../interfaces/templateInterface";
 
 class TemplateDao {
-    templates: Array<Template> = [];
+    templates: Array<ITemplate> = [];
     idCount: number = 0;
 
     constructor() {
         console.log("TemplateDao created");
     }
 
-    async addTemplate(template: Template) {
+    async addTemplate(template: ITemplate) {
         template.id = this.idCount;
         this.templates.push(template);
         this.idCount++;
@@ -23,7 +23,7 @@ class TemplateDao {
         return this.templates.find((Template: { id: number }) => Template.id === TemplateId);
     }
 
-    async putTemplateById(templateId: number, template: Template) {
+    async putTemplateById(templateId: number, template: ITemplate) {
         const objIndex = this.templates.findIndex(
             obj => obj.id === templateId
         );

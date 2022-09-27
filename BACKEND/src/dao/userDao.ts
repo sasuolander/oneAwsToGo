@@ -1,14 +1,14 @@
-import User from "../types/userType";
+import IUser from "../interfaces/userInterface";
 
 class UserDao {
-    users: Array<User> = [];
+    users: Array<IUser> = [];
     idCount: number = 0;
 
     constructor() {
         console.log("UserDao created");
     }
 
-    async addUser(user: User) {
+    async addUser(user: IUser) {
         user.id = this.idCount;
         this.users.push(user);
         this.idCount++;
@@ -23,7 +23,7 @@ class UserDao {
         return this.users.find((user: { id: number }) => user.id === userId);
     }
 
-    async putUserById(userId: number, user: User) {
+    async putUserById(userId: number, user: IUser) {
         const objIndex = this.users.findIndex(
             (obj: { id: number }) => obj.id === userId
         );
