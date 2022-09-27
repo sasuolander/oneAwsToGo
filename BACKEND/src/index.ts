@@ -1,3 +1,4 @@
+require('dotenv').config()
 import express, { Application, Request, Response } from "express";
 import {CommonControllerConfig} from './utils/CommonRoutesConfig';
 import bodyParser from "body-parser";
@@ -6,12 +7,11 @@ import UserController  from "./controllers/userController";
 import TemplateController from './controllers/templateController';
 import TemplateService from "./services/templateService";
 import UserService from "./services/userService";
-
 const app: Application = express();
 const port = 3000;
 const routes: Array<CommonControllerConfig> = [];
 
-// Use CORS middleware 
+// Use CORS middleware
 app.use(cors());
 
 // Configuring body parser middleware
