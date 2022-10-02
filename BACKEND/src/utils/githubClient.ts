@@ -1,5 +1,5 @@
 import axios from "axios";
-import Utils from "./Utils";
+import Utils from "./utils";
 
 interface ICachePath {
     templateName: string
