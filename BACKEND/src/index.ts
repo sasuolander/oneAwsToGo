@@ -9,6 +9,7 @@ import TemplateService from "./services/templateService";
 import UserService from "./services/userService";
 import CloudformationController from "./controllers/cloudformationController";
 import CloudformationService from "./services/cloudformationService";
+import GithubClient from "./utils/githubClient";
 const app: Application = express();
 const port = 3000;
 const routes: Array<CommonControllerConfig> = [];
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 //Add routes to the app
 routes.push(new UserController(app, new UserService()));
 routes.push(new TemplateController(app, new TemplateService()));
-routes.push(new CloudformationController(app, new CloudformationService));
+routes.push(new CloudformationController(app, new CloudformationService(), new GithubClient()));
 
 app.get("/",
     async (req: Request, res: Response): Promise<Response> => {
