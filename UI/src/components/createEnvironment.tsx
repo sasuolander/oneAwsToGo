@@ -5,6 +5,7 @@ import FetchTemplateService from "../service/fetchTemplateService";
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
+import ITemplate from '../interface/templateInterface';
 
 const deployService = new DeployService();
 const templateService = new FetchTemplateService();
@@ -13,7 +14,7 @@ function CreateEnvironment() {
 
   const [envId, setEnvId] = useState("");
   const [templId, setTemplId] = useState("");
-  const [templates, setTemplates] = useState<any[]>([])
+  const [templates, setTemplates] = useState<ITemplate[]>([])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     alert("ID: " + envId + "\n" + "template: " + templId + "\n");
@@ -27,9 +28,7 @@ function CreateEnvironment() {
   });
   
   return (
-    <div className="App">
-      <header className="App-header">
-      </header>
+    <div className="create-environment-component">
       <h2>Create an environment</h2>
       <form id="form-ctrl" onSubmit={handleSubmit}>
         <div className="form-div">

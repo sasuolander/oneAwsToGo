@@ -1,3 +1,4 @@
+
 export default class Backend {
 
  // place rest api call code here they can be static method
@@ -6,8 +7,8 @@ export default class Backend {
     }
 
     static fetchTemplates(){
-        const URL = 'http://localhost:3000/templates';
-        return fetch(URL)
+        const templateURL = (process.env['REACT_APP_BASE_URL'] as string).concat("/templates");
+        return fetch(templateURL)
             .then(response => response.json())
             .then(data => {return data})
      }
