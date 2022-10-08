@@ -19,8 +19,8 @@ describe('Handle requests for /', () => {
 });
   
 describe('Handle requests for /templates', () => { 
-    it('should respond with JSON file when "/" is requested', async () => {
-        const response = await chai.request(app).get('/');
+    it('should respond with JSON file when "/templates" is requested', async () => {
+        const response = await chai.request(app).get('/templates');
         expect(response).to.have.status(200);
         expect(response).to.be.json;
     });
