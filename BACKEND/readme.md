@@ -6,3 +6,6 @@ HTTP GET, PUT and DELETE are available on: /users/:id, /templates:id
 
 Create file .env with properties:
 TEMP_FOLDER=
+AWS_PROFILE= // aws profile, , for local debugging
+AWS_REGION=eu-west-1 // aws region, for local debugging
+SERVER_PORT= // server port 
