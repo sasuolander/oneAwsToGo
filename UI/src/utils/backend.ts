@@ -22,7 +22,6 @@ export class Payload  implements  IPayload{
 export default class Backend {
 
     static fetchTemplates(){
-        console.log(process.env['REACT_APP_BASE_URL'] as string+"/templates")
         return axios.get(process.env['REACT_APP_BASE_URL'] as string+"/templates")
             .then(data => {return data})
      }

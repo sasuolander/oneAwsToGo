@@ -18,11 +18,9 @@ export default class TriggerService {
     async findTemplate(toBeDeployed: IPostPayload): Promise<{ found: boolean, data: ITemplate | undefined }> {
         let found = false;
         const templateFound = await this.templateService.readById(toBeDeployed.templateId)
-
         if (typeof templateFound !== "undefined" ){
             found = true
         }
-        console.log(templateFound)
         return {found: found, data: templateFound};
     }
 }

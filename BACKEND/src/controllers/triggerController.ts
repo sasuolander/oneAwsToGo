@@ -21,11 +21,8 @@ export default class TriggerController extends CommonControllerConfig{
         .post(async (req: Request, res: Response) => {
             const toBeDeployed : IPostPayload = req.body;
             const foundTemplate = await this.triggerService.findTemplate(toBeDeployed);
-            console.log(toBeDeployed)
-            console.log(toBeDeployed.templateId,foundTemplate)
             if(foundTemplate.found) {
                 const templateSourceCode = await this.githubClient.getTemplate(foundTemplate.data?.url);
-                console.log(templateSourceCode)
                 const data = foundTemplate.data as ITemplate
                 const template = new Template(data.id,data.name,data.templateFormat,templateSourceCode,data.url)
 
@@ -47,7 +44,6 @@ export default class TriggerController extends CommonControllerConfig{
                 switch (template.templateFormat) {
                     case TemplateFormat.CloudFormation:
                         const deploy = await this.triggerService.deployTemplate<Output>(name,template.templateSourceCode,new CloudFormationDeploy);
-                        console.log(deploy);
                         // TODO change this into to requestID in future, need to check can ui remember this or do we save it into  database
                         return deploy.$metadata.httpStatusCode;
                     case TemplateFormat.CDK: throw  Error( "Not Implemented")

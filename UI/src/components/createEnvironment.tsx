@@ -34,7 +34,6 @@ function CreateEnvironment() {
   useEffect(() => {
     const promise = templateService.getTemplates();
     promise.then(function(response) {
-        console.log(response.data)
       setTemplates(response.data);
     });
   });

@@ -14,8 +14,6 @@ export interface Output extends MetadataBearer{}
 export default class CloudFormationDeploy implements IDeploy<Promise<any>,Parameter[]> {
     async deploy(deploymentName:string,templateData: string, parameter:Parameter[]): Promise<any> {
         const client = new CloudFormationClient({});
-        console.log("templateData")
-        console.log(templateData)
         const input = new InputWithParameter(deploymentName,templateData,parameter)
         const command = new CreateStackCommand(input);
         return client.send(command);
