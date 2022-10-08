@@ -10,7 +10,7 @@ export default class UserController extends CommonControllerConfig {
         this.userService = userService;
     }
 
-    configureRoutes() {
+    configureRoutes() : Application {
         this.app.route(`/users`)
         .get(async (req: Request, res: Response) => {
             const users = await this.userService.list();

@@ -10,7 +10,7 @@ export default class TemplateController extends CommonControllerConfig{
         this.templateService = templateService;  
     }
 
-    configureRoutes() {
+    configureRoutes() : Application{
         this.app.route(`/templates`)
         .get(async (req: Request, res: Response) => {
             const templates = await this.templateService.list();
