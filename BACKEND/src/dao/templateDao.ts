@@ -1,12 +1,16 @@
-import ITemplate from "../interfaces/templateInterface";
+import ITemplate, {TemplateFormat} from "../interfaces/templateInterface";
 
 class TemplateDao {
     templates: Array<ITemplate> = [];
-    idCount: number = 0;
+    idCount: number = 1;
 
     constructor() {
         console.log("TemplateDao created");
-        const firstTemplate : ITemplate = {id : 0, name: "Placeholder Template"};
+        const firstTemplate : ITemplate = {
+            id : 1,
+            name: "Website in S3 bucket",
+            url:"https://raw.githubusercontent.com/sasuolander/templatesAWS/master/S3_Website_Bucket_With_Retain_On_Delete.yaml",
+            templateFormat: TemplateFormat.CloudFormation, templateSourceCode:""};
         this.addTemplate(firstTemplate);
     }
 

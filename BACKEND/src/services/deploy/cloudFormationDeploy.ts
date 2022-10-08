@@ -7,32 +7,18 @@ import {
     Parameter
 } from "@aws-sdk/client-cloudformation";
 import {CreateStackCommandInput} from "@aws-sdk/client-cloudformation/dist-types/commands/CreateStackCommand";
-import {Credentials, Provider} from "@aws-sdk/types";
-import {AwsAuthInputConfig} from "@aws-sdk/middleware-signing";
-// await new CloudFormationDeploy().deploy("test",client,[]) as Promise<string>
+import {MetadataBearer} from "@aws-sdk/types";
+
+export interface Output extends MetadataBearer{}
+
 export default class CloudFormationDeploy implements IDeploy<Promise<any>,Parameter[]> {
     async deploy(deploymentName:string,templateData: string, parameter:Parameter[]): Promise<any> {
-        const client = new CloudFormationClient(new Test(new Norm("","")));
+        const client = new CloudFormationClient({});
+        console.log("templateData")
+        console.log(templateData)
         const input = new InputWithParameter(deploymentName,templateData,parameter)
         const command = new CreateStackCommand(input);
         return client.send(command);
-    }
-}
-
- class Norm implements Credentials {
-     readonly accessKeyId: string;
-     readonly secretAccessKey: string;
-
-     constructor(accessKeyId:string,secretAccessKey:string) {
-         this.accessKeyId =accessKeyId
-         this.secretAccessKey = secretAccessKey
-     }
- }
-
-class Test implements  AwsAuthInputConfig{
-    credentials?: Credentials | Provider<Credentials>;
-    constructor(credentials:Credentials) {
-        this.credentials=credentials
     }
 }
 

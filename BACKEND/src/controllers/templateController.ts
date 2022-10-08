@@ -7,7 +7,7 @@ export default class TemplateController extends CommonControllerConfig{
 
     constructor(app: Application, templateService: TemplateService) {
         super(app, "TemplateController");
-        this.templateService = templateService;  
+        this.templateService = templateService;
     }
 
     configureRoutes() : Application{

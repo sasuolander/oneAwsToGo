@@ -1,23 +1,28 @@
-import GithubClient from "../utils/githubClient"
-import CloudFormationDeploy from "./deploy/cloudFormationDeploy"
 import TemplateService from "./templateService";
 import IPostPayload from "../interfaces/postpayloadinterface";
+import IDeploy from "../interfaces/deployInterface";
+import ITemplate from "../interfaces/templateInterface";
 
 export default class TriggerService {
+    private templateService: TemplateService
 
-    async deploy(client: string) {
-        const deployed = await new CloudFormationDeploy().deploy("test",client,[]) as Promise<string>;
-        return deployed;
+    constructor(templateService: TemplateService) {
+        this.templateService = templateService
     }
 
-    async findTemplate(toBeDeployed : IPostPayload, templateService : TemplateService) : Promise<boolean> {
-        const templates = await templateService.list();
+    async deployTemplate<T>(name:string,sourceCode: string, deployImpl: IDeploy<any, any>): Promise<T> {
+        console.log("deployTemplate",sourceCode)
+        return await deployImpl.deploy(name, sourceCode, []) as Promise<T>;
+    }
+
+    async findTemplate(toBeDeployed: IPostPayload): Promise<{ found: boolean, data: ITemplate | undefined }> {
         let found = false;
-        templates.forEach(template => {
-            if(template.name === toBeDeployed.templateName) {
-                found = true;
-            }
-        });
-            return found;
+        const templateFound = await this.templateService.readById(toBeDeployed.templateId)
+
+        if (typeof templateFound !== "undefined" ){
+            found = true
+        }
+        console.log(templateFound)
+        return {found: found, data: templateFound};
     }
 }
