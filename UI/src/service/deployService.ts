@@ -1,8 +1,7 @@
 import Backend from "../utils/backend";
 
 export default class DeployService {
-
-     makeComeCall(input:string): string {
-        return Backend.testCall(input)
-     }
+    triggerCreation(id:number,name:string): void {
+        Backend.triggerCreation(id,name)
+    }
 }
