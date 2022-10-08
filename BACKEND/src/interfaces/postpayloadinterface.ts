@@ -1,3 +1,7 @@
+import {TemplateFormat} from "./templateInterface";
+
 export default interface IPostPayload {
-    templateName:string
-} 
+    deploymentName:string
+    templateId:number
+    templateFormat:TemplateFormat
+}
