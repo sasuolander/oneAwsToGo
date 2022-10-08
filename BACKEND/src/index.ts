@@ -7,7 +7,7 @@ import UserController  from "./controllers/userController";
 import TemplateController from './controllers/templateController';
 import TemplateService from "./services/templateService";
 import UserService from "./services/userService";
-const app: Application = express();
+export const app: Application = express();
 const port = 3000;
 const routes: Array<CommonControllerConfig> = [];
 
