@@ -3,7 +3,7 @@ import CloudFormationDeploy from "./deploy/cloudFormationDeploy"
 import TemplateService from "./templateService";
 import IPostPayload from "../interfaces/postpayloadinterface";
 
-export default class CloudformationService {
+export default class TriggerService {
 
     async deploy(client: string) {
         const deployed = await new CloudFormationDeploy().deploy("test",client,[]) as Promise<string>;
