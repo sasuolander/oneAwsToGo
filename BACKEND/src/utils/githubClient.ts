@@ -9,15 +9,18 @@ interface ICachePath {
 export default class GithubClient {
     static cache: ICachePath[]
 
-    async fetchTemplate(url: string): Promise<string> {
-        return axios.get(url).then(r => {
-            return r.data
-        })
+    async fetchTemplate(url: string | undefined): Promise<string> {
+        if ( typeof url !=="undefined") {
+            return axios.get(<string>url).then(r => {
+                return r.data
+            })
+        } else  {
+        throw Error("Trying fetch something with undefined url")
+        }
     }
 
     // TODO add logic to use cache if needed
-    // const client = await new GithubClient().getTemplate("test","https://raw.githubusercontent.com/sasuolander/templatesAWS/master/S3_Website_Bucket_With_Retain_On_Delete.yaml")
-    async getTemplate(templateName: string, templateURL: string, cache: boolean = false): Promise<string> {
+    async getTemplate(templateURL: string | undefined, cache: boolean = false,templateName: string = ""): Promise<string> {
         const response = await this.fetchTemplate(templateURL)
         if (cache) {
             const dirr = process.env.TEMP_FOLDER + "\\" + templateName
