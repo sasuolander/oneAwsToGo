@@ -10,7 +10,7 @@ import UserService from "./services/userService";
 import TriggerController from "./controllers/triggerController";
 import TriggerService from "./services/triggerService";
 import GithubClient from "./utils/githubClient";
-const app: Application = express();
+export const app: Application = express();
 const port = process.env.SERVER_PORT;
 const routes: Array<CommonControllerConfig> = [];
 
