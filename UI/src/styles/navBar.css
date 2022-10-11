@@ -1,0 +1,12 @@
+.main-navbar{
+    position: "static";
+    top:0;
+    width: 100%;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+    margin-right: 10px;
+}
