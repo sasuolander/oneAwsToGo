@@ -1,10 +1,10 @@
-import React from "react";
+import "../styles/mainPage.css"
 import CreateEnvironment from "../components/createEnvironment";
 
 export default function MainPage() {
     return (
-        <div id="mainpage" className="mainpage">
-            <CreateEnvironment />
-        </div>
+            <div id="main-page" className="mainPage">
+                <CreateEnvironment/>
+            </div>
     );
 }
