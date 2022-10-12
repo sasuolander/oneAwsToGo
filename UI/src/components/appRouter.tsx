@@ -1,15 +1,15 @@
 import {Routes, Route} from "react-router-dom"
 import NavBar from "../components/navBar"
-import DummyPage1 from '../pages/dummyPage1';
-import DummyPage2 from '../pages/dummyPage2';
+import MainPage from '../pages/mainPage';
+import DummyPage from '../pages/dummyPage';
 
 export function AppRouter() {
     return (
       <>
         <NavBar/>
         <Routes>
-          <Route path="/" element={<DummyPage1/>}></Route>
-          <Route path="/dummy" element={<DummyPage2/>}></Route>
+          <Route path="/" element={<MainPage/>}></Route>
+          <Route path="/dummy" element={<DummyPage/>}></Route>
         </Routes>
       </>  
     );

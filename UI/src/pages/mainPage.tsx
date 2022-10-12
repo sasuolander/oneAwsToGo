@@ -1,12 +1,10 @@
-import "../styles/dummyPage1.css"
+import "../styles/mainPage.css"
 import CreateEnvironment from "../components/createEnvironment";
 
 export default function MainPage() {
     return (
-        <body>
-            <div id="dummy-page1" className="dummyPage1">
+            <div id="main-page" className="mainPage">
                 <CreateEnvironment/>
             </div>
-        </body>
     );
 }
