@@ -45,10 +45,6 @@ function CreateEnvironment() {
 
     });
 
-    const handleError = (error: string) => {
-        alert(error);
-    }
-
     return (
         <div className="create-environment-component">
             <h2>Create an environment</h2>
