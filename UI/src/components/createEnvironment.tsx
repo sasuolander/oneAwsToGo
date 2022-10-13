@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import ITemplate from '../interface/templateInterface';
+import { preProcessFile } from 'typescript';
 
 // TODO think out injection or provider system when using service in react
 const deployService = new DeployService();
@@ -22,22 +23,31 @@ interface IEventSubmit extends React.FormEvent<HTMLFormElement> {
 function CreateEnvironment() {
 
     const [envId, setEnvId] = useState("");
-    const [templId, setTempId] = useState(0);
+    const [templId, setTempId] = useState("");
     const [templates, setTemplates] = useState<ITemplate[]>([])
+    const [templatesReady, setTemplatesReady] = useState("false");
 
     const handleSubmit = (event: IEventSubmit) => {
-        if (templId !== 0) {
-            deployService.triggerCreation(templId, envId)
+        if (templId !== "") {
+            deployService.triggerCreation(Number(templId), envId)
         }
     }
 
     useEffect(() => {
-        const promise = templateService.getTemplates();
-        promise.then(function (response) {
-            setTemplates(response.data);
-        });
+        if(templatesReady === "false") {
+            const promise = templateService.getTemplates();
+            promise.then(function (response) {
+                setTemplates(response.data);
+            
+            });
+            setTemplatesReady("true");
+        }
+
     });
 
+    const handleError = (error: string) => {
+        alert(error);
+    }
 
     return (
         <div className="create-environment-component">
@@ -51,7 +61,7 @@ function CreateEnvironment() {
                 </div>
                 <div className="form-div">
                     <TextField id="template-dropdown" label="Template" helperText="Select a template" variant="outlined"
-                               value={templId} onChange={(e: IEventChange) => setTempId(Number(e.target.value))} select
+                               value={templId} onChange={(e: IEventChange) => setTempId(e.target.value)} select
                                required>
                         {templates.map((template) => {
                             return (
