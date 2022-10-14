@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import ITemplate from '../interface/templateInterface';
-import { preProcessFile } from 'typescript';
 
 // TODO think out injection or provider system when using service in react
 const deployService = new DeployService();
