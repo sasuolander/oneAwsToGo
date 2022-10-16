@@ -5,9 +5,6 @@ COPY UI .
 RUN npm install
 RUN npm run build
 
-ARG BACKEND_APP_BASE_URL
-ENV BACKEND_APP_BASE_URL='http://127.0.0.1/api'
-
 FROM node:17-alpine AS buildbackeng
 
 WORKDIR /app
@@ -25,7 +22,6 @@ RUN apk add nodejs=16.17.1-r0 && npm=8.19.1-r0
 #ENV AWS_PROFILE=""
 #ENV AWS_REGION=""
 ENV SERVER_PORT=3001
-ENV BACKEND_APP_BASE_URL='http://127.0.0.1/api'
 
 COPY nginx-conf/server.conf /etc/nginx/conf.d/server.conf
 COPY nginx-conf/nginx.conf /etc/nginx/
