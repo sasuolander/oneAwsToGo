@@ -30,13 +30,13 @@ function CreateEnvironment() {
             deployService.triggerCreation(templId, envId)
         }
     }
-
+    //https://blog.logrocket.com/solve-react-useeffect-hook-infinite-loop-patterns/
     useEffect(() => {
         const promise = templateService.getTemplates();
         promise.then(function (response) {
             setTemplates(response.data);
         });
-    });
+    },[]);
 
 
     return (
