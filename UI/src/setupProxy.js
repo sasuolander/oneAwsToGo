@@ -8,7 +8,7 @@ module.exports = function(app) {
             pathRewrite:{
                 'api':''
             },
-            target: 'http://localhost:3001',
+            target: process.env.BACKEND_APP_BASE_URL,
             changeOrigin: true,
         })
     );
