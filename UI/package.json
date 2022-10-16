@@ -31,8 +31,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "packed": "Compress-Archive -DestinationPath app.zip -Path ./build/*",
-    "packedBash": "zip -r app.zip ./build/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
