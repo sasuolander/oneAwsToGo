@@ -42,7 +42,7 @@ function CreateEnvironment() {
             setTemplatesReady("true");
         }
 
-    });
+    }, [templatesReady]);
 
     return (
         <div className="create-environment-component">
