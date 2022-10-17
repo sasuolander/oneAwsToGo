@@ -1,12 +1,12 @@
-import DeployedStackService from "../services/deployedStackService";
+import InDeploymentStackService from "../services/inDeploymentStackService";
 import { CommonControllerConfig } from "../utils/CommonRoutesConfig";
 import {Application, Request, Response} from 'express';
 import { stat } from "fs";
 
-export default class DeployedStackController extends CommonControllerConfig {
-    private deploymentStatusService : DeployedStackService
+export default class InDeploymentStackController extends CommonControllerConfig {
+    private deploymentStatusService : InDeploymentStackService
 
-    constructor(app: Application, deploymentStatusService: DeployedStackService) {
+    constructor(app: Application, deploymentStatusService: InDeploymentStackService) {
         super(app, "DeploymentStatusController");
         this.deploymentStatusService = deploymentStatusService;
     }

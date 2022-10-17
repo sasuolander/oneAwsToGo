@@ -1,10 +1,10 @@
-interface IDeployedStack {
+interface IInDeploymentStack {
     id: number;
     name: string;
     stackId: string;
     status: string;
   };
-export class DeployedStack implements IDeployedStack {
+export class InDeploymentStack implements IInDeploymentStack {
     id: number;
     name: string;
     stackId: string;
@@ -20,4 +20,4 @@ export class DeployedStack implements IDeployedStack {
 
 }
 
-export default IDeployedStack;
+export default IInDeploymentStack;

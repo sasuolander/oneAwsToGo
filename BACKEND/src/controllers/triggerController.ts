@@ -5,15 +5,15 @@ import GithubClient from "../utils/githubClient";
 import IPostPayload from "../interfaces/postpayloadinterface";
 import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDeploy";
 import ITemplate, {Template, TemplateFormat} from "../interfaces/templateInterface";
-import DeployedStackService from "../services/deployedStackService";
-import IDeployedStack from "../interfaces/deployedStackInterface";
+import InDeploymentStackService from "../services/inDeploymentStackService";
+import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
 
 export default class TriggerController extends CommonControllerConfig {
     private triggerService: TriggerService;
     private githubClient: GithubClient;
-    private deployedStackService : DeployedStackService;
+    private deployedStackService : InDeploymentStackService;
 
-    constructor(app: Application, triggerService: TriggerService, githubClient: GithubClient, deployedStackService: DeployedStackService) {
+    constructor(app: Application, triggerService: TriggerService, githubClient: GithubClient, deployedStackService: InDeploymentStackService) {
         super(app, "TriggerController");
         this.triggerService = triggerService;
         this.githubClient = githubClient;
@@ -23,13 +23,13 @@ export default class TriggerController extends CommonControllerConfig {
     configureRoutes(): Application {
         this.app.route(`/trigger`)
             .post(async (req: Request, res: Response) => {
-                const toBeDeployed: IPostPayload = req.body;
-                const foundTemplate = await this.triggerService.findTemplate(toBeDeployed);
+                const toBeInDeployment: IPostPayload = req.body;
+                const foundTemplate = await this.triggerService.findTemplate(toBeInDeployment);
                 if (foundTemplate.found) {
                     const data = foundTemplate.data as ITemplate;
                     const templateSourceCode = await this.githubClient.getTemplate(data.url);
                     const template = new Template(data.id, data.name, data.templateFormat, templateSourceCode, data.url)
-                    const deployed = await this.deployTemplate(toBeDeployed.deploymentName, template);
+                    const deployed = await this.deployTemplate(toBeInDeployment.deploymentName, template);
                     if (deployed != null) {
                         res.status(deployed).send("Stack deployed");
                     }
@@ -49,7 +49,7 @@ export default class TriggerController extends CommonControllerConfig {
                         const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode, new CloudFormationDeploy);
                         console.log(deploy);
                         //@ts-ignore
-                        const newDeployment = {name: name, stackId: deploy.StackId} as IDeployedStack;
+                        const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
                         this.deployedStackService.create(newDeployment);
                         
                         // TODO change this into to requestID in future, need to check can ui remember this or do we save it into  database
