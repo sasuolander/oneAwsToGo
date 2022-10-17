@@ -1,0 +1,9 @@
+UI/node_modules
+UI/npm-debug.log
+UI/.env
+UI/build
+
+BACKEND/node_modules
+BACKEND/npm-debug.log
+BACKEND/.env
+BACKEND/build

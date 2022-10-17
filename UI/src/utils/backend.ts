@@ -18,11 +18,11 @@ export class Payload implements IPayload {
         this.deploymentName = deploymentName
     }
 }
-
+export const baseApi ="/api"
 export default class Backend {
 
     static fetchTemplates() {
-        return axios.get(process.env['REACT_APP_BASE_URL'] as string + "/templates")
+        return axios.get(baseApi as string + "/templates")
             .then(data => {
                 return data
             })
@@ -30,7 +30,7 @@ export default class Backend {
 
     static triggerCreation(id: number, name: string): void {
         // TODO remove hard coded format when we start supporting different template format
-        axios.post(process.env['REACT_APP_BASE_URL'] as string + "/trigger", new Payload(id, TemplateFormat.CloudFormation, name)).then(r => {
+        axios.post(baseApi as string + "/trigger", new Payload(id, TemplateFormat.CloudFormation, name)).then(r => {
             return r;
         })
     }
