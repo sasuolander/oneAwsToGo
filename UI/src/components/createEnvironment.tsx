@@ -31,18 +31,18 @@ function CreateEnvironment() {
             deployService.triggerCreation(Number(templId), envId)
         }
     }
-
+    //https://blog.logrocket.com/solve-react-useeffect-hook-infinite-loop-patterns/
     useEffect(() => {
         if(templatesReady === "false") {
             const promise = templateService.getTemplates();
             promise.then(function (response) {
                 setTemplates(response.data);
-            
+
             });
             setTemplatesReady("true");
         }
 
-    }, [templatesReady]);
+    },[]);
 
     return (
         <div className="create-environment-component">
