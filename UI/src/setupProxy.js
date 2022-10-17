@@ -4,7 +4,7 @@ module.exports = function(app) {
     app.use(
         '/api',
         createProxyMiddleware({
-            logLevel:'debug',
+            logLevel:'info',
             pathRewrite:{
                 'api':''
             },
