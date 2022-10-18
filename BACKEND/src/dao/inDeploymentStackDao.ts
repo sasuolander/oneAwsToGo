@@ -20,8 +20,8 @@ class InDeploymentStackDao {
         return this.deployedStacks;
     }
 
-    async getInDeploymentStackById(InDeploymentStackId: number) {
-        return this.deployedStacks.find((InDeploymentStack: { id: number }) => InDeploymentStack.id === InDeploymentStackId);
+    async getInDeploymentStackById(inDeploymentStackId: number) {
+        return this.deployedStacks.find((InDeploymentStack: { id: number }) => InDeploymentStack.id === inDeploymentStackId);
     }
 
     async getInDeploymentStackByStackId(stackId: string) {
@@ -35,6 +35,15 @@ class InDeploymentStackDao {
         deployedStack.id = deployedStackId;
         this.deployedStacks.splice(objIndex, 1, deployedStack);
         return `${deployedStack.id} updated via put`;
+    }
+
+    async changeStackStatus(inDeploymentStackId: number, status : string) {
+        const stack = this.deployedStacks.find((InDeploymentStack: { id: number }) => InDeploymentStack.id === inDeploymentStackId);
+        if(stack) {
+            stack.status = status;
+            return 200;
+        }
+        return 404;
     }
 
     async removeInDeploymentStackById(deployedStackId: number) {
