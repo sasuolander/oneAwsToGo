@@ -12,7 +12,7 @@ const Input = ({
   const { handleChange } = useContext(FormContext);
   return (
     <div className="form-group">
-      <label htmlFor="formGroupExampleInput">{field_label}</label>
+      <label htmlFor="formGroupExampleInput">{field_label+" "}</label>
       <input
         type="text"
         className="form-control"
