@@ -14,11 +14,6 @@ function DynamicForm({defaultValues, config, submitFormExec, metaData}) {
         const json = JSON.parse(config)
         json[0].fields.unshift(defaultValues)
         setElements(json[0]);
-        if (Object.keys(formErrors).length === 0 && isSubmit) {
-            console.log("Form submitted");
-        } else {
-            console.log("error", Object.keys(formErrors));
-        }
     }, [config, formErrors]);
 
 
