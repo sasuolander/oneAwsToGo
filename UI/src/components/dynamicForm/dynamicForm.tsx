@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import Element from "./components/Element";
 import { FormContext } from "./FormContext";
-import "./dynamicForm.css";
-
+import "../../styles/dynamicForm.css";
+// TODO add typing in some later time
 function DynamicForm({defaultValues,config,sendData,metaData}) {
   const [elements, setElements] = useState(null);
   const [formErrors, setFormErrors] = useState({});

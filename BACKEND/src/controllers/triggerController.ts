@@ -6,7 +6,7 @@ import IPostPayload from "../interfaces/postpayloadinterface";
 import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDeploy";
 import ITemplate, {Template, TemplateFormat} from "../interfaces/templateInterface";
 
-interface DeploymentResult {
+interface IDeploymentResult {
     httpStatus: number | undefined,
     deploymentId:string | undefined
 }
@@ -25,7 +25,6 @@ export default class TriggerController extends CommonControllerConfig {
         this.app.route(`/trigger`)
             .post(async (req: Request, res: Response) => {
                 const toBeDeployed: IPostPayload = req.body;
-                console.log(toBeDeployed)
                 const foundTemplate = await this.triggerService.findTemplate(toBeDeployed);
                 if (foundTemplate.found) {
                     const data = foundTemplate.data as ITemplate
@@ -43,7 +42,7 @@ export default class TriggerController extends CommonControllerConfig {
         return this.app;
     }
 
-    async deployTemplate(name: string, template: Template,parameters:any): Promise<DeploymentResult> {
+    async deployTemplate(name: string, template: Template,parameters:any): Promise<IDeploymentResult> {
         if (typeof template !== "undefined") {
             try {
                 switch (template.templateFormat) {
