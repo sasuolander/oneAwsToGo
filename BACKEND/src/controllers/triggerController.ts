@@ -48,7 +48,7 @@ export default class TriggerController extends CommonControllerConfig {
                 switch (template.templateFormat) {
                     case TemplateFormat.CloudFormation:
                         const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode, new CloudFormationDeploy);
-                        return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId:deploy.StackId};
+                        return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId};
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
                     case TemplateFormat.TerraForm:
