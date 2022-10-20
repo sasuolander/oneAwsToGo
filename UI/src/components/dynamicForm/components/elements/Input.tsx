@@ -17,7 +17,6 @@ const Input = ({
         type="text"
         className="form-control"
         id="formGroupExampleInput"
-        // aria-describedby="emailHelp"
         placeholder={field_placeholder ? field_placeholder : " "}
         value={field_value}
         name="field_value"
