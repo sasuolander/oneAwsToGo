@@ -4,6 +4,7 @@ page_label: AWS form
     description: "name of form"
   fields:
      type: array
+     description: "List of fields, empty array if no field"
      propeties:
        field_id:
           type: string
