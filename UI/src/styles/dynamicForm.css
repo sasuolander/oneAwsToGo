@@ -50,4 +50,7 @@ button {
 p {
     color: red;
 }
+label {
+    padding-right: 6px;
+}
 

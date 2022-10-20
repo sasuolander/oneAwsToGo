@@ -13,7 +13,7 @@ const Checkbox = ({ field_id, field_label, field_value }) => {
         onChange={(event) => handleChange(field_id, event)}
       />
       <label className="form-check-label" htmlFor="exampleCheck1">
-        {field_label+" "}
+        {field_label}
       </label>
     </div>
   );

@@ -5,7 +5,7 @@ const Select = ({ field_id, field_label, field_options }) => {
   const { handleChange } = useContext(FormContext);
   return (
     <div className="form-group">
-      <label htmlFor="exampleInputPassword1">{field_label+" "}</label>
+      <label htmlFor="exampleInputPassword1">{field_label}</label>
       <select
         className="form-control"
         onChange={(event) => handleChange(field_id, event)}
