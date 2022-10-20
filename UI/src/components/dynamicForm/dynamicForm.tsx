@@ -1,33 +1,35 @@
 // @ts-nocheck
-import formJSON from "./formElement.json";
-
 import { useState, useEffect } from "react";
 import Element from "./components/Element";
 import { FormContext } from "./FormContext";
 import "./dynamicForm.css";
 
-console.log("formJSON", formJSON);
-
-function DynamicForm() {
+function DynamicForm({defaultValues,config,sendData,metaData}) {
   const [elements, setElements] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
 
   useEffect(() => {
-    setElements(config[0]);
+     const json = JSON.parse(config)
+      json[0].fields.unshift(defaultValues)
+      setElements(json[0]);
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      console.log(elements);
+      //console.log(elements);
       console.log("Form submitted");
     } else {
-      console.log(Object.keys(formErrors));
+      console.log("error",Object.keys(formErrors));
     }
-  }, [formErrors]);
+  }, [config,formErrors]);
+
+
 
   const handleSubmit = (e) => {
+      console.log("pressing")
     e.preventDefault();
     setFormErrors(validate(elements));
     setIsSubmit(true);
-
+    const parameters = elements.fields.map((r)=> {return {field_id:r.field_id,field_value:r.field_value}} )
+      sendData(metaData,parameters)
   };
   const handleChange = (id, event) => {
     const newElements = { ...elements };
@@ -84,9 +86,9 @@ function DynamicForm() {
           </button>
         </form>
 
-        {Object.keys(formErrors).length === 0 && isSubmit
+        {/*{Object.keys(formErrors).length === 0 && isSubmit
           ? console.log(elements)
-          : console.log(formErrors)}
+          : console.log(formErrors)}*/}
       </div>
     </FormContext.Provider>
   );
