@@ -20,14 +20,14 @@ page_label: AWS form
           description: "Placeholder string"
        field_options:
           type: array
-          description: "If type is dropdownlist, list of option"
+          description: "If type is select, list of option"
           properties:
             option_label:
             type: string
             description: "option"
        field_type: text
           type: string
-          description: "type of fiel, text,select,checkbox"
+          description: "type of field, text,select,checkbox"
        field_value:
           type: string
           description: "place where input is placed"
@@ -36,7 +36,7 @@ page_label: AWS form
           description: "error message"
        field_regex:
           type: string
-          description: "input validation regec"
+          description: "input validation regex"
        field_max:
           type: string
           description: "max length"
