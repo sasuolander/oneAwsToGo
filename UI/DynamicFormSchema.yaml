@@ -30,3 +30,15 @@ page_label: AWS form
        field_value:
           type: string
           description: "place where input is placed"
+       field_error:
+          type: string
+          description: "error message"
+       field_regex:
+          type: string
+          description: "input validation regec"
+       field_max:
+          type: string
+          description: "max length"
+       field_min:
+          type: string
+          description: "minimal length"
