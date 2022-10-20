@@ -26,9 +26,11 @@ function CreateEnvironment() {
     const [templates, setTemplates] = useState<ITemplate[]>([])
     const [templatesReady, setTemplatesReady] = useState("false");
 
-    const handleSubmit = (event: IEventSubmit) => {
+    const handleSubmit = async (event: IEventSubmit) => {
+        event.preventDefault()
         if (templId !== "") {
-            deployService.triggerCreation(Number(templId), envId)
+            const startProcess = await deployService.triggerCreation(Number(templId), envId)
+            console.log(startProcess)
         }
     }
     //https://blog.logrocket.com/solve-react-useeffect-hook-infinite-loop-patterns/

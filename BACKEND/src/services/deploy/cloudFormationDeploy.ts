@@ -8,8 +8,9 @@ import {
 } from "@aws-sdk/client-cloudformation";
 import {CreateStackCommandInput} from "@aws-sdk/client-cloudformation/dist-types/commands/CreateStackCommand";
 import {MetadataBearer} from "@aws-sdk/types";
+import {CreateStackOutput} from "@aws-sdk/client-cloudformation/dist-types/models/models_0";
 
-export interface Output extends MetadataBearer{}
+export interface Output extends CreateStackOutput,MetadataBearer{}
 
 export default class CloudFormationDeploy implements IDeploy<Promise<any>,Parameter[]> {
     async deploy(deploymentName:string,templateData: string, parameter:Parameter[]): Promise<any> {

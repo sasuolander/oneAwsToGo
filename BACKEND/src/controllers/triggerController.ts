@@ -6,6 +6,11 @@ import IPostPayload from "../interfaces/postpayloadinterface";
 import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDeploy";
 import ITemplate, {Template, TemplateFormat} from "../interfaces/templateInterface";
 
+interface DeploymentResult {
+    httpStatus: number | undefined,
+    deploymentId:string | undefined
+}
+
 export default class TriggerController extends CommonControllerConfig {
     private triggerService: TriggerService;
     private githubClient: GithubClient;
@@ -26,8 +31,8 @@ export default class TriggerController extends CommonControllerConfig {
                     const templateSourceCode = await this.githubClient.getTemplate(data.url);
                     const template = new Template(data.id, data.name, data.templateFormat, templateSourceCode, data.url)
                     const deployed = await this.deployTemplate(toBeDeployed.deploymentName, template);
-                    if (deployed != null) {
-                        res.status(deployed).send("Stack deployed");
+                    if (deployed.httpStatus == 200) {
+                        res.status(deployed.httpStatus).send(deployed);
                     }
                 } else {
                     res.status(404).send();
@@ -37,14 +42,13 @@ export default class TriggerController extends CommonControllerConfig {
         return this.app;
     }
 
-    async deployTemplate(name: string, template: Template): Promise<number | undefined> {
+    async deployTemplate(name: string, template: Template): Promise<DeploymentResult> {
         if (typeof template !== "undefined") {
             try {
                 switch (template.templateFormat) {
                     case TemplateFormat.CloudFormation:
                         const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode, new CloudFormationDeploy);
-                        // TODO change this into to requestID in future, need to check can ui remember this or do we save it into  database
-                        return deploy.$metadata.httpStatusCode;
+                        return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId};
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
                     case TemplateFormat.TerraForm:
@@ -54,11 +58,11 @@ export default class TriggerController extends CommonControllerConfig {
                 }
             } catch (e) {
                 console.log(e);
-                return 500;
+                return {httpStatus: 500, deploymentId:undefined};
             }
 
         } else {
-            return 404;
+            return {httpStatus: 404, deploymentId:undefined};
         }
     }
 

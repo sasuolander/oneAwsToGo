@@ -1,6 +1,11 @@
 import axios from "axios";
 import {TemplateFormat} from "../interface/templateInterface";
 
+export interface DeploymentResult {
+    httpStatus: number | undefined,
+    deploymentId: string | undefined
+}
+
 export interface IPayload {
     templateId: number
     templateFormat: TemplateFormat
@@ -18,7 +23,8 @@ export class Payload implements IPayload {
         this.deploymentName = deploymentName
     }
 }
-export const baseApi ="/api"
+
+export const baseApi = "/api"
 export default class Backend {
 
     static fetchTemplates() {
@@ -28,10 +34,10 @@ export default class Backend {
             })
     }
 
-    static triggerCreation(id: number, name: string): void {
+    static triggerCreation(id: number, name: string): Promise<DeploymentResult> {
         // TODO remove hard coded format when we start supporting different template format
-        axios.post(baseApi as string + "/trigger", new Payload(id, TemplateFormat.CloudFormation, name)).then(r => {
-            return r;
+        return axios.post(baseApi as string + "/trigger", new Payload(id, TemplateFormat.CloudFormation, name)).then(r => {
+            return {httpStatus: r.data.httpStatus, deploymentId: r.data.deploymentId};
         })
     }
 }
