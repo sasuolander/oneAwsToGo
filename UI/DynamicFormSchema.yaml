@@ -1,0 +1,32 @@
+
+page_label: AWS form
+    type: string
+    description: "name of form"
+  fields:
+     type: array
+     propeties:
+       field_id:
+          type: string
+          description: "Id which corresponse name of cloudformation parameter"
+       field_label:
+          type: string
+          description: "Id which corresponse name of cloudformation parameter"
+       field_mandatory:
+          type: string
+          description: "Is field mandatory or nor, yes or no"
+       field_placeholder:
+          type: string
+          description: "Placeholder string"
+       field_options:
+          type: array
+          description: "If type is dropdownlist, list of option"
+          properties:
+            option_label:
+            type: string
+            description: "option"
+       field_type: text
+          type: string
+          description: "type of fiel, text,select,checkbox"
+       field_value:
+          type: string
+          description: "place where input is placed"
