@@ -37,7 +37,7 @@ class InDeploymentStackDao {
         return `${deployedStack.id} updated via put`;
     }
 
-    async changeStackStatus(inDeploymentStackId: number, status : string) {
+    async updateStackStatus(inDeploymentStackId: number, status : string) {
         const stack = this.deployedStacks.find((InDeploymentStack: { id: number }) => InDeploymentStack.id === inDeploymentStackId);
         if(stack) {
             stack.status = status;

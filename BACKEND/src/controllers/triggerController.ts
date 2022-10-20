@@ -48,7 +48,6 @@ export default class TriggerController extends CommonControllerConfig {
                     case TemplateFormat.CloudFormation:
                         const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode, new CloudFormationDeploy);
                         console.log(deploy);
-                        //@ts-ignore
                         const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
                         this.deployedStackService.create(newDeployment);
                         

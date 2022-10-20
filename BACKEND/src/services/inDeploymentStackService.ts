@@ -1,6 +1,9 @@
 import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
 import InDeploymentStackDao from "../dao/inDeploymentStackDao";
 import StackStatusService from "./deploymentstatus/stackStatusService";
+import IStatusPayload from "../interfaces/statusPayloadInterface";
+import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
+
 export default class InDeploymentStackService {
     stackStatusService: StackStatusService;
 
@@ -8,16 +11,22 @@ export default class InDeploymentStackService {
         this.stackStatusService = stackStatusService
     }
 
-    async checkDeploymentStatus(id : string) {
-        const stack = await InDeploymentStackDao.getInDeploymentStackById(parseInt(id));
+    async checkDeploymentStatus(payload: IStatusPayload) {
+        const stack = await InDeploymentStackDao.getInDeploymentStackById(payload.id);
         if(stack) {
-            return this.stackStatusService.checkStatus(stack.stackId);
+            const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+            if(currentStatus.StackEvents) {
+                //@ts-ignore
+                return this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
+            }
+            
+        } else {
+            return 404;
         }
-        
     }
 
-    async changeDeploymentStatus(id : number, status : string) {
-        return await InDeploymentStackDao.changeStackStatus(id, status);
+    async updateDeploymentStatus(id : number, status : string) {
+        return await InDeploymentStackDao.updateStackStatus(id, status);
     }
 
     async create(deployedStack: IInDeploymentStack) {
