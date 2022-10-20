@@ -34,14 +34,11 @@ function CreateEnvironment() {
         if (id !== "") {
             const name = data[0].field_value
             const cropData = data.filter((f: { field_id: string; })=>f.field_id !== "deployment_name")
-            console.log("name",name)
-            console.log("id",id)
-            console.log(cropData)
             const startProcess = await deployService.triggerCreation(Number(id),name,cropData)
             console.log("pressing CreateEnvironment",startProcess)
         }
     }
-    //https://blog.logrocket.com/solve-react-useeffect-hook-infinite-loop-patterns/
+
     useEffect(() => {
         if(templatesReady === "false") {
             const promise = templateService.getTemplates();

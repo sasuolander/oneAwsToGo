@@ -31,8 +31,6 @@ export default class CloudFormationDeploy implements IDeploy<Promise<any>, Param
         } else {
             throw new CloudFormationDeployError("Parameter is in wrong format")
         }
-        console.log("rawParameter",parameter)
-        console.log("parameterConverted",parameterList)
         const client = new CloudFormationClient({});
         const input = new InputWithParameter(deploymentName, templateData, parameterList)
         const command = new CreateStackCommand(input);
