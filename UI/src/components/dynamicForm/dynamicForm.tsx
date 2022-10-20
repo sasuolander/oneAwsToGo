@@ -5,7 +5,7 @@ import {FormContext} from "./FormContext";
 import "../../styles/dynamicForm.css";
 
 // TODO add typing in some later time
-function DynamicForm({defaultValues, config, sendData, metaData}) {
+function DynamicForm({defaultValues, config, submitFormExec, metaData}) {
     const [elements, setElements] = useState(null);
     const [formErrors, setFormErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
@@ -29,7 +29,7 @@ function DynamicForm({defaultValues, config, sendData, metaData}) {
         const parameters = elements.fields.map((r) => {
             return {field_id: r.field_id, field_value: r.field_value}
         })
-        sendData(metaData, parameters)
+        submitFormExec(metaData, parameters)
     };
     const handleChange = (id, event) => {
         const newElements = {...elements};
