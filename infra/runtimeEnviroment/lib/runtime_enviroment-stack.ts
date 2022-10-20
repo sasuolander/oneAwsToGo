@@ -40,7 +40,7 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             image:ContainerImage.fromDockerImageAsset(asset),
             environment:{"temp": "something"},
             logging: LogDriver.awsLogs({logRetention:aws_logs.RetentionDays.FIVE_DAYS,streamPrefix:"aws"})
-        }).addPortMappings({hostPort:80,containerPort:80})
+        }).addPortMappings({hostPort:8080,containerPort:80})
 
 
         const loadBalancedFargateService = new NetworkLoadBalancedFargateService(this,appName+"serverloadbancer",{
@@ -53,7 +53,9 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             listenerPort: 80,
             publicLoadBalancer:true // remember turn this off after testing
         })
-        // check this configuration for security whole, in actual production add firewall and other security concerns
+        // check this configuration for security whole, in actual production add firewall and other security systems
+
+        // health check failure, check port and what it is testing
         loadBalancedFargateService.service.connections.allowToAnyIpv4(aws_ec2.Port.tcp(80))
         loadBalancedFargateService.service.connections.allowInternally(aws_ec2.Port.tcp(80))
         loadBalancedFargateService.service.connections.allowFromAnyIpv4(aws_ec2.Port.tcp(80))
