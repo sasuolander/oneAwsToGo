@@ -25,12 +25,13 @@ export default class TriggerController extends CommonControllerConfig {
         this.app.route(`/trigger`)
             .post(async (req: Request, res: Response) => {
                 const toBeDeployed: IPostPayload = req.body;
+                console.log(toBeDeployed)
                 const foundTemplate = await this.triggerService.findTemplate(toBeDeployed);
                 if (foundTemplate.found) {
                     const data = foundTemplate.data as ITemplate
                     const templateSourceCode = await this.githubClient.getTemplate(data.url);
-                    const template = new Template(data.id, data.name, data.templateFormat, templateSourceCode, data.url)
-                    const deployed = await this.deployTemplate(toBeDeployed.deploymentName, template);
+                    const template = new Template(data.id, data.name, data.templateFormat, templateSourceCode, data.url,"")
+                    const deployed = await this.deployTemplate(toBeDeployed.deploymentName, template,toBeDeployed.parameters);
                     if (deployed.httpStatus == 200) {
                         res.status(deployed.httpStatus).send(deployed);
                     }
@@ -42,12 +43,12 @@ export default class TriggerController extends CommonControllerConfig {
         return this.app;
     }
 
-    async deployTemplate(name: string, template: Template): Promise<DeploymentResult> {
+    async deployTemplate(name: string, template: Template,parameters:any): Promise<DeploymentResult> {
         if (typeof template !== "undefined") {
             try {
                 switch (template.templateFormat) {
                     case TemplateFormat.CloudFormation:
-                        const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode, new CloudFormationDeploy);
+                        const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
                         return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId};
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
