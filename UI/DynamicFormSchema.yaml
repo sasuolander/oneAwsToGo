@@ -11,10 +11,10 @@ page_label: AWS form
           description: "Id which corresponse name of cloudformation parameter"
        field_label:
           type: string
-          description: "Id which corresponse name of cloudformation parameter"
+          description: "human readable label"
        field_mandatory:
           type: string
-          description: "Is field mandatory or nor, yes or no"
+          description: "Is field mandatory or not, yes or no"
        field_placeholder:
           type: string
           description: "Placeholder string"
