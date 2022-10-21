@@ -4,8 +4,8 @@ import DeployService from "../service/deployService";
 import FetchTemplateService from "../service/fetchTemplateService";
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
-import ITemplate from '../interface/templateInterface';
+import DynamicForm from '../components/dynamicForm/dynamicForm'
+import {TemplatePayload} from "../utils/backend";
 
 // TODO think out injection or provider system when using service in react
 const deployService = new DeployService();
@@ -15,62 +15,71 @@ interface IEventChange extends React.ChangeEvent<HTMLInputElement> {
 
 }
 
-interface IEventSubmit extends React.FormEvent<HTMLFormElement> {
-
+interface ITemplateItem {
+    id: string,
+    data: TemplatePayload
 }
 
 function CreateEnvironment() {
 
-    const [envId, setEnvId] = useState("");
     const [templId, setTempId] = useState("");
-    const [templates, setTemplates] = useState<ITemplate[]>([])
-    const [templatesReady, setTemplatesReady] = useState("false");
+    const [templates, setTemplates] = useState<ITemplateItem[]>([])
+    const [templatesReady, setTemplatesReady] = useState(false);
 
-    const handleSubmit = async (event: IEventSubmit) => {
-        event.preventDefault()
-        if (templId !== "") {
-            const startProcess = await deployService.triggerCreation(Number(templId), envId)
-            console.log(startProcess)
+    const sendData = async (id: string, data: any) => {
+        if (id !== "") {
+            const name = data[0].field_value
+            const cropData = data.filter((f: { field_id: string; }) => f.field_id !== "deployment_name")
+            const startProcess = await deployService.triggerCreation(Number(id), name, cropData)
+            console.log("pressing CreateEnvironment", startProcess)
         }
     }
-    //https://blog.logrocket.com/solve-react-useeffect-hook-infinite-loop-patterns/
-    useEffect(() => {
-        if(templatesReady === "false") {
-            const promise = templateService.getTemplates();
-            promise.then(function (response) {
-                setTemplates(response.data);
 
+    useEffect(() => {
+        if (!templatesReady) {
+            templateService.getTemplates().then(function (response) {
+                const templatesData = response.map(r => {
+                    return {id: String(r.id), data: r} as ITemplateItem
+                })
+                setTemplates(templatesData);
             });
-            setTemplatesReady("true");
+            setTemplatesReady(true);
         }
 
-    },[]);
+    }, []);
+
+    const nameForNewTemplate = {
+        field_id: "deployment_name",
+        field_label: "Deployment name",
+        field_mandatory: "yes",
+        field_placeholder: "Enter deployment name",
+        field_type: "text",
+        field_value: "",
+        field_error: "You must give name for deployment",
+        field_regex: "[a-zA-Z][a-zA-Z0-9]*",
+        field_min: "1"
+    }
 
     return (
-        <div className="create-environment-component">
+        <div className="create-environment-component container">
             <h2>Create an environment</h2>
-            <form id="form-ctrl" onSubmit={handleSubmit}>
-                <div className="form-div">
-                    <TextField id="id-textfield" label="ID" variant="outlined"
-                               helperText="Enter an identifier for the environment"
-                               value={envId} onChange={(e: IEventChange) => setEnvId(e.target.value)}
-                               required></TextField>
-                </div>
-                <div className="form-div">
-                    <TextField id="template-dropdown" label="Template" helperText="Select a template" variant="outlined"
-                               value={templId} onChange={(e: IEventChange) => setTempId(e.target.value)} select
-                               required>
-                        {templates.map((template) => {
-                            return (
-                                <MenuItem key={template.id} value={template.id}>{template.name}</MenuItem>
-                            );
-                        })}
-                    </TextField>
-                </div>
-                <div className="form-div">
-                    <Button type="submit" id="form-submit" variant="contained">Create</Button>
-                </div>
-            </form>
+            {typeof templates.find(r => r.id == templId) !== "undefined" ?
+                <DynamicForm defaultValues={nameForNewTemplate} metaData={templId}
+                             config={templates.find(r => r.id == templId)?.data.formConfig} submitFormExec={sendData}
+                /> : <div></div>
+            }
+            <div className="form-div">
+                <TextField id="template-dropdown" label="Template" helperText="Select a template" variant="outlined"
+                           value={templId} onChange={(e: IEventChange) => setTempId(e.target.value)} select
+                           required>
+                    {templates.map((template) => {
+                        return (
+                            <MenuItem key={template.data.id} value={template.data.id}>{template.data.name}</MenuItem>
+                        );
+                    })}
+                </TextField>
+            </div>
+
         </div>
     );
 }

@@ -4,9 +4,9 @@ import {Application, Request, Response} from 'express';
 import GithubClient from "../utils/githubClient";
 import IPostPayload from "../interfaces/postpayloadinterface";
 import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDeploy";
-import ITemplate, {Template, TemplateFormat} from "../interfaces/templateInterface";
+import ITemplate, {TemplateFormat, TemplateInput} from "../interfaces/templateInterface";
 
-interface DeploymentResult {
+interface IDeploymentResult {
     httpStatus: number | undefined,
     deploymentId:string | undefined
 }
@@ -29,8 +29,8 @@ export default class TriggerController extends CommonControllerConfig {
                 if (foundTemplate.found) {
                     const data = foundTemplate.data as ITemplate
                     const templateSourceCode = await this.githubClient.getTemplate(data.url);
-                    const template = new Template(data.id, data.name, data.templateFormat, templateSourceCode, data.url)
-                    const deployed = await this.deployTemplate(toBeDeployed.deploymentName, template);
+                    const template = new TemplateInput(data.id, data.name, data.templateFormat, templateSourceCode, data.url)
+                    const deployed = await this.deployTemplate(toBeDeployed.deploymentName, template,toBeDeployed.parameters);
                     if (deployed.httpStatus == 200) {
                         res.status(deployed.httpStatus).send(deployed);
                     }
@@ -42,12 +42,12 @@ export default class TriggerController extends CommonControllerConfig {
         return this.app;
     }
 
-    async deployTemplate(name: string, template: Template): Promise<DeploymentResult> {
+    async deployTemplate(name: string, template: TemplateInput,parameters:any): Promise<IDeploymentResult> {
         if (typeof template !== "undefined") {
             try {
                 switch (template.templateFormat) {
                     case TemplateFormat.CloudFormation:
-                        const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode, new CloudFormationDeploy);
+                        const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
                         return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId};
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")

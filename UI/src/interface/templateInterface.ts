@@ -7,5 +7,6 @@ export enum TemplateFormat {
 export default interface ITemplate {
     id: number;
     name: string;
+    formConfig:string
     templateFormat:TemplateFormat;
   };
