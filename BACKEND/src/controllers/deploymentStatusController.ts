@@ -1,7 +1,6 @@
 import InDeploymentStackService from "../services/inDeploymentStackService";
 import { CommonControllerConfig } from "../utils/CommonRoutesConfig";
 import {Application, Request, Response} from 'express';
-import { stat } from "fs";
 import IStatusPayload from "../interfaces/statusPayloadInterface";
 
 export default class InDeploymentStackController extends CommonControllerConfig {
