@@ -13,13 +13,13 @@ export default class InDeploymentStackController extends CommonControllerConfig 
     }
 
     configureRoutes(): Application {
-        this.app.route(`/deployedstacks`)
+        this.app.route(`/deployed`)
         .get(async (req: Request, res: Response) => {
             const stacks = await this.inDeploymentStackStatusService.list()
             res.status(200).send(stacks);
         });
 
-        this.app.route(`/deploymentstatus/`)
+        this.app.route(`/checkdeployed/`)
         .post(async (req: Request, res: Response) => {
             const payload : IStatusPayload = req.body;
             const status = await this.inDeploymentStackStatusService.checkDeploymentStatus(payload);
