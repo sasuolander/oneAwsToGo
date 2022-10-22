@@ -23,7 +23,11 @@ export default class InDeploymentStackController extends CommonControllerConfig 
         .post(async (req: Request, res: Response) => {
             const payload : IStatusPayload = req.body;
             const status = await this.inDeploymentStackStatusService.checkDeploymentStatus(payload);
-            res.status(200).send(status);
+            if(status) {
+                res.status(200).send();
+            } else {
+                res.status(404).send;
+            }
         })
         return this.app;
     }

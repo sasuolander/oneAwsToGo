@@ -13,16 +13,16 @@ export default class InDeploymentStackService {
 
     async checkDeploymentStatus(payload: IStatusPayload) {
         const stack = await InDeploymentStackDao.getInDeploymentStackById(payload.id);
+        let checked : boolean = false;
         if(stack) {
             const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
             if(currentStatus.StackEvents) {
                 //@ts-ignore
-                return this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
+                checked = await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
             }
             
-        } else {
-            return 404;
         }
+        return checked;
     }
 
     async updateDeploymentStatus(id : number, status : string) {

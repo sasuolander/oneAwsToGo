@@ -41,9 +41,9 @@ class InDeploymentStackDao {
         const stack = this.deployedStacks.find((InDeploymentStack: { id: number }) => InDeploymentStack.id === inDeploymentStackId);
         if(stack) {
             stack.status = status;
-            return 200;
+            return true;
         }
-        return 404;
+        return false;
     }
 
     async removeInDeploymentStackById(deployedStackId: number) {
