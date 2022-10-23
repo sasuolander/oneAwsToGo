@@ -3,6 +3,7 @@ import {
     Capability,
     CloudFormationClient,
     CreateStackCommand,
+    CreateStackOutput,
     OnFailure,
     Parameter
 } from "@aws-sdk/client-cloudformation";
