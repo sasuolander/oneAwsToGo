@@ -10,8 +10,8 @@ export default class TriggerService {
         this.templateService = templateService
     }
 
-    async deployTemplate<T>(name: string, sourceCode: string, deployImpl: IDeploy<any, any>): Promise<T> {
-        return await deployImpl.deploy(name, sourceCode, []) as Promise<T>;
+    async deployTemplate<T>(name: string, sourceCode: string,parameters:any, deployImpl: IDeploy<any, any>): Promise<T> {
+        return await deployImpl.deploy(name, sourceCode, parameters) as Promise<T>;
     }
 
     async findTemplate(toBeDeployed: IPostPayload): Promise<{ found: boolean, data: ITemplate | undefined }> {

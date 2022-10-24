@@ -4,4 +4,5 @@ export default interface IPostPayload {
     deploymentName:string
     templateId:number
     templateFormat:TemplateFormat
+    parameters: string;
 }
