@@ -5,6 +5,7 @@ import {DockerImageAsset} from "aws-cdk-lib/aws-ecr-assets";
 import {Cluster, ContainerImage, FargateTaskDefinition, LogDriver} from "aws-cdk-lib/aws-ecs";
 import {Vpc} from "aws-cdk-lib/aws-ec2";
 import {NetworkLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-patterns";
+import {PolicyStatement} from "aws-cdk-lib/aws-iam";
 
 export class RuntimeEnviromentStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -21,16 +22,6 @@ export class RuntimeEnviromentStack extends cdk.Stack {
         const vpc =new  Vpc(this, appName+"VPC", {maxAzs:2})
         const serviceCluster = new Cluster(this, appName+"ServiceCluster",{vpc:vpc})
         serviceCluster.addDefaultCloudMapNamespace({name:"service.local"})
-        /*const myCustomPolicy = new PolicyDocument({
-            statements: [new PolicyStatement({
-                actions: [
-                    'cloudformation:*',
-                ],
-                principals: [new AccountRootPrincipal()],
-                resources: ['*'],
-            })],
-        });*/
-      //  const role = new Role(this,appName+"role", {roleName:"RightForInfra",inlinePolicies:{}})
 
         const taskDefinition = new FargateTaskDefinition(this,appName,{cpu:256 })
 
@@ -42,9 +33,17 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             logging: LogDriver.awsLogs({logRetention:aws_logs.RetentionDays.FIVE_DAYS,streamPrefix:"aws"})
         }).addPortMappings({hostPort:80,containerPort:80})
 
+        taskDefinition.addToExecutionRolePolicy(new PolicyStatement({
+            actions: [
+                'cloudformation:*', // check in later stage all needed action and limit only to these
+            ],
+            //principals: [new ServicePrincipal("ecs-tasks.amazonaws.com")],
+            resources: ['*'],
+        }))
+
 
         const loadBalancedFargateService = new NetworkLoadBalancedFargateService(this,appName+"serverloadbancer",{
-            serviceName: "",
+            serviceName: "oneAWSGoService",
             cluster : serviceCluster,
             cpu:256,
             desiredCount:2,
@@ -53,11 +52,17 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             listenerPort: 80,
             publicLoadBalancer:true // remember turn this off after testing
         })
-        // check this configuration for security whole, in actual production add firewall and other security systems
+        // check this configuration for security whole, in actual production add firewall/WAF and other security systems
 
-        // health check failure, check port and what it is testing
         loadBalancedFargateService.service.connections.allowToAnyIpv4(aws_ec2.Port.tcp(80))
-        loadBalancedFargateService.service.connections.allowInternally(aws_ec2.Port.tcp(80))
-        loadBalancedFargateService.service.connections.allowFromAnyIpv4(aws_ec2.Port.tcp(80))
+        loadBalancedFargateService.service.connections.allowFromAnyIpv4(aws_ec2.Port.tcp(80)) // http
+
+        loadBalancedFargateService.service.connections.allowToAnyIpv4(aws_ec2.Port.tcp(443))
+        loadBalancedFargateService.service.connections.allowFromAnyIpv4(aws_ec2.Port.tcp(443)) // https
+
+        loadBalancedFargateService.service.connections.allowInternally(aws_ec2.Port.tcp(80)) // http
+        loadBalancedFargateService.service.connections.allowInternally(aws_ec2.Port.tcp(443)) // https
+
+        loadBalancedFargateService.service.connections.allowInternally(aws_ec2.Port.tcp(5432)) // postgresql
     }
 }
