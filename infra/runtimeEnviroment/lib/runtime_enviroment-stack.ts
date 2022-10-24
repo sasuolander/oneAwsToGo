@@ -40,7 +40,7 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             image:ContainerImage.fromDockerImageAsset(asset),
             environment:{"temp": "something"},
             logging: LogDriver.awsLogs({logRetention:aws_logs.RetentionDays.FIVE_DAYS,streamPrefix:"aws"})
-        }).addPortMappings({hostPort:8080,containerPort:80})
+        }).addPortMappings({hostPort:80,containerPort:80})
 
 
         const loadBalancedFargateService = new NetworkLoadBalancedFargateService(this,appName+"serverloadbancer",{
