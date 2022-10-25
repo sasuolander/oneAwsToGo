@@ -5,7 +5,7 @@ import {DockerImageAsset} from "aws-cdk-lib/aws-ecr-assets";
 import {Cluster, ContainerImage, FargateTaskDefinition, LogDriver} from "aws-cdk-lib/aws-ecs";
 import {Vpc} from "aws-cdk-lib/aws-ec2";
 import {NetworkLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-patterns";
-import {PolicyStatement} from "aws-cdk-lib/aws-iam";
+import {PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 
 export class RuntimeEnviromentStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -23,7 +23,29 @@ export class RuntimeEnviromentStack extends cdk.Stack {
         const serviceCluster = new Cluster(this, appName+"ServiceCluster",{vpc:vpc})
         serviceCluster.addDefaultCloudMapNamespace({name:"service.local"})
 
-        const taskDefinition = new FargateTaskDefinition(this,appName,{cpu:256 })
+        const execRole = new Role(this, appName+'execRole', {
+            assumedBy: new ServicePrincipal('ecs-tasks.amazonaws.com')
+        })
+
+        execRole.addToPolicy(new PolicyStatement({
+            actions: [
+                'sts:AssumeRole',
+            ],
+            resources: ['*'],
+        }))
+
+        const containerTaskRole = new Role(this, appName+'MyAppTaskRole', {
+            assumedBy: new ServicePrincipal('ecs-tasks.amazonaws.com')
+        })
+        containerTaskRole.addToPolicy(new PolicyStatement({
+            actions: [
+                'cloudformation:*', // check in later stage all needed action and limit only to these
+                // here start listing all supported recourse
+                's3:*'
+            ],
+            resources: ['*'],
+        }))
+        const taskDefinition = new FargateTaskDefinition(this,appName,{cpu:256,executionRole:execRole,taskRole:containerTaskRole})
 
         taskDefinition.addContainer(appName+"taskDefinition",{
             cpu:256,
@@ -32,15 +54,6 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             environment:{"temp": "something"},
             logging: LogDriver.awsLogs({logRetention:aws_logs.RetentionDays.FIVE_DAYS,streamPrefix:"aws"})
         }).addPortMappings({hostPort:80,containerPort:80})
-
-        taskDefinition.addToExecutionRolePolicy(new PolicyStatement({
-            actions: [
-                'cloudformation:*', // check in later stage all needed action and limit only to these
-            ],
-            //principals: [new ServicePrincipal("ecs-tasks.amazonaws.com")],
-            resources: ['*'],
-        }))
-
 
         const loadBalancedFargateService = new NetworkLoadBalancedFargateService(this,appName+"serverloadbancer",{
             serviceName: "oneAWSGoService",
