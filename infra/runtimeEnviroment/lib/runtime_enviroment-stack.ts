@@ -42,6 +42,8 @@ export class RuntimeEnviromentStack extends cdk.Stack {
                 'cloudformation:*', // check in later stage all needed action and limit only to these
                 // here start listing all supported recourse
                 's3:*'
+                ,
+                'EC2:*'
             ],
             resources: ['*'],
         }))
