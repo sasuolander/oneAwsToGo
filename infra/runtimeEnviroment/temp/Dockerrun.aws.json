@@ -1,1 +1,0 @@
-{"AWSEBDockerrunVersion":"1","containerDefinitions":{"memory":512,"cpu":256,"image":"${Token[TOKEN.230]}","environment":[{"name":"testValue","value":"test"}],"portMappings":[{"hostPort":80,"containerPort":80}]}}
