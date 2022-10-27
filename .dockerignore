@@ -7,3 +7,6 @@ BACKEND/node_modules
 BACKEND/npm-debug.log
 BACKEND/.env
 BACKEND/build
+
+infra
+.git

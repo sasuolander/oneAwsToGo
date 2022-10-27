@@ -17,6 +17,7 @@ module.exports = {
     entry: {
         app:path.resolve(srcPath, 'index.ts')
     },
+    //devtool: 'eval-cheap-module-source-map',
     mode: NODE_ENV,
     target: 'node',
     output: {
@@ -26,14 +27,13 @@ module.exports = {
         clean:true
     },
     resolve: {
-        fallback: { path: require.resolve("path-browserify"), 'aws-crt': false,uuid:false},
+        fallback: { path: require.resolve("path-browserify"), 'aws-crt': false},
         extensions: ['.ts', '.js','.json','.mjs'],
         modules: [
             path.resolve(__dirname, 'node_modules'),
         ],
     },
     module: {
-       //noParse: [/aws-sdk/],
         rules: [
             {
                 type: 'javascript/auto',
@@ -45,7 +45,7 @@ module.exports = {
                     'ts-loader',
                 ],
                 exclude: /node_modules/
-            }
+            },
         ]
     },
 }
