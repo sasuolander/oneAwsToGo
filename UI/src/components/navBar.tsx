@@ -8,7 +8,7 @@ export function NavBar() {
       <header id="main-header">
         <AppBar className="main-navbar">  
         <Toolbar>
-          <Link className="nav-link" to="/main">A page</Link>
+          <Link className="nav-link" to="/main">Create an environment</Link>
           <Link className="nav-link" to="dummy">An empty page</Link>
         </Toolbar>
         </AppBar>
