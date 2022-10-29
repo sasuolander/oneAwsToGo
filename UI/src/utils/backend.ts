@@ -46,6 +46,24 @@ export class Payload implements IPayload {
     }
 }
 
+export interface IDeployedPayload {
+    name: string | undefined,
+    stackId: string | undefined,
+    id: Number | undefined
+}
+
+export class DeployedPayload implements IDeployedPayload{
+    name: string | undefined;
+    stackId: string | undefined;
+    id: Number | undefined;
+
+    constructor(name:string, stackId: string, id: Number) {
+        this.name = name;
+        this.stackId = stackId;
+        this.id = id;
+    }
+}
+
 export const baseApi = "/api"
 export default class Backend {
 
@@ -60,6 +78,13 @@ export default class Backend {
         // TODO remove hard coded format when we start supporting different template format
         return axios.post(baseApi as string + "/trigger", new Payload(id, TemplateFormat.CloudFormation, name,parameters)).then(r => {
             return {httpStatus: r.data.httpStatus, deploymentId: r.data.deploymentId};
+        })
+    }
+
+    static fetchDeployed():Promise<DeployedPayload[]> {
+        return axios.get(baseApi as string + "/deployed")
+            .then(response => {
+                return response.data.map((response:any) =>{ return new DeployedPayload(response.name, response.stackId, response.id)})
         })
     }
 }
