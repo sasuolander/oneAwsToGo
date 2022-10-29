@@ -63,11 +63,6 @@ function CreateEnvironment() {
     return (
         <div className="create-environment-component container">
             <h2>Create an environment</h2>
-            {typeof templates.find(r => r.id == templId) !== "undefined" ?
-                <DynamicForm defaultValues={nameForNewTemplate} metaData={templId}
-                             config={templates.find(r => r.id == templId)?.data.formConfig} submitFormExec={sendData}
-                /> : <div></div>
-            }
             <div className="form-div">
                 <TextField id="template-dropdown" label="Template" helperText="Select a template" variant="outlined"
                            value={templId} onChange={(e: IEventChange) => setTempId(e.target.value)} select
@@ -79,8 +74,12 @@ function CreateEnvironment() {
                     })}
                 </TextField>
             </div>
-
-        </div>
+            {typeof templates.find(r => r.id == templId) !== "undefined" ?
+                <DynamicForm defaultValues={nameForNewTemplate} metaData={templId}
+                             config={templates.find(r => r.id == templId)?.data.formConfig} submitFormExec={sendData}
+                /> : <div></div>
+            }
+       </div>
     );
 }
 
