@@ -1,3 +1,14 @@
 .form-div {
   margin-top: 10px;
 }
+
+.loginCard {
+  max-width: fit-content;
+  max-height: fit-content;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-top: 10px
+}
