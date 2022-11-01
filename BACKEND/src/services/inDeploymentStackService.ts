@@ -18,10 +18,34 @@ export default class InDeploymentStackService {
             if(currentStatus.StackEvents) {
                 //@ts-ignore
                 await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
+                this.pollStatusUpdate(stack, currentStatus.StackEvents[0].ResourceStatus);
                 return currentStatus.StackEvents[0].ResourceStatus;
             }
             
         }
+    }
+
+    async pollStatusUpdate(stack: IInDeploymentStack, status: string | undefined) {
+
+        try {
+            while(status !== "CREATE_COMPLETE" && status !== "CREATE_FAILED") {
+                await this.timeout(5000)
+                console.log("Polling....");
+                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+                if(currentStatus.StackEvents) {
+                    //@ts-ignore
+                    await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
+                    status = currentStatus.StackEvents[0].ResourceStatus;
+                }
+            }
+        }catch(e) {
+            console.log(e)
+        }
+        
+    }
+
+    timeout(ms:number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async updateDeploymentStatus(id : number, status : string) {
