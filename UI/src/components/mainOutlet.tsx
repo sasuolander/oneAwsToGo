@@ -1,12 +1,10 @@
 import NavBar from '../components/navBar';
-import { Outlet } from 'react-router';
+import { Outlet, Navigate } from 'react-router';
 
 function MainOutlet() {
+
   return (
-    <>
-    <NavBar />
-    <Outlet />
-  </>
+    sessionStorage.getItem("loggedIn") === "true" ? <><NavBar/><Outlet/></> : <Navigate to="/" />
   )
 }
 
