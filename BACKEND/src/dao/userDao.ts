@@ -23,6 +23,10 @@ class UserDao {
         return this.users.find((user: { id: number }) => user.id === userId);
     }
 
+    async getCurrentUser(userName: string, password: string) {
+        return this.users.find(user => user.email === email && user.password === password);
+    }
+
     async putUserById(userId: number, user: IUser) {
         const objIndex = this.users.findIndex(
             (obj: { id: number }) => obj.id === userId

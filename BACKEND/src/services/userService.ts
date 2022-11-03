@@ -18,6 +18,10 @@ class UserService {
         return UserDao.getUserById(id);
     }
 
+    async readByLogin(name: string, password: string) {
+        return UserDao.getCurrentUser(name, password);
+    }
+
     async putById(id: number, user: IUser) {
         return UserDao.putUserById(id, user);
     }
