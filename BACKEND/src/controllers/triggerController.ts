@@ -56,20 +56,13 @@ export default class TriggerController extends CommonControllerConfig {
         if (typeof template !== "undefined") {
             try {
                 switch (template.templateFormat) {
-                    case TemplateFormat.CloudFormation:
-
-                        try {
+                    case TemplateFormat.CloudFormation:                    
                             const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
                             console.log(deploy);
                             const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
                             this.deployedStackService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined};
-                            }catch(e) {
-                                console.log(e);
-                                return {httpStatus: 500, deploymentId:undefined, errorMessage: "Something failed"};
-                            } 
-                            
-  
+
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
                     case TemplateFormat.TerraForm:
