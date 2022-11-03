@@ -56,12 +56,19 @@ export default class TriggerController extends CommonControllerConfig {
         if (typeof template !== "undefined") {
             try {
                 switch (template.templateFormat) {
-                    case TemplateFormat.CloudFormation:                    
+                    case TemplateFormat.CloudFormation:
+                        try{
                             const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
                             console.log(deploy);
                             const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
                             this.deployedStackService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined};
+                        } catch (e:any) {
+                            console.log(e)
+                            return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message}
+                               
+                        }                    
+                            
 
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
@@ -70,9 +77,9 @@ export default class TriggerController extends CommonControllerConfig {
                     default :
                         throw  Error("Unknown type")
                 }
-            } catch (e) {
+            } catch (e:any) {
                 console.log(e);
-                return {httpStatus: 500, deploymentId:undefined, errorMessage: "Something failed"};
+                return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message};
             }
 
         } else {
