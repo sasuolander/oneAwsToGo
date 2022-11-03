@@ -7,10 +7,12 @@ import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDep
 import ITemplate, {TemplateFormat, TemplateInput, Template} from "../interfaces/templateInterface";
 import InDeploymentStackService from "../services/inDeploymentStackService";
 import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
+import { AlreadyExistsException } from "@aws-sdk/client-cloudformation";
 
 interface IDeploymentResult {
     httpStatus: number | undefined,
-    deploymentId:string | undefined
+    deploymentId:string | undefined,
+    errorMessage: string | undefined
 }
 
 
@@ -53,12 +55,19 @@ export default class TriggerController extends CommonControllerConfig {
             try {
                 switch (template.templateFormat) {
                     case TemplateFormat.CloudFormation:
-
-                        const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
-                        console.log(deploy);
-                        const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
-                        this.deployedStackService.create(newDeployment);
-                        return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId};
+                        //If try catch is used, it skips this case and throws an error "not implemented"
+                        //try {
+                            const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
+                            console.log(deploy);
+                            const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
+                            this.deployedStackService.create(newDeployment);
+                            return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined};
+                        // } catch(e) {
+                        //     if(e instanceof AlreadyExistsException) {
+                        //         return {httpStatus: e.$metadata.httpStatusCode, deploymentId:undefined, errorMessage: e.Message};
+                        //     }
+                        // }
+                        
 
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
@@ -69,11 +78,11 @@ export default class TriggerController extends CommonControllerConfig {
                 }
             } catch (e) {
                 console.log(e);
-                return {httpStatus: 500, deploymentId:undefined};
+                return {httpStatus: 500, deploymentId:undefined, errorMessage: undefined};
             }
 
         } else {
-            return {httpStatus: 404, deploymentId:undefined};
+            return {httpStatus: 404, deploymentId:undefined, errorMessage: undefined};
         }
     }
 

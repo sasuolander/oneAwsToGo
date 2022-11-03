@@ -23,9 +23,9 @@ export default class InDeploymentStackController extends CommonControllerConfig 
             const payload : IStatusPayload = req.body;
             const status = await this.inDeploymentStackStatusService.checkDeploymentStatus(payload);
             if(status) {
-                res.status(200).send();
+                res.status(200).send(status);
             } else {
-                res.status(404).send;
+                res.status(404).send("Stack not found");
             }
         })
         return this.app;

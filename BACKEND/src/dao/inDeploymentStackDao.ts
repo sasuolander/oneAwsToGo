@@ -10,7 +10,9 @@ class InDeploymentStackDao {
     }
 
     async addInDeploymentStack(deployedStack: IInDeploymentStack) {
+        //TODO: Create enum for stack status
         deployedStack.id = this.idCount;
+        deployedStack.status = "Deployment started";
         this.deployedStacks.push(deployedStack);
         this.idCount++;
         return deployedStack;
