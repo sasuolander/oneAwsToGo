@@ -38,9 +38,11 @@ export default class TriggerController extends CommonControllerConfig {
                     const templateSourceCode = await this.githubClient.getTemplate(data.url);
                     const template = new TemplateInput(data.id, data.name, data.templateFormat, templateSourceCode, data.url)
                     const deployed = await this.deployTemplate(toBeInDeployment.deploymentName, template,toBeInDeployment.parameters);
-                    if (deployed.httpStatus == 200) {
+                    if (deployed.httpStatus) {
                         res.status(deployed.httpStatus).send(deployed);
 
+                    } else {
+                        res.status(500).send("Something failed")
                     }
                 } else {
                     res.status(404).send();
@@ -55,20 +57,19 @@ export default class TriggerController extends CommonControllerConfig {
             try {
                 switch (template.templateFormat) {
                     case TemplateFormat.CloudFormation:
-                        //If try catch is used, it skips this case and throws an error "not implemented"
-                        //try {
+
+                        try {
                             const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
                             console.log(deploy);
                             const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
                             this.deployedStackService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined};
-                        // } catch(e) {
-                        //     if(e instanceof AlreadyExistsException) {
-                        //         return {httpStatus: e.$metadata.httpStatusCode, deploymentId:undefined, errorMessage: e.Message};
-                        //     }
-                        // }
-                        
-
+                            }catch(e) {
+                                console.log(e);
+                                return {httpStatus: 500, deploymentId:undefined, errorMessage: "Something failed"};
+                            } 
+                            
+  
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
                     case TemplateFormat.TerraForm:
@@ -78,7 +79,7 @@ export default class TriggerController extends CommonControllerConfig {
                 }
             } catch (e) {
                 console.log(e);
-                return {httpStatus: 500, deploymentId:undefined, errorMessage: undefined};
+                return {httpStatus: 500, deploymentId:undefined, errorMessage: "Something failed"};
             }
 
         } else {
