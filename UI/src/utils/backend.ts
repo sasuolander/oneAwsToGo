@@ -64,6 +64,18 @@ export class DeployedPayload implements IDeployedPayload{
     }
 }
 
+export interface IStatusPayload {
+    id: Number | undefined
+}
+
+export class StatusPayload implements IStatusPayload{
+    id: Number | undefined;
+
+    constructor(id: Number) {
+        this.id = id;
+    }
+}
+
 export const baseApi = "/api"
 export default class Backend {
 
@@ -85,6 +97,12 @@ export default class Backend {
         return axios.get(baseApi as string + "/deployed")
             .then(response => {
                 return response.data.map((response:any) =>{ return new DeployedPayload(response.name, response.stackId, response.id)})
+        })
+    }
+
+    static fetchDevelopmentStatus(id: Number): Promise<any> {
+        return axios.post(baseApi as string + "/checkdeployed/", new StatusPayload(id)).then(response => {
+            return {status: response.data, httpStatus: response.status, text: response.statusText};
         })
     }
 }
