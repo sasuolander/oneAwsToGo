@@ -1,6 +1,28 @@
 import {CommonControllerConfig} from '../utils/CommonRoutesConfig';
 import TemplateService from '../services/templateService';
 import {Application, Request, Response, NextFunction} from 'express';
+import {TemplateFormat} from "../interfaces/templateInterface";
+
+interface ITemplatePayload {
+    id: number;
+    name: string;
+    formConfig:string;
+    templateFormat:TemplateFormat;
+}
+
+class TemplatePayload implements ITemplatePayload{
+    id: number;
+    name: string;
+    formConfig:string;
+    templateFormat:TemplateFormat;
+
+    constructor(id: number, name: string, formConfig: string, templateFormat: TemplateFormat) {
+        this.id = id;
+        this.name = name;
+        this.formConfig = formConfig;
+        this.templateFormat = templateFormat;
+    }
+}
 
 export default class TemplateController extends CommonControllerConfig{
     private templateService : TemplateService
@@ -14,7 +36,8 @@ export default class TemplateController extends CommonControllerConfig{
         this.app.route(`/templates`)
         .get(async (req: Request, res: Response) => {
             const templates = await this.templateService.list();
-            res.status(200).send(templates);
+            const returnList = templates.map(r=> new TemplatePayload(r.id,r.name,r.formConfig,r.templateFormat))
+            res.status(200).send(returnList);
         })
         .post(async (req: Request, res: Response) => {
             const template = await this.templateService.create(req.body);
@@ -24,7 +47,12 @@ export default class TemplateController extends CommonControllerConfig{
     this.app.route(`/templates/:id`)
         .get(async (req: Request, res: Response) => {
             const template = await this.templateService.readById(parseInt(req.params.id));
-            res.status(200).send(template);
+            if (typeof template !== 'undefined' ) {
+                res.status(200).send(
+                    new TemplatePayload(template.id,template.name,template.formConfig,template.templateFormat));
+            } else {
+                res.status(404)
+            }
         })
         .put(async (req: Request, res: Response) => {
             const responseMessage = await this.templateService.putById(parseInt(req.params.id), req.body)

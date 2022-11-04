@@ -1,0 +1,83 @@
+[
+  {
+    "page_label": "Wordpress site",
+    "fields": [
+      {
+        "field_id": "DBName",
+        "field_label": "DB Name",
+        "field_mandatory": "yes",
+        "field_placeholder": "Enter DB name",
+        "field_type": "text",
+        "field_value": "",
+        "field_error": "",
+        "field_regex": "[a-zA-Z][a-zA-Z0-9]*",
+        "field_max": "64",
+        "field_min": "1"
+      },
+      {
+        "field_id": "DBPassword",
+        "field_label": "DB Password",
+        "field_mandatory": "yes",
+        "field_placeholder": "Enter DB password",
+        "field_type": "text",
+        "field_value": "",
+        "field_error": "",
+        "field_regex": "[a-zA-Z0-9]+",
+        "field_max": "41",
+        "field_min": "8"
+      },
+      {
+        "field_id": "DBRootPassword",
+        "field_label": "DB Root Password",
+        "field_mandatory": "yes",
+        "field_placeholder": "Enter DB Root password",
+        "field_type": "text",
+        "field_value": "",
+        "field_error": "",
+        "field_regex": "[a-zA-Z0-9]+",
+        "field_max": "41",
+        "field_min": "8"
+      },
+      {
+        "field_id": "DBUser",
+        "field_label": "DB User",
+        "field_mandatory": "yes",
+        "field_placeholder": "Enter User name",
+        "field_type": "text",
+        "field_value": "",
+        "field_error": "",
+        "field_regex": "[a-zA-Z][a-zA-Z0-9]*",
+        "field_max": "16",
+        "field_min": "1"
+      },
+      {
+        "field_id": "InstanceType",
+        "field_label": "Instance Type",
+        "field_value": "t2.nano",
+        "field_error": "",
+        "field_mandatory": "yes",
+        "field_options": [
+          {
+            "option_label": "t2.nano"
+          },
+          {
+            "option_label": "t2.micro"
+          }
+        ],
+        "field_type": "select"
+      },
+      {
+        "field_id": "SSHLocation",
+        "field_label": "SSH Location",
+        "field_mandatory": "yes",
+        "field_placeholder": "Enter User name",
+        "field_type": "text",
+        "field_value": "",
+        "field_error": "",
+        "field_regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+        "field_max": "18",
+        "field_min": "9"
+      }
+    ]
+  }
+]
