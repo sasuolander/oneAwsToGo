@@ -10,6 +10,8 @@ import '../styles/infoCard.css';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import DeploymentStatusService from '../service/deploymentStatusService';
+import FetchDeployedService from "../service/fetchDeployedService";
 import LinearProgress from '@mui/material/LinearProgress';
 import '../styles/progressBar.css';
 import Grid from "@mui/material/Grid"
@@ -17,6 +19,8 @@ import Grid from "@mui/material/Grid"
 // TODO think out injection or provider system when using service in react
 const deployService = new DeployService();
 const templateService = new FetchTemplateService();
+const deploymentStatusService = new DeploymentStatusService();
+const fetchDeployedService = new FetchDeployedService();
 
 interface IEventChange extends React.ChangeEvent<HTMLInputElement> {
 
@@ -41,10 +45,31 @@ function CreateEnvironment() {
             const name = data[0].field_value
             const cropData = data.filter((f: { field_id: string; }) => f.field_id !== "deployment_name")
             const startProcess = await deployService.triggerCreation(Number(id), name, cropData)
-            //console.log("pressing CreateEnvironment", startProcess)
             setCardVisibility(true);
             updateCardText("Creating environment with stackId: " + String(startProcess.deploymentId));
+            const internalId = await fetchDeployedService.getDeploymentIdByStackId(String(startProcess.deploymentId));
+            if (internalId !== undefined) {
+                pollStatus(Number(internalId));
+            }
+
         }
+    }
+
+    const pollStatus = async (internalId: Number | undefined) => {
+
+        const timeout = async (ms:number) => {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        while (true) {
+            let statusResponse = await deploymentStatusService.fetchDeploymentStatus(Number(internalId));
+            console.log(statusResponse.status);
+            if (statusResponse.status === "CREATE_COMPLETE" || statusResponse.status === "CREATE_FAILED") {
+                break;
+            }
+            await timeout(5000);
+        }
+        
     }
 
     const updateCardText = (text: string) => {
