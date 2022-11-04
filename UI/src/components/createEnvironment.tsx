@@ -144,7 +144,7 @@ function CreateEnvironment() {
                              config={templates.find(r => r.id == templId)?.data.formConfig} submitFormExec={sendData}
                 /> : <div></div>
             }
-            {<Card id="info-card" className="infoCard" variant="outlined" background-color="blue" style={{visibility: cardVisible ? "visible" : "hidden", backgroundColor: cardColor}}>
+            {<Card id="info-card" className="infoCard" variant="outlined" style={{visibility: cardVisible ? "visible" : "hidden", backgroundColor: cardColor}}>
                 <CardContent className="cardContent">
                     <Typography className="statusText">{cardText}</Typography>
                 </CardContent>
