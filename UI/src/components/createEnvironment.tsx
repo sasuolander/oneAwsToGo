@@ -38,31 +38,42 @@ function CreateEnvironment() {
     const [templatesReady, setTemplatesReady] = useState(false);
     const [cardText, setCardText] = useState("");
     const [cardVisible, setCardVisibility] = useState(false);
+    const [cardColor, setCardColor] = useState("white");
     const [progressVisible, setProgressVisibility] = useState(false);
 
     const sendData = async (id: string, data: any) => {
+        setCardColor("white");
+        setCardVisibility(false);
+        setCardText("");
+        setProgressVisibility(false);
+
         if (id !== "") {
             const name = data[0].field_value
             const cropData = data.filter((f: { field_id: string; }) => f.field_id !== "deployment_name")
-            const startProcess = await deployService.triggerCreation(Number(id), name, cropData)
-
-            if (startProcess.httpStatus === 200) {
-                handleDeploymentUpdates(String(startProcess.deploymentId));
-            } else {
-                //TDB in another branch.
-            }
+            deployService.triggerCreation(Number(id), name, cropData)
+                .then(response => {
+                    handleDeploymentUpdates(String(response.deploymentId));
+                })
+                .catch(error => handleDeploymentError(error))
         }
+    }
+
+    const handleDeploymentError = (error: any) => {
+        setProgressVisibility(false);
+        setCardColor("lightcoral");
+        updateCardText("Error: " + error.response.data.errorMessage);
+        setCardVisibility(true);
     }
 
     const handleDeploymentUpdates = async (stackId: string) => {
         const timeout = async (ms:number) => {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
-
+        setCardColor("white");
         setCardVisibility(true);
         setProgressVisibility(true);
         const internalId = await fetchDeployedService.getDeploymentIdByStackId(stackId);
-        updateCardText("Creating environment with id " + internalId + " and stackId " + stackId);
+        updateCardText("Creating an environment with id " + internalId + " and stackId " + stackId);
 
         if (internalId !== undefined) {
 
@@ -70,10 +81,12 @@ function CreateEnvironment() {
                 let statusResponse = await deploymentStatusService.fetchDeploymentStatus(Number(internalId));
                 if (statusResponse.status === "CREATE_COMPLETE") {
                     setProgressVisibility(false);
-                    updateCardText("Successfully created an environment with id " + internalId + " and stackId" + stackId);
+                    setCardColor("palegreen");
+                    updateCardText("Successfully created an environment with id " + internalId + " and stackId " + stackId);
                     break;
                 } else if (statusResponse.status === "CREATE_FAILED") {
                     setProgressVisibility(false);
+                    setCardColor("lightcoral");
                     updateCardText("Failed to create an environment with id " + internalId + " and stackId " + stackId)
                     break;
                 } 
@@ -131,7 +144,7 @@ function CreateEnvironment() {
                              config={templates.find(r => r.id == templId)?.data.formConfig} submitFormExec={sendData}
                 /> : <div></div>
             }
-            {<Card id="info-card" className="infoCard" variant="outlined" style={{visibility: cardVisible ? "visible" : "hidden"}}>
+            {<Card id="info-card" className="infoCard" variant="outlined" style={{visibility: cardVisible ? "visible" : "hidden", backgroundColor: cardColor}}>
                 <CardContent className="cardContent">
                     <Typography className="statusText">{cardText}</Typography>
                 </CardContent>
