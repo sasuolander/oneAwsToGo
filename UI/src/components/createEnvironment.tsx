@@ -10,6 +10,9 @@ import '../styles/infoCard.css';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
+import '../styles/progressBar.css';
+import Grid from "@mui/material/Grid"
 
 // TODO think out injection or provider system when using service in react
 const deployService = new DeployService();
@@ -31,6 +34,7 @@ function CreateEnvironment() {
     const [templatesReady, setTemplatesReady] = useState(false);
     const [cardText, setCardText] = useState("");
     const [cardVisible, setCardVisibility] = useState(false);
+    const [progressVisible, setProgressVisibility] = useState(false);
 
     const sendData = async (id: string, data: any) => {
         if (id !== "") {
@@ -95,6 +99,11 @@ function CreateEnvironment() {
                     <Typography className="statusText">{cardText}</Typography>
                 </CardContent>
             </Card>}
+            <Grid id="progress-grid" className="progressContainer" container>
+                <Grid id="progress-grid-item" className="progressGridItem" xs item>
+                    <LinearProgress id="progress-bar" className="progressBar" variant="indeterminate" style={{visibility: progressVisible ? "visible" : "hidden"}}/>
+                </Grid>
+            </Grid>
        </div>
 
     );
