@@ -12,6 +12,9 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import DeploymentStatusService from '../service/deploymentStatusService';
 import FetchDeployedService from "../service/fetchDeployedService";
+import LinearProgress from '@mui/material/LinearProgress';
+import '../styles/progressBar.css';
+import Grid from "@mui/material/Grid"
 
 // TODO think out injection or provider system when using service in react
 const deployService = new DeployService();
@@ -35,42 +38,55 @@ function CreateEnvironment() {
     const [templatesReady, setTemplatesReady] = useState(false);
     const [cardText, setCardText] = useState("");
     const [cardVisible, setCardVisibility] = useState(false);
+    const [progressVisible, setProgressVisibility] = useState(false);
 
     const sendData = async (id: string, data: any) => {
         if (id !== "") {
             const name = data[0].field_value
             const cropData = data.filter((f: { field_id: string; }) => f.field_id !== "deployment_name")
             const startProcess = await deployService.triggerCreation(Number(id), name, cropData)
-            setCardVisibility(true);
-            updateCardText("Creating environment with stackId: " + String(startProcess.deploymentId));
-            const internalId = await fetchDeployedService.getDeploymentIdByStackId(String(startProcess.deploymentId));
-            if (internalId !== undefined) {
-                pollStatus(Number(internalId));
-            }
 
+            if (startProcess.httpStatus === 200) {
+                handleDeploymentUpdates(String(startProcess.deploymentId));
+            } else {
+                //TDB in another branch.
+            }
         }
     }
 
-    const pollStatus = async (internalId: Number | undefined) => {
-
+    const handleDeploymentUpdates = async (stackId: string) => {
         const timeout = async (ms:number) => {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        while (true) {
-            let statusResponse = await deploymentStatusService.fetchDeploymentStatus(Number(internalId));
-            console.log(statusResponse.status);
-            if (statusResponse.status === "CREATE_COMPLETE" || statusResponse.status === "CREATE_FAILED") {
-                break;
+        setCardVisibility(true);
+        setProgressVisibility(true);
+        const internalId = await fetchDeployedService.getDeploymentIdByStackId(stackId);
+        updateCardText("Creating environment with id " + internalId + " and stackId " + stackId);
+
+        if (internalId !== undefined) {
+
+            while (true) {
+                let statusResponse = await deploymentStatusService.fetchDeploymentStatus(Number(internalId));
+                if (statusResponse.status === "CREATE_COMPLETE") {
+                    setProgressVisibility(false);
+                    updateCardText("Successfully created an environment with id " + internalId + " and stackId" + stackId);
+                    break;
+                } else if (statusResponse.status === "CREATE_FAILED") {
+                    setProgressVisibility(false);
+                    updateCardText("Failed to create an environment with id " + internalId + " and stackId " + stackId)
+                    break;
+                } 
+                await timeout(5000);
             }
-            await timeout(5000);
         }
-        
     }
+
 
     const updateCardText = (text: string) => {
         setCardText(text);
     }
+
     useEffect(() => {
         if (!templatesReady) {
             templateService.getTemplates().then(function (response) {
@@ -120,6 +136,11 @@ function CreateEnvironment() {
                     <Typography className="statusText">{cardText}</Typography>
                 </CardContent>
             </Card>}
+            <Grid id="progress-grid" className="progressContainer" container>
+                <Grid id="progress-grid-item" className="progressGridItem" xs item>
+                    <LinearProgress id="progress-bar" className="progressBar" variant="indeterminate" style={{visibility: progressVisible ? "visible" : "hidden"}}/>
+                </Grid>
+            </Grid>
        </div>
 
     );

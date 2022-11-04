@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import Element from "./components/Element";
 import {FormContext} from "./FormContext";
 import "../../styles/dynamicForm.css";
+import Button from "@mui/material/Button"
 
 // TODO add typing in some later time
 function DynamicForm({defaultValues, config, submitFormExec, metaData}) {
@@ -75,9 +76,7 @@ function DynamicForm({defaultValues, config, submitFormExec, metaData}) {
                             </>
                         ))
                         : null}
-                    <button type="submit" className="btn btn-primary">
-                        Submit
-                    </button>
+                    <Button type="submit" className="btn btn-primary" variant="contained">Submit</Button>    
                 </form>
             </div>
         </FormContext.Provider>
