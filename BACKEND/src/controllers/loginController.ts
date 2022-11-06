@@ -32,18 +32,7 @@ export default class LoginController extends CommonControllerConfig{
 
     configureRoutes() : Application{
         this.app.route(`/login`)
-        .get(async (req: Request, res: Response) => {
-            const users = await this.userService.list()
-            const returnList = users.map(r=> new LoginPayload(r.name, r.password));
-            res.status(200).send(returnList);
-        })
         .post(async (req: Request, res: Response) => {
-            const user = await this.userService.create(req.body);
-            res.status(201).send(user);
-        });
-
-    this.app.route(`/login/:name`)
-        .get(async (req: Request, res: Response) => {
             const user = await this.userService.readByLogin(req.params.name, req.params.password);
             if (typeof user !== 'undefined' ) {
                 res.status(200).send(
@@ -51,7 +40,6 @@ export default class LoginController extends CommonControllerConfig{
             } else {
                 res.status(404)
             }
-
         });
 
         return this.app;
