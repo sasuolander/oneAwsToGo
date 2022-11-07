@@ -20,4 +20,6 @@ start database:
 
 docker-compose -f .\oneAwsToGo\system.yml -p oneawssystem up
 
+You can use dbeaver to connect to database.
+
 
