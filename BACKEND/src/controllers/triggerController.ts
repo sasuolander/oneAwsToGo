@@ -62,6 +62,7 @@ export default class TriggerController extends CommonControllerConfig {
                             console.log(deploy);
                             const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
                             this.deployedStackService.create(newDeployment);
+                            this.deployedStackService.pollStatusUpdate(newDeployment, "CREATE_IN_PROGRESS");
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined};
                         } catch (e:any) {
                             console.log(e)

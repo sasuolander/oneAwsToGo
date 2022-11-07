@@ -12,6 +12,7 @@ export default class InDeploymentStackService {
     }
 
     async checkDeploymentStatus(payload: IStatusPayload) {
+        try {
         const stack = await InDeploymentStackDao.getInDeploymentStackById(payload.id);
         if(stack) {
             const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
@@ -22,6 +23,10 @@ export default class InDeploymentStackService {
                 return currentStatus.StackEvents[0].ResourceStatus;
             }
             
+        }
+        } catch(e) {
+            console.log(e);
+            return "Couldn't check status";
         }
     }
 
@@ -39,7 +44,7 @@ export default class InDeploymentStackService {
                 }
             }
         }catch(e) {
-            console.log(e)
+            console.log(e);
         }
         
     }
