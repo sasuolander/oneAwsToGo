@@ -12,3 +12,12 @@ SERVER_PORT= // server port
 
 
 Bundle source code by npm build
+
+load database with test data:
+
+npx knex --knexfile ./src/database/knexConfig.ts seed:run
+
+
+run migration:
+
+npx knex --knexfile ./BACKEND/knexConfig.ts migrate:latest
