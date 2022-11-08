@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   postgres:
-    image: postgis:latest
+    image: postgres:latest
     environment:
       POSTGRES_USER: oneawstogo
       POSTGRES_PASSWORD: oneawstogo
