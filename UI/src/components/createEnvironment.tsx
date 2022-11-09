@@ -72,7 +72,6 @@ function CreateEnvironment() {
         setCardColor("white");
         setCardVisibility(true);
         setProgressVisibility(true);
-        //const internalId = await fetchDeployedService.getDeploymentIdByStackId(stackId);
         updateCardText("Creating an environment with id " + internalId + " and stackId " + stackId);
 
         if (internalId !== undefined) {
