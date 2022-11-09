@@ -12,9 +12,6 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import DeploymentStatusService from '../service/deploymentStatusService';
 import FetchDeployedService from "../service/fetchDeployedService";
-import LinearProgress from '@mui/material/LinearProgress';
-import '../styles/progressBar.css';
-import Grid from "@mui/material/Grid"
 
 // TODO think out injection or provider system when using service in react
 const deployService = new DeployService();
@@ -39,13 +36,13 @@ function CreateEnvironment() {
     const [cardText, setCardText] = useState("");
     const [cardVisible, setCardVisibility] = useState(false);
     const [cardColor, setCardColor] = useState("white");
-    const [progressVisible, setProgressVisibility] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const sendData = async (id: string, data: any) => {
         setCardColor("white");
         setCardVisibility(false);
         setCardText("");
-        setProgressVisibility(false);
+        setLoading(false);
 
         if (id !== "") {
             const name = data[0].field_value
@@ -59,7 +56,7 @@ function CreateEnvironment() {
     }
 
     const handleDeploymentError = (error: any) => {
-        setProgressVisibility(false);
+        setLoading(false);
         setCardColor("lightcoral");
         updateCardText("Error: " + error.response.data.errorMessage);
         setCardVisibility(true);
@@ -71,7 +68,7 @@ function CreateEnvironment() {
         }
         setCardColor("white");
         setCardVisibility(true);
-        setProgressVisibility(true);
+        setLoading(true);
         const internalId = await fetchDeployedService.getDeploymentIdByStackId(stackId);
         updateCardText("Creating an environment with id " + internalId + " and stackId " + stackId);
 
@@ -80,12 +77,12 @@ function CreateEnvironment() {
             while (true) {
                 let statusResponse = await deploymentStatusService.fetchDeploymentStatus(Number(internalId));
                 if (statusResponse.status === "CREATE_COMPLETE") {
-                    setProgressVisibility(false);
+                    setLoading(false);
                     setCardColor("palegreen");
                     updateCardText("Successfully created an environment with id " + internalId + " and stackId " + stackId);
                     break;
                 } else if (statusResponse.status === "CREATE_FAILED") {
-                    setProgressVisibility(false);
+                    setLoading(false);
                     setCardColor("lightcoral");
                     updateCardText("Failed to create an environment with id " + internalId + " and stackId " + stackId)
                     break;
@@ -140,7 +137,7 @@ function CreateEnvironment() {
                 </TextField>
             </div>
             {typeof templates.find(r => r.id == templId) !== "undefined" ?
-                <DynamicForm defaultValues={nameForNewTemplate} metaData={templId}
+                <DynamicForm defaultValues={nameForNewTemplate} metaData={templId} buttonLoading={loading}
                              config={templates.find(r => r.id == templId)?.data.formConfig} submitFormExec={sendData}
                 /> : <div></div>
             }
@@ -149,11 +146,6 @@ function CreateEnvironment() {
                     <Typography className="statusText">{cardText}</Typography>
                 </CardContent>
             </Card>}
-            <Grid id="progress-grid" className="progressContainer" container>
-                <Grid id="progress-grid-item" className="progressGridItem" xs item>
-                    <LinearProgress id="progress-bar" className="progressBar" variant="indeterminate" style={{visibility: progressVisible ? "visible" : "hidden"}}/>
-                </Grid>
-            </Grid>
        </div>
 
     );
