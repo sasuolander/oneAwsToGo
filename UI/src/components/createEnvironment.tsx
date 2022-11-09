@@ -52,7 +52,7 @@ function CreateEnvironment() {
             const cropData = data.filter((f: { field_id: string; }) => f.field_id !== "deployment_name")
             deployService.triggerCreation(Number(id), name, cropData)
                 .then(response => {
-                    handleDeploymentUpdates(String(response.deploymentId));
+                    handleDeploymentUpdates(String(response.deploymentId), Number(response.id));
                 })
                 .catch(error => handleDeploymentError(error))
         }
@@ -65,14 +65,14 @@ function CreateEnvironment() {
         setCardVisibility(true);
     }
 
-    const handleDeploymentUpdates = async (stackId: string) => {
+    const handleDeploymentUpdates = async (stackId: string, internalId: Number) => {
         const timeout = async (ms:number) => {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         setCardColor("white");
         setCardVisibility(true);
         setProgressVisibility(true);
-        const internalId = await fetchDeployedService.getDeploymentIdByStackId(stackId);
+        //const internalId = await fetchDeployedService.getDeploymentIdByStackId(stackId);
         updateCardText("Creating an environment with id " + internalId + " and stackId " + stackId);
 
         if (internalId !== undefined) {
