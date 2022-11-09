@@ -716,4 +716,12 @@ FodyWeavers.xsd
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
+# Robot Framework Stuff
+
+robot/log.html
+robot/output.xml
+robot/report.html
+robot/*driver.exe
+robot/*.png
+
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudio,visualstudiocode,intellij+all,linux,windows,macos
