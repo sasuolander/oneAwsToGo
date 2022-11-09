@@ -1,10 +1,10 @@
-import "../styles/dummyPage.css"
+import "../styles/myEnvsPage.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import ShowEnvironment from "../components/showEnvironment";
-export default function DummyPage() {
+export default function EnvsPage() {
     return (
-        <div id="dummy-page" className="dummyPage">
+        <div id="myenvs-page" className="myEnvsPage">
             <ShowEnvironment />
         </div>
     );
