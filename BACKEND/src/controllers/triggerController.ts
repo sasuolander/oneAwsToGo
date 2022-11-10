@@ -12,7 +12,8 @@ import { AlreadyExistsException } from "@aws-sdk/client-cloudformation";
 interface IDeploymentResult {
     httpStatus: number | undefined,
     deploymentId:string | undefined,
-    errorMessage: string | undefined
+    errorMessage: string | undefined,
+    id: number | undefined
 }
 
 
@@ -62,10 +63,10 @@ export default class TriggerController extends CommonControllerConfig {
                             console.log(deploy);
                             const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
                             this.deployedStackService.create(newDeployment);
-                            return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined};
+                            return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined, id: newDeployment.id};
                         } catch (e:any) {
                             console.log(e)
-                            return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message}
+                            return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id: undefined}
                                
                         }                    
                             
@@ -79,11 +80,11 @@ export default class TriggerController extends CommonControllerConfig {
                 }
             } catch (e:any) {
                 console.log(e);
-                return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message};
+                return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id:undefined};
             }
 
         } else {
-            return {httpStatus: 404, deploymentId:undefined, errorMessage: undefined};
+            return {httpStatus: 404, deploymentId:undefined, errorMessage: undefined, id:undefined};
         }
     }
 
