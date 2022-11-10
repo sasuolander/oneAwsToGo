@@ -50,18 +50,21 @@ export class Payload implements IPayload {
 export interface IDeployedPayload {
     name: string | undefined,
     stackId: string | undefined,
-    id: Number | undefined
+    id: Number | undefined,
+    status: string | undefined
 }
 
 export class DeployedPayload implements IDeployedPayload{
     name: string | undefined;
     stackId: string | undefined;
     id: Number | undefined;
+    status: string | undefined;
 
-    constructor(name:string, stackId: string, id: Number) {
+    constructor(name:string, stackId: string, id: Number, status: string) {
         this.name = name;
         this.stackId = stackId;
         this.id = id;
+        this.status = status;
     }
 }
 
@@ -97,7 +100,7 @@ export default class Backend {
     static fetchDeployed():Promise<DeployedPayload[]> {
         return axios.get(baseApi as string + "/deployed")
             .then(response => {
-                return response.data.map((response:any) =>{ return new DeployedPayload(response.name, response.stackId, response.id)})
+                return response.data.map((response:any) =>{ return new DeployedPayload(response.name, response.stackId, response.id, response.status)})
         })
     }
 

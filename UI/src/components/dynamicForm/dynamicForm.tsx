@@ -3,10 +3,11 @@ import {useState, useEffect} from "react";
 import Element from "./components/Element";
 import {FormContext} from "./FormContext";
 import "../../styles/dynamicForm.css";
-import Button from "@mui/material/Button"
+import LoadingButton from "@mui/lab/LoadingButton"
+import CloudUpload from '@mui/icons-material/CloudUpload';
 
 // TODO add typing in some later time
-function DynamicForm({defaultValues, config, submitFormExec, metaData}) {
+function DynamicForm({defaultValues, config, submitFormExec, metaData, buttonLoading}) {
     const [elements, setElements] = useState(null);
     const [formErrors, setFormErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
@@ -76,7 +77,8 @@ function DynamicForm({defaultValues, config, submitFormExec, metaData}) {
                             </>
                         ))
                         : null}
-                    <Button type="submit" className="btn btn-primary" variant="contained">Submit</Button>    
+                    <LoadingButton type="submit" startIcon={<CloudUpload/>} loading={buttonLoading} 
+                    loadingPosition="start" className="btn btn-primary" variant="contained">Submit</LoadingButton>    
                 </form>
             </div>
         </FormContext.Provider>

@@ -1,22 +1,24 @@
 import FetchDeployedService from "../service/fetchDeployedService";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { DeployedPayload } from "../utils/backend";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { CompressOutlined } from "@mui/icons-material";
-import { Console } from "console";
 
 function ShowEnvironment() {
     let fetchObj = new FetchDeployedService();
     let deployed = fetchObj.getDeployed();
     const [envs, setEnvs] = useState<DeployedPayload[]>([]);
+    const [envsReady, setEnvsReady] = useState(false);
 
     useEffect(() => {
-        deployed.then((result) => {
-            setEnvs(result);
-        })
-    });
 
+        if(!envsReady) {
+            deployed.then((result) => {
+                setEnvs(result);
+                setEnvsReady(true);
+            })
+        }
+    }, []);
 
     const tableRows = envs.map(
         (element) => {
@@ -26,6 +28,7 @@ function ShowEnvironment() {
                     <td>{String(element.id)}</td>
                     <td>{element.name}</td>
                     <td>{element.stackId}</td>
+                    <td>{element.status}</td>
                 </tr>
 
             )
@@ -39,6 +42,7 @@ function ShowEnvironment() {
                         <th>ID</th>
                         <th>Name</th>
                         <th>Stack ID</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
