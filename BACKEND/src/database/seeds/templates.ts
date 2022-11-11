@@ -22,6 +22,8 @@ const templates: ITemplate[] = [
   
   export async function seed(knex: Knex): Promise<void> {
     console.log("Seeding")
-    await knex("template").truncate();
-    await knex("template").insert(templates);
+    //await knex("template").truncate();
+    await knex("template").insert(templates).then(()=>{
+      console.log("Inserting seed")
+    });
   }

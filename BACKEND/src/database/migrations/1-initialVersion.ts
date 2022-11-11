@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("name").notNullable();
         table.string("formConfig",10000).notNullable();
         table.integer("templateFormat").notNullable();
+        table.string('templateSourceCode', 10000).notNullable();
         table.string("url",10000).notNullable();
     });
 
