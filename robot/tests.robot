@@ -48,6 +48,20 @@ Access App Without Login
     Go To    ${APP_URL}/main
     Element Should Not Be Visible    template-dropdown
 
+# Also checks that user can change selected template
+# TC-RU-1
+Test Template Selection
+    Input Text    username-field    username
+    Input Text    password-field    password
+    Click Element    login-submit
+    Element Should Be Visible    template-dropdown
+    Click Element    template-dropdown
+    Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')]
+    Page Should Contain Element    xpath://h3[contains(text(),'Website in S3 bucket')]
+    Click Element    template-dropdown
+    Click Element       xpath://ul/li[contains(text(),'Wordpress site')]
+    Page Should Contain Element    xpath://h3[contains(text(),'Wordpress site')]
+
 *** Keywords ***
 
 Test Setup
