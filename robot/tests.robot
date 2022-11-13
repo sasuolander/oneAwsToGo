@@ -76,6 +76,23 @@ Test Deployment
     Click Element       xpath://button[contains(text(),'Submit')]
     Wait Until Element Is Visible    info-card
 
+# Note the success of this test requires the success of TC-RU-4
+# TC-RU-6
+Test Duplicate Deployment Error
+    Input Text    username-field    username
+    Input Text    password-field    password
+    Click Element    login-submit
+    Element Should Be Visible    template-dropdown
+    Click Element       template-dropdown
+    Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')] 
+    Page Should Contain Element     xpath://h2[contains(text(), "Create an environment")]
+    Input Text  formGroupExampleInput  test-s3-deployment
+    Click Element       xpath://button[contains(text(),'Submit')]
+    Page Should Contain Element    info-card
+    Wait Until Element Is Visible    info-card
+    Element Should Be Visible    info-card
+    Element Should Contain    info-card    Error: Stack [test-s3-deployment] already exists
+
 *** Keywords ***
 
 Test Setup
