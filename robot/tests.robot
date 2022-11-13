@@ -62,6 +62,20 @@ Test Template Selection
     Click Element       xpath://ul/li[contains(text(),'Wordpress site')]
     Page Should Contain Element    xpath://h3[contains(text(),'Wordpress site')]
 
+# Note this deploys to aws but doesen't delete
+# TC-RU-4
+Test Deployment
+    Input Text    username-field    username
+    Input Text    password-field    password
+    Click Element    login-submit
+    Element Should Be Visible    template-dropdown
+    Click Element       template-dropdown
+    Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')] 
+    Page Should Contain Element     xpath://h2[contains(text(), "Create an environment")]
+    Input Text  formGroupExampleInput  test-s3-deployment
+    Click Element       xpath://button[contains(text(),'Submit')]
+    Wait Until Element Is Visible    info-card
+
 *** Keywords ***
 
 Test Setup
