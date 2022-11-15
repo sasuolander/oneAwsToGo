@@ -3,7 +3,8 @@ import {TemplateFormat} from "../interface/templateInterface";
 
 export interface IDeploymentResult {
     httpStatus: number | undefined,
-    deploymentId: string | undefined
+    deploymentId: string | undefined,
+    id: number | undefined
 }
 
 export interface IPayload {
@@ -49,18 +50,21 @@ export class Payload implements IPayload {
 export interface IDeployedPayload {
     name: string | undefined,
     stackId: string | undefined,
-    id: Number | undefined
+    id: Number | undefined,
+    status: string | undefined
 }
 
 export class DeployedPayload implements IDeployedPayload{
     name: string | undefined;
     stackId: string | undefined;
     id: Number | undefined;
+    status: string | undefined;
 
-    constructor(name:string, stackId: string, id: Number) {
+    constructor(name:string, stackId: string, id: Number, status: string) {
         this.name = name;
         this.stackId = stackId;
         this.id = id;
+        this.status = status;
     }
 }
 
@@ -89,14 +93,14 @@ export default class Backend {
     static triggerCreation(id: number, name: string,parameters:string): Promise<IDeploymentResult> {
         // TODO remove hard coded format when we start supporting different template format
         return axios.post(baseApi as string + "/trigger", new Payload(id, TemplateFormat.CloudFormation, name,parameters)).then(r => {
-            return {httpStatus: r.data.httpStatus, deploymentId: r.data.deploymentId};
+            return {httpStatus: r.data.httpStatus, deploymentId: r.data.deploymentId, id: r.data.id};
         })
     }
 
     static fetchDeployed():Promise<DeployedPayload[]> {
         return axios.get(baseApi as string + "/deployed")
             .then(response => {
-                return response.data.map((response:any) =>{ return new DeployedPayload(response.name, response.stackId, response.id)})
+                return response.data.map((response:any) =>{ return new DeployedPayload(response.name, response.stackId, response.id, response.status)})
         })
     }
 
