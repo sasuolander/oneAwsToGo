@@ -1,12 +1,12 @@
 *** Settings ***
 Library    SeleniumLibrary
-Test Setup    Test Setup
+Library    String
+
+Test Setup    Open Login Page
 Test Teardown    Close Browser
 
 *** Variables ***
 
-#${APP URL}    http://localhost:3002
-#${BROWSER}    firefox
 ${APP TITLE}    OneAWStoGo    
 
 *** Test Cases ***
@@ -93,8 +93,60 @@ Test Duplicate Deployment Error
     Element Should Be Visible    info-card
     Element Should Contain    info-card    Error: Stack [test-s3-deployment] already exists
 
+# TC-RU-11
+Verify Deployment From UI
+    [Tags]    asd
+    Login
+    ${deployment_name}=    Generate Random String    8    [LETTERS]
+    Deploy S3 Template    ${deployment_name}
+    Wait For Deployment To Succeed
+    ${id}    ${stackId}=    Get Deployment Ids
+    Open My Environments Page
+    Find Deployment    ${id}    ${deployment_name}    ${stackId}
+
 *** Keywords ***
 
-Test Setup
+Open Login Page
     Open Browser    ${APP_URL}    ${BROWSER}
     Title Should Be    ${APP_TITLE}
+
+Login    
+    Input Text    username-field    username
+    Input Text    password-field    password
+    Click Element    login-submit
+    Element Should Be Visible    template-dropdown
+
+Wait For Deployment To Succeed
+    Wait Until Element Is Visible    info-card
+    Wait Until Element Contains    info-card    Successfully created an environment    15m
+
+Deploy S3 Template
+    [Arguments]    ${deployment_name}
+    Click Element       template-dropdown
+    Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')]
+    Input Text          formGroupExampleInput  ${deployment_name}
+    Click Element       xpath://button[contains(text(),'Submit')]
+
+Get Deployment Ids
+    ${text}=    Get Text    info-card    
+    ${parts1}=    Split String    ${text}    and stackId
+    ${parts2}=    Split String    ${parts1}[0]    id
+    ${id}=    Strip String    ${parts2}[1]
+    ${stackId}=    Strip String    ${parts1}[1]
+    RETURN    ${id}    ${stackid}   
+
+Open My Environments Page     
+    Click Element    envs-link
+    Element Should Be Visible    class:table-hover
+
+Find Deployment
+    [Arguments]    ${id}    ${name}    ${stackId}   
+    ${to_find}=    Catenate    ${id}    ${name}    ${stackId}     
+    ${trows}=    Get WebElements   xpath://tbody/tr
+    ${found}=    Set Variable    ${false}
+    FOR    ${trow}    IN    @{trows}
+        ${row_text}=    Get Text    ${trow}
+        ${found}=    Evaluate    "${to_find}" in """${row_text}"""
+        Exit For Loop If    ${found} == ${true} 
+    END
+    Should Be True    ${found}
