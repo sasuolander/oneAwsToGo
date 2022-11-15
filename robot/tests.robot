@@ -151,8 +151,7 @@ Open My Environments Page
 
 Find Deployment
     [Arguments]    ${id}    ${name}    ${stackId}    ${status}=${None}    ${check_status}=${false}   
-    ${to_find}=    Set Variable If    ${check_status}    ${id} ${name} ${stackId} ${status}    ${id} ${name} ${stackId}
-    #${to_find}=    Catenate    ${id}    ${name}    ${stackId}     
+    ${to_find}=    Set Variable If    ${check_status}    ${id} ${name} ${stackId} ${status}    ${id} ${name} ${stackId}    
     ${trows}=    Get WebElements   xpath://tbody/tr
     ${found}=    Set Variable    ${false}
     FOR    ${trow}    IN    @{trows}
