@@ -95,7 +95,6 @@ Test Duplicate Deployment Error
 
 # TC-RU-11
 Verify Deployment From UI
-    [Tags]    asd
     Login
     ${deployment_name}=    Generate Random String    8    [LETTERS]
     Deploy S3 Template    ${deployment_name}
@@ -103,6 +102,17 @@ Verify Deployment From UI
     ${id}    ${stackId}=    Get Deployment Ids
     Open My Environments Page
     Find Deployment    ${id}    ${deployment_name}    ${stackId}
+
+
+# TC-RU-8
+Verify Completed Creation From UI 
+    Login
+    ${deployment_name}=    Generate Random String    8    [LETTERS]
+    Deploy S3 Template    ${deployment_name}
+    Wait For Deployment To Succeed
+    ${id}    ${stackId}=    Get Deployment Ids
+    Open My Environments Page
+    Find Deployment    ${id}    ${deployment_name}    ${stackId}    CREATE_COMPLETE    ${true}
 
 *** Keywords ***
 
@@ -140,8 +150,9 @@ Open My Environments Page
     Element Should Be Visible    class:table-hover
 
 Find Deployment
-    [Arguments]    ${id}    ${name}    ${stackId}   
-    ${to_find}=    Catenate    ${id}    ${name}    ${stackId}     
+    [Arguments]    ${id}    ${name}    ${stackId}    ${status}=${None}    ${check_status}=${false}   
+    ${to_find}=    Set Variable If    ${check_status}    ${id} ${name} ${stackId} ${status}    ${id} ${name} ${stackId}
+    #${to_find}=    Catenate    ${id}    ${name}    ${stackId}     
     ${trows}=    Get WebElements   xpath://tbody/tr
     ${found}=    Set Variable    ${false}
     FOR    ${trow}    IN    @{trows}
