@@ -13,6 +13,7 @@ export function NavBar() {
     <header id="main-header">
       <AppBar className="main-navbar">
         <Toolbar>
+          <img id="navbar-logo" alt="" className="navbarLogo"src="/logo392_91.png"/>
           <Link id="main-link" className="nav-link" to="/main">Create an environment</Link>
           <Link id="envs-link" className="nav-link" to="/myEnvironments">My environments</Link>
           <Link id="logout-link" className="nav-link" to="/" onClick={logout}>Log out</Link>
