@@ -9,6 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "../styles/showEnvironment.css"
 import DeleteService from "../service/deleteDeploymentService";
 
+
 function ShowEnvironment() {
     let fetchObj = new FetchDeployedService();
     const deleteService = new DeleteService();
@@ -59,20 +60,23 @@ function ShowEnvironment() {
         }
     )
     return (
-        <div>
-            <Table hover>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Stack ID</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tableRows}
-                </tbody>
-            </Table>
+        <div id="my-envs-container" className="myEnvsContainer">
+            <h2 id="my-envs-title">My environments</h2>
+            <div>
+                <Table hover>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Stack ID</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tableRows}
+                    </tbody>
+                </Table>
+            </div>
         </div>
     )
 

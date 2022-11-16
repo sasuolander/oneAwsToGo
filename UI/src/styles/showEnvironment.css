@@ -1,3 +1,13 @@
+
 .removeButton {
     background-color:crimson !important;
+}
+
+.myEnvsContainer {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: auto;
 }
