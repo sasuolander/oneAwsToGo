@@ -147,7 +147,7 @@ Get Deployment Ids
 
 Open My Environments Page     
     Click Element    envs-link
-    Element Should Be Visible    class:table-hover
+    Element Should Be Visible    my-envs-title
 
 Find Deployment
     [Arguments]    ${id}    ${name}    ${stackId}    ${status}=${None}    ${check_status}=${false}   
