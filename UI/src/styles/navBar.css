@@ -2,6 +2,7 @@
     position: "static";
     top:0;
     width: 100%;
+    background-color:black !important;
 }
 
 .nav-link {
@@ -9,4 +10,8 @@
     text-decoration: none;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.navbarLogo {
+    max-width: 200px;
 }

@@ -4,7 +4,7 @@ import LoginForm from "../components/loginForm"
 export default function LoginPage() {
     return (
             <div id="login-page" className="loginPage">
-                <h3 className="login-title">One AWS to go, please!</h3>
+                <img id="login-logo" alt="" className="loginLogo" src="logo392_91.png"></img>
                 <LoginForm/>
             </div>
     );
