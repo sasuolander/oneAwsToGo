@@ -2,7 +2,7 @@
 	margin-top: 100px;
 }
 
-.login-title {
+.loginLogo {
 	display: flex !important;
 	flex-direction: column;
 	justify-content: center;
