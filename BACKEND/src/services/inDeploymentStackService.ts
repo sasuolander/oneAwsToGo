@@ -73,9 +73,48 @@ export default class InDeploymentStackService {
         if (stack !== undefined) {
             const status = await deleteTemplate(stack.stackId)
             if ( status.$metadata.httpStatusCode == 200 ) {
-                await InDeploymentStackDao.removeInDeploymentStackById(deployedId);
+                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+                if (currentStatus !== undefined){
+                    // @ts-ignore
+                    const statusNow = currentStatus.StackEvents[0].ResourceStatus
+                    if (statusNow !== undefined){
+                        const finalStatus = await this.pollStatusUpdateDelete(stack,statusNow)
+                        console.log("status")
+                        if (finalStatus !== undefined ){
+                            console.log(finalStatus)
+                            await InDeploymentStackDao.removeInDeploymentStackById(deployedId);
+                        }
+
+                    }   else{
+                        console.log("undefined error")
+                    }
+                }
             }
         }
+    }
+
+    async pollStatusUpdateDelete(stack: IInDeploymentStack, status: string | undefined) : Promise<string | undefined >{
+    let deleteStatus: string | undefined
+        try {
+        console.log("start deleting poll")
+            while(status !== "DELETE_COMPLETE") {
+                await this.timeout(5000)
+                console.log("Polling Delete....");
+                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+                if(currentStatus.StackEvents) {
+                    //@ts-ignore
+                    await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
+                    status = currentStatus.StackEvents[0].ResourceStatus;
+                    deleteStatus = currentStatus.StackEvents[0].ResourceStatus;
+                }
+            }
+            if (deleteStatus !== undefined){
+                return deleteStatus
+            }
+        }catch(e) {
+            console.log(e)
+        }
+
     }
 
     async list() {
