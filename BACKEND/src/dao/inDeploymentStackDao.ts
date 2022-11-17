@@ -48,12 +48,12 @@ class InDeploymentStackDao {
         return false;
     }
 
-    async removeInDeploymentStackById(deployedStackId: number) {
+    async removeInDeploymentStackById(deployedId: number) {
         const objIndex = this.deployedStacks.findIndex(
-            (obj: { id: number }) => obj.id === deployedStackId
+            (obj: { id: number }) => obj.id === deployedId
         );
         this.deployedStacks.splice(objIndex, 1);
-        return `${deployedStackId} removed`;
+        return `${deployedId} removed`;
     }
 
 }
