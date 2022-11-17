@@ -18,7 +18,7 @@ export default class InDeploymentStackController extends CommonControllerConfig 
             res.status(200).send(stacks);
         })
         .delete(async (req: Request, res: Response) => {
-            const responseMessage = await this.inDeploymentStackStatusService.deleteByStackId(parseInt(req.params.id));
+            const responseMessage = await this.inDeploymentStackStatusService.deleteStack(parseInt(req.body.id));
             res.status(204).send();
         });
 
@@ -34,5 +34,5 @@ export default class InDeploymentStackController extends CommonControllerConfig 
         })
         return this.app;
     }
-    
+
 }
