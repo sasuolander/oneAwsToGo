@@ -13,7 +13,6 @@ import GithubClient from "./utils/githubClient";
 import InDeploymentStackService from "./services/inDeploymentStackService";
 import InDeploymentStackController from "./controllers/deploymentStatusController";
 import StackStatusService from "./services/deploymentstatus/stackStatusService";
-import StackController from "./controllers/stackController";
 
 export const app: Application = express();
 const port = process.env.SERVER_PORT;
@@ -31,7 +30,6 @@ routes.push(new UserController(app, new UserService()));
 routes.push(new TemplateController(app, new TemplateService()));
 routes.push(new TriggerController(app, new TriggerService( new TemplateService), new GithubClient(), new InDeploymentStackService(new StackStatusService)));
 routes.push(new InDeploymentStackController(app, new InDeploymentStackService(new StackStatusService)));
-routes.push(new StackController(app, new InDeploymentStackService(new StackStatusService)));
 
 app.get("/",
     async (req: Request, res: Response): Promise<Response> => {
