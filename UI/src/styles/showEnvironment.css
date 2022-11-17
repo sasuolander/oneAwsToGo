@@ -1,8 +1,4 @@
 
-.removeButton {
-    background-color:crimson !important;
-}
-
 .myEnvsContainer {
     display: flex !important;
     flex-direction: column;

@@ -21,6 +21,7 @@ function ShowEnvironment() {
     const [notificationOpen, setNotificationOpen] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
     const [notificationSeverity, setnotificationSeverity] = useState<AlertColor>("info");
+    const [loadingStatuses, setLoadingStatuses] = useState<any>([]);
 
     useEffect(() => {
         if(!envsReady) {
@@ -38,20 +39,28 @@ function ShowEnvironment() {
     }
     
     const handleClick = async (id: Number) => {
+        setLoadingStatus(id, true);
         deleteService.deleteDeployment(Number(id))
         .then(response => {
-            handleSuccess(id, response);
+            handleDeletionUpdates(id, response);
         })
         .catch(error => handleDeletionError(id, error))
     }
 
     const handleDeletionError = (id: Number, error: any) => {
+        setLoadingStatus(id, false);
         setNotificationMessage("Failed to remove environment with id " + id + " : "  + error);
         setnotificationSeverity("error");
         setNotificationOpen(true);
+        getDeployed();
+    }
+
+    const handleDeletionUpdates = (id: Number, response: any) => {
+        handleSuccess(id, response);
     }
 
     const handleSuccess = (id: Number, response: any) => {
+        setLoadingStatus(id, false);
         setnotificationSeverity("success");
         setNotificationMessage("Successfully removed environment with id " + id + "!");
         setNotificationOpen(true);
@@ -69,9 +78,15 @@ function ShowEnvironment() {
         <CloseIcon fontSize="small" />
         </IconButton>
     );
-    
+
+    const setLoadingStatus = (id: Number, status: boolean) => {
+        const spliced  = loadingStatuses.slice();
+        spliced[Number(id)] = status;
+        setLoadingStatuses(spliced);     
+    }
     const tableRows = envs.map(
         (element) => {
+
             return (
 
                 <tr id={"row-".concat(String(element.id))}>
@@ -80,9 +95,10 @@ function ShowEnvironment() {
                     <td id={"stackId-".concat(String(element.id))}>{element.stackId}</td>
                     <td id={"status-".concat(String(element.id))}>{element.status}</td>
                     <td ><LoadingButton startIcon={<DeleteIcon />} className="removeButton" id={"remove-".concat(String(element.id))} 
-                    variant="contained" loadingPosition="start" loading={false} onClick={() =>handleClick(Number(element.id))}>Remove</LoadingButton></td>
+                    variant="contained" loadingPosition="start" loading={loadingStatuses[Number(element.id)] || false} onClick={() =>handleClick(Number(element.id))}>Remove</LoadingButton></td>
                 </tr>
             )
+
         }
     )
     return (
