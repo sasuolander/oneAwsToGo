@@ -3,6 +3,7 @@ import InDeploymentStackDao from "../dao/inDeploymentStackDao";
 import StackStatusService from "./deploymentstatus/stackStatusService";
 import IStatusPayload from "../interfaces/statusPayloadInterface";
 import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
+import deleteTemplate from "./deleteTemplate";
 
 export default class InDeploymentStackService {
     stackStatusService: StackStatusService;
@@ -21,7 +22,7 @@ export default class InDeploymentStackService {
                 this.pollStatusUpdate(stack, currentStatus.StackEvents[0].ResourceStatus);
                 return currentStatus.StackEvents[0].ResourceStatus;
             }
-            
+
         }
     }
 
@@ -41,7 +42,7 @@ export default class InDeploymentStackService {
         }catch(e) {
             console.log(e)
         }
-        
+
     }
 
     timeout(ms:number) {
@@ -59,9 +60,22 @@ export default class InDeploymentStackService {
     async getByStackId(stackId : string) {
         return InDeploymentStackDao.getInDeploymentStackByStackId(stackId);
     }
+    async getById(deployedId : number) {
+        return InDeploymentStackDao.getInDeploymentStackById(deployedId);
+    }
 
-    async deleteByStackId(stackId: number) {
-        return InDeploymentStackDao.removeInDeploymentStackById(stackId);
+    async deleteByStackId(deployedId: number) {
+        return InDeploymentStackDao.removeInDeploymentStackById(deployedId);
+    }
+
+    async deleteStack(deployedId: number) {
+        const stack = await this.getById(deployedId);
+        if (stack !== undefined) {
+            const status = await deleteTemplate(stack.stackId)
+            if ( status.$metadata.httpStatusCode == 200 ) {
+                await InDeploymentStackDao.removeInDeploymentStackById(deployedId);
+            }
+        }
     }
 
     async list() {
