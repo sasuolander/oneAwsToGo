@@ -1,7 +1,5 @@
 import UserDao from '../dao/userDao';
 import IUser from "../interfaces/userInterface";
-import StackStatusService from "./deploymentstatus/stackStatusService";
-import TemplateDao from "../dao/templateDao";
 
 class UserService {
     userDao:UserDao = new UserDao()

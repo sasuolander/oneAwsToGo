@@ -38,18 +38,6 @@ export default class CloudFormationDeploy implements IDeploy<Promise<any>, Param
     }
 }
 
-class MinimalInput implements CreateStackCommandInput {
-    Capabilities: (Capability | string)[] = [Capability.CAPABILITY_NAMED_IAM];
-    OnFailure: OnFailure | string =OnFailure.DELETE;
-    StackName: string;
-    TemplateBody: string;
-
-    constructor(StackName: string, TemplateBody: string) {
-        this.StackName = StackName;
-        this.TemplateBody = TemplateBody;
-    }
-}
-
 class InputWithParameter implements CreateStackCommandInput {
     Capabilities: (Capability | string)[] = [Capability.CAPABILITY_NAMED_IAM];
     OnFailure: OnFailure | string = OnFailure.DELETE;

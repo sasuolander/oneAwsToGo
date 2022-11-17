@@ -1,14 +1,10 @@
 import TemplateDao from '../dao/templateDao';
 import ITemplate from "../interfaces/templateInterface";
-import DeployedDao from "../dao/deployedDao";
-import StackStatusService from "./deploymentstatus/stackStatusService";
 
 class TemplateService {
     templateDao:TemplateDao = new TemplateDao
 
-    constructor(templateDao: TemplateDao) {
-        this.templateDao = templateDao
-    }
+    constructor() {}
 
     async create(template: ITemplate) {
         return this.templateDao.addTemplate(template);

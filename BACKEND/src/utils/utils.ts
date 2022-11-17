@@ -10,7 +10,7 @@ export default class Utils {
         });
     }
 
-    static  timeout(ms:number) {
+    static timeout(ms:number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
