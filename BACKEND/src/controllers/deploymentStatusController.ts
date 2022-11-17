@@ -6,13 +6,13 @@ import IStatusPayload from "../interfaces/statusPayloadInterface";
 export default class InDeploymentStackController extends CommonControllerConfig {
     private inDeploymentStackStatusService : InDeploymentStackService
 
-    constructor(app: Application, deploymentStatusService: InDeploymentStackService) {
-        super(app, "DeploymentStatusController");
-        this.inDeploymentStackStatusService = deploymentStatusService;
+    constructor(app: Application, inDeploymentStackStatusService: InDeploymentStackService) {
+        super(app, "InDeploymentStackController");
+        this.inDeploymentStackStatusService = inDeploymentStackStatusService;
     }
 
     configureRoutes(): Application {
-        this.app.route(`/checkdeployed/`)
+        this.app.route(`/checkdeployed`)
         .post(async (req: Request, res: Response) => {
             const payload : IStatusPayload = req.body;
             const status = await this.inDeploymentStackStatusService.checkDeploymentStatus(payload);

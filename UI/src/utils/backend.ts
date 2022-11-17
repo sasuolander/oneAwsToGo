@@ -105,7 +105,7 @@ export default class Backend {
     }
 
     static fetchDevelopmentStatus(id: Number): Promise<any> {
-        return axios.post(baseApi as string + "/checkdeployed/", new StatusPayload(id)).then(response => {
+        return axios.post(baseApi as string + "/checkdeployed", new StatusPayload(id)).then(response => {
             return {status: response.data, httpStatus: response.status, text: response.statusText};
         })
     }

@@ -4,6 +4,7 @@ import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
 import Utils from "../utils/utils";
 import DeployedDao from "../dao/deployedDao";
 import StackStatusService from "./deploymentstatus/stackStatusService";
+require('dotenv').config()
 
 export default class DeployedService {
 
@@ -62,7 +63,7 @@ export default class DeployedService {
         try {
             console.log("start deleting poll")
             while(status !== "DELETE_COMPLETE") {
-                await Utils.timeout(5000)
+                await Utils.timeout(Number(process.env.POLLTIMEOUT))
                 console.log("Polling Delete....");
                 const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
                 if(currentStatus.StackEvents) {

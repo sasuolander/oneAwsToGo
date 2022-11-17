@@ -4,6 +4,7 @@ import IStatusPayload from "../interfaces/statusPayloadInterface";
 import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
 import Utils from "../utils/utils";
 import DeployedDao from "../dao/deployedDao";
+require('dotenv').config()
 
 export default class InDeploymentStackService {
     stackStatusService: StackStatusService;
@@ -20,7 +21,7 @@ export default class InDeploymentStackService {
             if(currentStatus.StackEvents) {
                 //@ts-ignore
                 await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
-                this.pollStatusUpdate(stack, currentStatus.StackEvents[0].ResourceStatus);
+                await this.pollStatusUpdate(stack, currentStatus.StackEvents[0].ResourceStatus);
                 return currentStatus.StackEvents[0].ResourceStatus;
             }
 
@@ -31,7 +32,9 @@ export default class InDeploymentStackService {
 
         try {
             while(status !== "CREATE_COMPLETE" && status !== "CREATE_FAILED") {
-                await Utils.timeout(5000)
+                console.log("loop")
+                console.log(process.env.POLLTIMEOUT)
+                await Utils.timeout(Number(process.env.POLLTIMEOUT))
                 console.log("Polling....");
                 const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
                 if(currentStatus.StackEvents) {
