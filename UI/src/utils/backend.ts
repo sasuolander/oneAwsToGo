@@ -80,15 +80,20 @@ export class StatusPayload implements IStatusPayload{
     }
 }
 
-export interface IDeletePayload {
-    id: Number | undefined
+export interface IDeletePayLoad {
+    data : {
+        id: Number | undefined
+    }
+
 }
 
-export class DeletePayload implements IDeletePayload{
-    id: Number | undefined;
+export class DeletePayload implements IDeletePayLoad{
+    data : {
+        id: Number | undefined
+    }
 
     constructor(id: Number) {
-        this.id = id;
+        this.data = {id};
     }
 }
 
@@ -122,10 +127,9 @@ export default class Backend {
         })
     }
     
-    //TODO: Finish, when endpoint works.
     static deleteDeployment(id: Number): Promise<any> {
-        return axios.post(baseApi as string + "/delete", new DeletePayload(id)).then(response => {
-            return {};
+        return axios.delete(baseApi as string + "/deployed/", new DeletePayload(id)).then(response => {
+            return {response};
         })
     }
 }
