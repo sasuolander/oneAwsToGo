@@ -8,7 +8,7 @@ import StackStatusService from "./deploymentstatus/stackStatusService";
 export default class DeployedService {
 
     stackStatusService: StackStatusService;
-    deployedDao:DeployedDao =new DeployedDao
+    deployedDao:DeployedDao = new DeployedDao
 
     constructor(stackStatusService: StackStatusService) {
         this.stackStatusService = stackStatusService
