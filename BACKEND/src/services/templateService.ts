@@ -1,25 +1,33 @@
 import TemplateDao from '../dao/templateDao';
 import ITemplate from "../interfaces/templateInterface";
+import DeployedDao from "../dao/deployedDao";
+import StackStatusService from "./deploymentstatus/stackStatusService";
 
 class TemplateService {
+    templateDao:TemplateDao = new TemplateDao
+
+    constructor(templateDao: TemplateDao) {
+        this.templateDao = templateDao
+    }
+
     async create(template: ITemplate) {
-        return TemplateDao.addTemplate(template);
+        return this.templateDao.addTemplate(template);
     }
 
     async deleteById(id: number) {
-        return TemplateDao.removeTemplateById(id);
+        return this.templateDao.removeTemplateById(id);
     }
 
     async list() {
-        return TemplateDao.getTemplates();
+        return this.templateDao.getTemplates();
     }
 
     async readById(id: number) {
-        return TemplateDao.getTemplateById(id);
+        return this.templateDao.getTemplateById(id);
     }
 
     async putById(id: number, resource: ITemplate) {
-        return TemplateDao.putTemplateById(id, resource);
+        return this.templateDao.putTemplateById(id, resource);
     }
 
 }

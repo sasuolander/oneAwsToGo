@@ -2,7 +2,7 @@ import ITemplate, {TemplateFormat} from "../interfaces/templateInterface";
 import emptysite from "../../dummy_db/emptysite.json"
 import wordpresssite from "../../dummy_db/wordpresssite.json"
 
-class TemplateDao {
+export default class TemplateDao {
     templates: Array<ITemplate> = [];
     idCount: number = 1;
 
@@ -59,5 +59,3 @@ class TemplateDao {
     }
 
 }
-
-export default new TemplateDao;

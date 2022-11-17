@@ -1,25 +1,29 @@
 import UserDao from '../dao/userDao';
 import IUser from "../interfaces/userInterface";
+import StackStatusService from "./deploymentstatus/stackStatusService";
+import TemplateDao from "../dao/templateDao";
 
 class UserService {
+    userDao:UserDao = new UserDao()
+
     async create(user: IUser) {
-        return UserDao.addUser(user);
+        return this.userDao.addUser(user);
     }
 
     async deleteById(id: number) {
-        return UserDao.removeUserById(id);
+        return this.userDao.removeUserById(id);
     }
 
     async list() {
-        return UserDao.getUsers();
+        return this.userDao.getUsers();
     }
 
     async readById(id: number) {
-        return UserDao.getUserById(id);
+        return this.userDao.getUserById(id);
     }
 
     async putById(id: number, user: IUser) {
-        return UserDao.putUserById(id, user);
+        return this.userDao.putUserById(id, user);
     }
 
 }

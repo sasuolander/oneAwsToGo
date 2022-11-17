@@ -4,10 +4,10 @@ import {Application, Request, Response} from 'express';
 import GithubClient from "../utils/githubClient";
 import IPostPayload from "../interfaces/postpayloadinterface";
 import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDeploy";
-import ITemplate, {TemplateFormat, TemplateInput, Template} from "../interfaces/templateInterface";
+import ITemplate, {TemplateFormat, TemplateInput} from "../interfaces/templateInterface";
 import InDeploymentStackService from "../services/inDeploymentStackService";
 import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
-import { AlreadyExistsException } from "@aws-sdk/client-cloudformation";
+import DeployedService from "../services/deployedService";
 
 interface IDeploymentResult {
     httpStatus: number | undefined,
@@ -20,13 +20,13 @@ interface IDeploymentResult {
 export default class TriggerController extends CommonControllerConfig {
     private triggerService: TriggerService;
     private githubClient: GithubClient;
-    private deployedStackService : InDeploymentStackService;
+    private deployedService : DeployedService;
 
-    constructor(app: Application, triggerService: TriggerService, githubClient: GithubClient, deployedStackService: InDeploymentStackService) {
+    constructor(app: Application, triggerService: TriggerService, githubClient: GithubClient, deployedService: DeployedService) {
         super(app, "TriggerController");
         this.triggerService = triggerService;
         this.githubClient = githubClient;
-        this.deployedStackService = deployedStackService;
+        this.deployedService = deployedService;
     }
 
     configureRoutes(): Application {
@@ -62,14 +62,14 @@ export default class TriggerController extends CommonControllerConfig {
                             const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
                             console.log(deploy);
                             const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
-                            this.deployedStackService.create(newDeployment);
+                            await this.deployedService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined, id: newDeployment.id};
                         } catch (e:any) {
                             console.log(e)
                             return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id: undefined}
-                               
-                        }                    
-                            
+
+                        }
+
 
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")

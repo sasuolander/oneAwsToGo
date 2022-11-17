@@ -1,6 +1,6 @@
 import IUser from "../interfaces/userInterface";
 
-class UserDao {
+export default class UserDao {
     users: Array<IUser> = [];
     idCount: number = 0;
 
@@ -41,5 +41,3 @@ class UserDao {
     }
 
 }
-
-export default new UserDao;

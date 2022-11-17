@@ -1,12 +1,11 @@
 import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
 
-class InDeploymentStackDao {
+export default class DeployedDao {
     deployedStacks: Array<IInDeploymentStack> = [];
     idCount: number = 1;
 
     constructor() {
-        console.log("InDeploymentStackDao created");
-
+        console.log("DeployedDao created");
     }
 
     async addInDeploymentStack(deployedStack: IInDeploymentStack) {
@@ -57,5 +56,3 @@ class InDeploymentStackDao {
     }
 
 }
-
-export default new InDeploymentStackDao;
