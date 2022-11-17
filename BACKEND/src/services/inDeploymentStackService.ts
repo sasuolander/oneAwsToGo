@@ -60,6 +60,10 @@ export default class InDeploymentStackService {
         return InDeploymentStackDao.getInDeploymentStackByStackId(stackId);
     }
 
+    async deleteByStackId(stackId: number) {
+        return InDeploymentStackDao.removeInDeploymentStackById(stackId);
+    }
+
     async list() {
         return InDeploymentStackDao.getInDeploymentStacks();
     }
