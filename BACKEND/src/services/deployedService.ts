@@ -1,18 +1,15 @@
 import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
-import deleteTemplate from "./deleteTemplate";
 import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
 import Utils from "../utils/utils";
 import DeployedDao from "../dao/deployedDao";
-import StackStatusService from "./deploymentstatus/stackStatusService";
+import AWSCommand from "../utils/AWSCommand";
 require('dotenv').config()
 
 export default class DeployedService {
 
-    stackStatusService: StackStatusService;
     deployedDao:DeployedDao = new DeployedDao
 
-    constructor(stackStatusService: StackStatusService) {
-        this.stackStatusService = stackStatusService
+    constructor() {
     }
 
     async updateDeploymentStatus(id : number, status : string) {
@@ -37,9 +34,9 @@ export default class DeployedService {
     async deleteStack(deployedId: number) {
         const stack = await this.getById(deployedId);
         if (stack !== undefined) {
-            const status = await deleteTemplate(stack.stack_id)
+            const status = await AWSCommand.deleteTemplate(stack.stack_id)
             if ( status.$metadata.httpStatusCode == 200 ) {
-                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stack_id);
+                const currentStatus : DescribeStackEventsCommandOutput = await AWSCommand.checkStatus(stack.stack_id);
                 if (currentStatus !== undefined){
                     // @ts-ignore
                     const statusNow = currentStatus.StackEvents[0].ResourceStatus
@@ -65,7 +62,7 @@ export default class DeployedService {
             while(status !== "DELETE_COMPLETE") {
                 await Utils.timeout(Number(process.env.POLLTIMEOUT))
                 console.log("Polling Delete....");
-                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stack_id);
+                const currentStatus : DescribeStackEventsCommandOutput = await AWSCommand.checkStatus(stack.stack_id);
                 if(currentStatus.StackEvents) {
                     //@ts-ignore
                     await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);

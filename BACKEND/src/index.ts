@@ -12,7 +12,6 @@ import TriggerService from "./services/triggerService";
 import GithubClient from "./utils/githubClient";
 import InDeploymentStackService from "./services/inDeploymentStackService";
 import InDeploymentStackController from "./controllers/deploymentStatusController";
-import StackStatusService from "./services/deploymentstatus/stackStatusService";
 import DeployedService from "./services/deployedService";
 import DeployedController from "./controllers/deployedController";
 
@@ -29,10 +28,8 @@ app.use(bodyParser.json());
 
 //Add routes to the app
 const templateService =  new TemplateService()
-const stackStatusService = new StackStatusService()
-const inDeploymentStackService = new InDeploymentStackService(stackStatusService)
-const deployedService = new DeployedService(stackStatusService)
-
+const deployedService = new DeployedService()
+const inDeploymentStackService = new InDeploymentStackService(deployedService)
 routes.push(new UserController(app, new UserService()));
 routes.push(new TemplateController(app, templateService));
 routes.push(new TriggerController(app, new TriggerService(templateService), new GithubClient(), deployedService));
