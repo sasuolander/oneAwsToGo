@@ -14,7 +14,7 @@ import MuiAlert, { AlertColor } from '@mui/material/Alert';
 
 
 function ShowEnvironment() {
-    let fetchObj = new FetchDeployedService();
+    const fetchObj = new FetchDeployedService();
     const deleteService = new DeleteService();
     const [envs, setEnvs] = useState<DeployedPayload[]>([]);
     const [envsReady, setEnvsReady] = useState(false);
