@@ -1,4 +1,4 @@
-import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
+import IDeployedStack from "../interfaces/inDeploymentStackInterface";
 import IStatusPayload from "../interfaces/statusPayloadInterface";
 import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
 import Utils from "../utils/utils";
@@ -28,7 +28,7 @@ export default class InDeploymentStackService {
         }
     }
 
-    async pollStatusUpdate(stack: IInDeploymentStack, status: string | undefined) {
+    async pollStatusUpdate(stack: IDeployedStack, status: string | undefined) {
 
         try {
             while(status !== "CREATE_COMPLETE" && status !== "CREATE_FAILED") {

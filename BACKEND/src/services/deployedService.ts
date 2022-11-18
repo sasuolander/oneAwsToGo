@@ -1,4 +1,4 @@
-import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
+import IDeployedStack from "../interfaces/inDeploymentStackInterface";
 import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
 import Utils from "../utils/utils";
 import DeployedDao from "../dao/deployedDao";
@@ -16,7 +16,7 @@ export default class DeployedService {
         return this.deployedDao.updateDeployedStackStatus(id, status);
     }
 
-    async create(deployedStack: IInDeploymentStack) {
+    async create(deployedStack: IDeployedStack) {
         return this.deployedDao.addDeployedStack(deployedStack);
     }
 
@@ -55,7 +55,7 @@ export default class DeployedService {
         }
     }
 
-    async pollStatusUpdateDelete(stack: IInDeploymentStack, status: string | undefined) : Promise<string | undefined >{
+    async pollStatusUpdateDelete(stack: IDeployedStack, status: string | undefined) : Promise<string | undefined >{
         let deleteStatus: string | undefined
         try {
             console.log("start deleting poll")
