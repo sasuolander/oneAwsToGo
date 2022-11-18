@@ -1,5 +1,5 @@
 import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
-
+import {db} from "../database/configDb";
 class InDeploymentStackDao {
     deployedStacks: Array<IInDeploymentStack> = [];
     idCount: number = 1;
@@ -10,49 +10,57 @@ class InDeploymentStackDao {
     }
 
     async addInDeploymentStack(deployedStack: IInDeploymentStack) {
-        //TODO: Create enum for stack status
-        deployedStack.id = this.idCount;
-        deployedStack.status = "Deployment started";
-        this.deployedStacks.push(deployedStack);
-        this.idCount++;
+        const newId : any = await db.select(db.raw(`nextval('serial')`)).first();
+        deployedStack.status = "CREATE_IN_PROGRESS";
+        console.log(newId.nextval);
+        deployedStack.id = newId.nextval;
+        await db<IInDeploymentStack>("deployed").insert(deployedStack);
         return deployedStack;
     }
 
     async getInDeploymentStacks() {
-        return this.deployedStacks;
+        const allDeployed= await db.select("*")
+        .from<IInDeploymentStack>("deployed")
+        .then();
+        return allDeployed;
     }
 
     async getInDeploymentStackById(inDeploymentStackId: number) {
-        return this.deployedStacks.find((InDeploymentStack: { id: number }) => InDeploymentStack.id === inDeploymentStackId);
+        const foundDeployed = await db<IInDeploymentStack>("deployed").where("id", inDeploymentStackId).first();
+        return foundDeployed;
     }
 
     async getInDeploymentStackByStackId(stackId: string) {
-        return this.deployedStacks.find((InDeploymentStack: { stackId: string }) => InDeploymentStack.stackId === stackId);
+        const foundDeployed = await db<IInDeploymentStack>("deployed").where("stack_id", stackId).first();
+        return foundDeployed;
     }
 
     async putInDeploymentStackById(deployedStackId: number, deployedStack: IInDeploymentStack) {
-        const objIndex = this.deployedStacks.findIndex(
-            obj => obj.id === deployedStackId
-        );
         deployedStack.id = deployedStackId;
-        this.deployedStacks.splice(objIndex, 1, deployedStack);
+        const updated = await db("deployed")
+        .returning("id")
+        .where({id: deployedStackId})
+        .update(deployedStack)
+
         return `${deployedStack.id} updated via put`;
     }
 
     async updateStackStatus(inDeploymentStackId: number, status : string) {
-        const stack = this.deployedStacks.find((InDeploymentStack: { id: number }) => InDeploymentStack.id === inDeploymentStackId);
-        if(stack) {
-            stack.status = status;
+        const updated = await db("deployed")
+        .returning("id")
+        .where({id: inDeploymentStackId})
+        .update('status', status)
+        if(updated.length > 0) {
             return true;
         }
+
         return false;
     }
 
     async removeInDeploymentStackById(deployedId: number) {
-        const objIndex = this.deployedStacks.findIndex(
-            (obj: { id: number }) => obj.id === deployedId
-        );
-        this.deployedStacks.splice(objIndex, 1);
+        await db("deployed")
+        .where({id: deployedId})
+        .del()
         return `${deployedId} removed`;
     }
 

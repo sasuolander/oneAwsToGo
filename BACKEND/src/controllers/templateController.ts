@@ -2,6 +2,7 @@ import {CommonControllerConfig} from '../utils/CommonRoutesConfig';
 import TemplateService from '../services/templateService';
 import {Application, Request, Response, NextFunction} from 'express';
 import {TemplateFormat} from "../interfaces/templateInterface";
+import {HealthController} from "./healthController";
 
 interface ITemplatePayload {
     id: number;
@@ -62,6 +63,9 @@ export default class TemplateController extends CommonControllerConfig{
             const responseMessage = await this.templateService.deleteById(parseInt(req.params.id));
             res.status(204).send();
         });
+
+        //For testing knex
+        this.app.use("/health", HealthController);
 
         return this.app;
     }
