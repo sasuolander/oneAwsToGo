@@ -1,5 +1,3 @@
-import UserDao from "./dao/userDao";
-
 require('dotenv').config()
 import express, { Application, Request, Response } from "express";
 import {CommonControllerConfig} from './utils/CommonRoutesConfig';

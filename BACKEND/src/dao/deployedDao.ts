@@ -1,8 +1,6 @@
 import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
 import {db} from "../database/configDb";
 export default class DeployedDao {
-    deployedStacks: Array<IInDeploymentStack> = [];
-    idCount: number = 1;
 
     constructor() {
         console.log("DeployedDao created");

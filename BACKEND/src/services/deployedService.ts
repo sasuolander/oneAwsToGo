@@ -37,9 +37,9 @@ export default class DeployedService {
     async deleteStack(deployedId: number) {
         const stack = await this.getById(deployedId);
         if (stack !== undefined) {
-            const status = await deleteTemplate(stack.stackId)
+            const status = await deleteTemplate(stack.stack_id)
             if ( status.$metadata.httpStatusCode == 200 ) {
-                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stack_id);
                 if (currentStatus !== undefined){
                     // @ts-ignore
                     const statusNow = currentStatus.StackEvents[0].ResourceStatus
@@ -65,7 +65,7 @@ export default class DeployedService {
             while(status !== "DELETE_COMPLETE") {
                 await Utils.timeout(Number(process.env.POLLTIMEOUT))
                 console.log("Polling Delete....");
-                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stack_id);
                 if(currentStatus.StackEvents) {
                     //@ts-ignore
                     await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
