@@ -21,7 +21,7 @@ export default class InDeploymentStackService {
             if(currentStatus.StackEvents) {
                 // @ts-ignore
                 await this.deployedService.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
-                await this.pollStatusUpdate(stack, currentStatus.StackEvents[0].ResourceStatus);
+                this.pollStatusUpdate(stack, currentStatus.StackEvents[0].ResourceStatus);
                 return currentStatus.StackEvents[0].ResourceStatus;
             }
 
