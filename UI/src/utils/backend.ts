@@ -80,6 +80,23 @@ export class StatusPayload implements IStatusPayload{
     }
 }
 
+export interface IDeletePayLoad {
+    data : {
+        id: Number | undefined
+    }
+
+}
+
+export class DeletePayload implements IDeletePayLoad{
+    data : {
+        id: Number | undefined
+    }
+
+    constructor(id: Number) {
+        this.data = {id};
+    }
+}
+
 export const baseApi = "/api"
 export default class Backend {
 
@@ -107,6 +124,12 @@ export default class Backend {
     static fetchDevelopmentStatus(id: Number): Promise<any> {
         return axios.post(baseApi as string + "/checkdeployed", new StatusPayload(id)).then(response => {
             return {status: response.data, httpStatus: response.status, text: response.statusText};
+        })
+    }
+    
+    static deleteDeployment(id: Number): Promise<any> {
+        return axios.delete(baseApi as string + "/deployed/", new DeletePayload(id)).then(response => {
+            return {response};
         })
     }
 }

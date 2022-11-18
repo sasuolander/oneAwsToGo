@@ -1,11 +1,13 @@
 import { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
+    console.log("Migrating schema")
     await knex.schema.createTable("template", (table) => {
         table.integer("id").primary();
         table.string("name").notNullable();
         table.string("formConfig",10000).notNullable();
-        table.integer("format").notNullable();
+        table.integer("templateFormat").notNullable();
+        table.string('templateSourceCode', 10000).notNullable();
         table.string("url",10000).notNullable();
     });
 
@@ -19,7 +21,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     await knex.schema.createTable("user", (table) => {
-        table.uuid("id").primary();
+        table.integer("id").primary();
         table.string("name").notNullable();
         table.string("password",10000).notNullable();
     });

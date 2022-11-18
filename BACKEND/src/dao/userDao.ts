@@ -1,7 +1,7 @@
 import IUser from "../interfaces/userInterface";
-
+import {db} from "../database/configDb";
+import knex from "knex";
 export default class UserDao {
-    users: Array<IUser> = [];
     idCount: number = 0;
 
     constructor() {
@@ -9,34 +9,37 @@ export default class UserDao {
     }
 
     async addUser(user: IUser) {
-        user.id = this.idCount;
-        this.users.push(user);
-        this.idCount++;
+        const newId : any = await db.select(db.raw(`nextval('serial')`)).first();
+        console.log(newId.nextval);
+        user.id = newId.nextval;
+        await db<IUser>("user").insert(user);
         return user;
     }
 
     async getUsers() {
-        return this.users;
+        const allUsers = await db.select("*")
+        .from<IUser>("user")
+        .then();
+        return allUsers;
     }
 
     async getUserById(userId: number) {
-        return this.users.find((user: { id: number }) => user.id === userId);
+        const foundUser = await db<IUser>("user").where("id", userId).first();
+        return foundUser;
     }
 
     async putUserById(userId: number, user: IUser) {
-        const objIndex = this.users.findIndex(
-            (obj: { id: number }) => obj.id === userId
-        );
         user.id = userId;
-        this.users.splice(objIndex, 1, user);
+        await db("user")
+        .where({id: userId})
+        .update(user)
         return `${user.id} updated via put`;
     }
 
     async removeUserById(userId: number) {
-        const objIndex = this.users.findIndex(
-            (obj: { id: number }) => obj.id === userId
-        );
-        this.users.splice(objIndex, 1);
+        await db("user")
+        .where({id: userId})
+        .del()
         return `${userId} removed`;
     }
 

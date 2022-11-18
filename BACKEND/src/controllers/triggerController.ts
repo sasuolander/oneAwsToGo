@@ -60,7 +60,9 @@ export default class TriggerController extends CommonControllerConfig {
                         try{
                             const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
                             console.log(deploy);
-                            const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
+                            //TODO fix this
+                            //@ts-ignore
+                            const newDeployment = {template_id: template.id, stack_id: deploy.StackId} as IInDeploymentStack;
                             await this.deployedService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined, id: newDeployment.id};
                         } catch (e:any) {
@@ -68,8 +70,6 @@ export default class TriggerController extends CommonControllerConfig {
                             return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id: undefined}
 
                         }
-
-
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
                     case TemplateFormat.TerraForm:

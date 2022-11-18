@@ -1,6 +1,7 @@
 import ITemplate, {TemplateFormat} from "../interfaces/templateInterface";
 import emptysite from "../../dummy_db/emptysite.json"
 import wordpresssite from "../../dummy_db/wordpresssite.json"
+import {db} from "../database/configDb";
 
 export default class TemplateDao {
     templates: Array<ITemplate> = [];
@@ -8,53 +9,40 @@ export default class TemplateDao {
 
     constructor() {
         console.log("TemplateDao created");
-        const firstTemplate : ITemplate = {
-            id : 1,
-            name: "Website in S3 bucket",
-            url:"https://raw.githubusercontent.com/sasuolander/templatesAWS/master/S3_Website_Bucket_With_Retain_On_Delete.yaml",
-            templateFormat: TemplateFormat.CloudFormation, templateSourceCode:"",
-            formConfig: JSON.stringify(emptysite)
-        };
-        const secondTemplate : ITemplate = {
-            id : 2,
-            name: "Wordpress site",
-            url:"https://raw.githubusercontent.com/sasuolander/templatesAWS/master/WordPress_Single_InstanceOwn.yaml",
-            templateFormat: TemplateFormat.CloudFormation, templateSourceCode:"",
-            formConfig:JSON.stringify(wordpresssite)
-        };
-        this.addTemplate(firstTemplate);
-        this.addTemplate(secondTemplate);
     }
 
     async addTemplate(template: ITemplate) {
-        template.id = this.idCount;
-        this.templates.push(template);
-        this.idCount++;
+        const newId : any = await db.select(db.raw(`nextval('serial')`)).first();
+        console.log(newId.nextval);
+        template.id = newId.nextval;
+        await db<ITemplate>("user").insert(template);
         return template;
     }
 
     async getTemplates() {
-        return this.templates;
+        const allTemplates = await db.select("*")
+        .from<ITemplate>("template")
+        .then();
+        return allTemplates;
     }
 
     async getTemplateById(TemplateId: number) {
-        return this.templates.find((Template: { id: number }) => Template.id === TemplateId);
+        const foundTemplate = await db<ITemplate>("template").where("id", TemplateId).first();
+        return foundTemplate;
     }
 
     async putTemplateById(templateId: number, template: ITemplate) {
-        const objIndex = this.templates.findIndex(
-            obj => obj.id === templateId
-        );
         template.id = templateId;
-        this.templates.splice(objIndex, 1, template);
+        await db("template")
+        .where({id: templateId})
+        .update(template)
         return `${template.id} updated via put`;
     }
 
     async removeTemplateById(templateId: number) {
-        const objIndex = this.templates.findIndex(
-            (obj: { id: number }) => obj.id === templateId
-        );
-        this.templates.splice(objIndex, 1);
+        await db("template")
+        .where({id: templateId})
+        .del()
         return `${templateId} removed`;
     }
 

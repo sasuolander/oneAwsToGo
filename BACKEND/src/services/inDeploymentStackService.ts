@@ -17,7 +17,7 @@ export default class InDeploymentStackService {
     async checkDeploymentStatus(payload: IStatusPayload) {
         const stack = await this.deployedDao.getInDeploymentStackById(payload.id);
         if(stack) {
-            const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+            const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stack_id);
             if(currentStatus.StackEvents) {
                 //@ts-ignore
                 await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
@@ -36,7 +36,7 @@ export default class InDeploymentStackService {
                 console.log(process.env.POLLTIMEOUT)
                 await Utils.timeout(Number(process.env.POLLTIMEOUT))
                 console.log("Polling....");
-                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stack_id);
                 if(currentStatus.StackEvents) {
                     //@ts-ignore
                     await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
