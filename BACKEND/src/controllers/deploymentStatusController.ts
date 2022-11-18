@@ -16,6 +16,10 @@ export default class InDeploymentStackController extends CommonControllerConfig 
         .get(async (req: Request, res: Response) => {
             const stacks = await this.inDeploymentStackStatusService.list()
             res.status(200).send(stacks);
+        })
+        .delete(async (req: Request, res: Response) => {
+            const responseMessage = await this.inDeploymentStackStatusService.deleteStack(parseInt(req.body.id));
+            res.status(204).send();
         });
 
         this.app.route(`/checkdeployed/`)
@@ -30,5 +34,5 @@ export default class InDeploymentStackController extends CommonControllerConfig 
         })
         return this.app;
     }
-    
+
 }
