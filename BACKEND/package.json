@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@densebrain/terraformjs": "1.0.0",
     "@aws-sdk/client-cloudformation": "^3.180.0",
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",

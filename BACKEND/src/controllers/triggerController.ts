@@ -4,10 +4,10 @@ import {Application, Request, Response} from 'express';
 import GithubClient from "../utils/githubClient";
 import IPostPayload from "../interfaces/postpayloadinterface";
 import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDeploy";
-import ITemplate, {TemplateFormat, TemplateInput, Template} from "../interfaces/templateInterface";
+import ITemplate, {TemplateFormat, TemplateInput} from "../interfaces/templateInterface";
 import InDeploymentStackService from "../services/inDeploymentStackService";
 import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
-import { AlreadyExistsException } from "@aws-sdk/client-cloudformation";
+import TerraformDeploy from "../services/deploy/terraformDeploy";
 
 interface IDeploymentResult {
     httpStatus: number | undefined,
@@ -36,7 +36,13 @@ export default class TriggerController extends CommonControllerConfig {
                 const foundTemplate = await this.triggerService.findTemplate(toBeInDeployment);
                 if (foundTemplate.found) {
                     const data = foundTemplate.data as ITemplate;
-                    const templateSourceCode = await this.githubClient.getTemplate(data.url);
+                    let templateSourceCode: string
+                    if (data.templateFormat == TemplateFormat.TerraForm) {
+                        templateSourceCode = await this.githubClient.getTemplate(data.url,true,data.name);
+                    }else{
+                        templateSourceCode = await this.githubClient.getTemplate(data.url);
+                    }
+
                     const template = new TemplateInput(data.id, data.name, data.templateFormat, templateSourceCode, data.url)
                     const deployed = await this.deployTemplate(toBeInDeployment.deploymentName, template,toBeInDeployment.parameters);
                     if (deployed.httpStatus) {
@@ -67,14 +73,25 @@ export default class TriggerController extends CommonControllerConfig {
                         } catch (e:any) {
                             console.log(e)
                             return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id: undefined}
-                               
-                        }                    
-                            
+
+                        }
+
 
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
                     case TemplateFormat.TerraForm:
-                        throw  Error("Not Implemented")
+                        try{
+                            const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new TerraformDeploy());
+                            console.log(deploy);
+                            //const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
+                            //this.deployedStackService.create(newDeployment);
+                           // return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined, id: newDeployment.id};
+                            return {httpStatus: 500, deploymentId:undefined, errorMessage: "test", id: undefined}
+                        } catch (e:any) {
+                            console.log(e)
+                            return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id: undefined}
+
+                        }
                     default :
                         throw  Error("Unknown type")
                 }

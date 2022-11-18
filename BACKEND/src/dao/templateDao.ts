@@ -1,6 +1,7 @@
 import ITemplate, {TemplateFormat} from "../interfaces/templateInterface";
 import emptysite from "../../dummy_db/emptysite.json"
 import wordpresssite from "../../dummy_db/wordpresssite.json"
+import terraformexample from "../../dummy_db/terraformexample.json"
 
 class TemplateDao {
     templates: Array<ITemplate> = [];
@@ -22,8 +23,16 @@ class TemplateDao {
             templateFormat: TemplateFormat.CloudFormation, templateSourceCode:"",
             formConfig:JSON.stringify(wordpresssite)
         };
+        const thirdTemplate : ITemplate = {
+            id : 3,
+            name: "terraformexamle",
+            url:"https://raw.githubusercontent.com/sasuolander/templatesAWS/master/main.tf",
+            templateFormat: TemplateFormat.TerraForm, templateSourceCode:"",
+            formConfig:JSON.stringify(terraformexample)
+        };
         this.addTemplate(firstTemplate);
         this.addTemplate(secondTemplate);
+        this.addTemplate(thirdTemplate);
     }
 
     async addTemplate(template: ITemplate) {
