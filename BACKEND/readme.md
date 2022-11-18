@@ -28,4 +28,4 @@ run migration:
 npx knex --knexfile ./BACKEND/knexConfig.ts migrate:latest
 
 
-REMEMBER to always run CREATE SEQUENCE serial START 101; on db before testing it.
+
