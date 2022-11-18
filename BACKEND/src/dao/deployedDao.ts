@@ -1,4 +1,4 @@
-import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
+import IDeployed from "../interfaces/inDeploymentStackInterface";
 import {db} from "../database/configDb";
 export default class DeployedDao {
 
@@ -6,33 +6,33 @@ export default class DeployedDao {
         console.log("DeployedDao created");
     }
 
-    async addInDeploymentStack(deployedStack: IInDeploymentStack) {
+    async addDeployedStack(deployedStack: IDeployed) {
         const newId : any = await db.select(db.raw(`nextval('serial')`)).first();
         deployedStack.status = "CREATE_IN_PROGRESS";
         console.log(newId.nextval);
         deployedStack.id = newId.nextval;
-        await db<IInDeploymentStack>("deployed").insert(deployedStack);
+        await db<IDeployed>("deployed").insert(deployedStack);
         return deployedStack;
     }
 
-    async getInDeploymentStacks() {
+    async getDeployedStacks() {
         const allDeployed= await db.select("*")
-        .from<IInDeploymentStack>("deployed")
+        .from<IDeployed>("deployed")
         .then();
         return allDeployed;
     }
 
-    async getInDeploymentStackById(inDeploymentStackId: number) {
-        const foundDeployed = await db<IInDeploymentStack>("deployed").where("id", inDeploymentStackId).first();
+    async getDeployedStackById(inDeploymentStackId: number) {
+        const foundDeployed = await db<IDeployed>("deployed").where("id", inDeploymentStackId).first();
         return foundDeployed;
     }
 
-    async getInDeploymentStackByStackId(stackId: string) {
-        const foundDeployed = await db<IInDeploymentStack>("deployed").where("stack_id", stackId).first();
+    async getDeployedStackByStackId(stackId: string) {
+        const foundDeployed = await db<IDeployed>("deployed").where("stack_id", stackId).first();
         return foundDeployed;
     }
 
-    async putInDeploymentStackById(deployedStackId: number, deployedStack: IInDeploymentStack) {
+    async putDeployedStackById(deployedStackId: number, deployedStack: IDeployed) {
         deployedStack.id = deployedStackId;
         const updated = await db("deployed")
         .returning("id")
@@ -42,7 +42,7 @@ export default class DeployedDao {
         return `${deployedStack.id} updated via put`;
     }
 
-    async updateStackStatus(inDeploymentStackId: number, status : string) {
+    async updateDeployedStackStatus(inDeploymentStackId: number, status : string) {
         const updated = await db("deployed")
         .returning("id")
         .where({id: inDeploymentStackId})
@@ -54,7 +54,7 @@ export default class DeployedDao {
         return false;
     }
 
-    async removeInDeploymentStackById(deployedId: number) {
+    async removeDeployedStackById(deployedId: number) {
         await db("deployed")
         .where({id: deployedId})
         .del()

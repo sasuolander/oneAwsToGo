@@ -13,22 +13,22 @@ export default class DeployedService {
     }
 
     async updateDeploymentStatus(id : number, status : string) {
-        return this.deployedDao.updateStackStatus(id, status);
+        return this.deployedDao.updateDeployedStackStatus(id, status);
     }
 
     async create(deployedStack: IInDeploymentStack) {
-        return this.deployedDao.addInDeploymentStack(deployedStack);
+        return this.deployedDao.addDeployedStack(deployedStack);
     }
 
     async getByStackId(stackId : string) {
-        return this.deployedDao.getInDeploymentStackByStackId(stackId);
+        return this.deployedDao.getDeployedStackByStackId(stackId);
     }
     async getById(deployedId : number) {
-        return this.deployedDao.getInDeploymentStackById(deployedId);
+        return this.deployedDao.getDeployedStackById(deployedId);
     }
 
     async deleteByStackId(deployedId: number) {
-        return this.deployedDao.removeInDeploymentStackById(deployedId);
+        return this.deployedDao.removeDeployedStackById(deployedId);
     }
 
     async deleteStack(deployedId: number) {
@@ -44,7 +44,7 @@ export default class DeployedService {
                         const finalStatus = await this.pollStatusUpdateDelete(stack,statusNow)
                         if (finalStatus !== undefined ){
                             console.log(finalStatus)
-                            await this.deployedDao.removeInDeploymentStackById(deployedId);
+                            await this.deployedDao.removeDeployedStackById(deployedId);
                         }
 
                     }   else{
@@ -80,6 +80,6 @@ export default class DeployedService {
     }
 
     async list() {
-        return this.deployedDao.getInDeploymentStacks();
+        return this.deployedDao.getDeployedStacks();
     }
 }
