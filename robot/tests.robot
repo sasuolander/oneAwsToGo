@@ -36,7 +36,7 @@ Test Deployment
     Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')] 
     Page Should Contain Element     xpath://h2[contains(text(), "Create an environment")]
     Input Text  formGroupExampleInput  test-s3-deployment
-    Click Element       xpath://button[contains(text(),'Submit')]
+    Click Element       xpath://button[contains(text(),'Create')]
     Wait Until Element Is Visible    info-card
 
 # Note the success of this test requires the success of TC-RU-4
@@ -50,7 +50,7 @@ Test Duplicate Deployment Error
     Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')] 
     Page Should Contain Element     xpath://h2[contains(text(), "Create an environment")]
     Input Text  formGroupExampleInput  test-s3-deployment
-    Click Element       xpath://button[contains(text(),'Submit')]
+    Click Element       xpath://button[contains(text(),'Create')]
     Page Should Contain Element    info-card
     Wait Until Element Is Visible    info-card
     Element Should Be Visible    info-card
@@ -98,7 +98,7 @@ Deploy S3 Template
     Click Element       template-dropdown
     Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')]
     Input Text          formGroupExampleInput  ${deployment_name}
-    Click Element       xpath://button[contains(text(),'Submit')]
+    Click Element       xpath://button[contains(text(),'Create')]
 
 Get Deployment Ids
     ${text}=    Get Text    info-card    
@@ -115,11 +115,7 @@ Open My Environments Page
 Find Deployment
     [Arguments]    ${id}    ${name}    ${stackId}    ${status}=${None}    ${check_status}=${false}   
     ${to_find}=    Set Variable If    ${check_status}    ${id} ${name} ${stackId} ${status}    ${id} ${name} ${stackId}    
-    ${trows}=    Get WebElements   xpath://tbody/tr
-    ${found}=    Set Variable    ${false}
-    FOR    ${trow}    IN    @{trows}
-        ${row_text}=    Get Text    ${trow}
-        ${found}=    Evaluate    "${to_find}" in """${row_text}"""
-        Exit For Loop If    ${found} == ${true} 
-    END
+    ${row}=    Get WebElement    row-${id}  
+    ${row_text}=    Get Text    ${row}    
+    ${found}=    Evaluate    "${to_find}" in """${row_text}"""
     Should Be True    ${found}
