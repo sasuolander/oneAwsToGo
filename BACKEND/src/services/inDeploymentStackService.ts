@@ -32,8 +32,6 @@ export default class InDeploymentStackService {
 
         try {
             while(status !== "CREATE_COMPLETE" && status !== "CREATE_FAILED") {
-                console.log("loop")
-                console.log(process.env.POLLTIMEOUT)
                 await Utils.timeout(Number(process.env.POLLTIMEOUT))
                 console.log("Polling....");
                 const currentStatus : DescribeStackEventsCommandOutput = await AWSCommand.checkStatus(stack.stack_id);

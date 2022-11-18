@@ -58,7 +58,6 @@ export default class DeployedService {
     async pollStatusUpdateDelete(stack: IDeployedStack, status: string | undefined) : Promise<string | undefined >{
         let deleteStatus: string | undefined
         try {
-            console.log("start deleting poll")
             while(status !== "DELETE_COMPLETE") {
                 await Utils.timeout(Number(process.env.POLLTIMEOUT))
                 console.log("Polling Delete....");
