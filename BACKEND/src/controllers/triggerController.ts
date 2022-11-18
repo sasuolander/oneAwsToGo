@@ -62,7 +62,7 @@ export default class TriggerController extends CommonControllerConfig {
                             console.log(deploy);
                             //TODO fix this
                             //@ts-ignore
-                            const newDeployment = {template_id: template.id, stack_id: deploy.StackId} as IInDeploymentStack;
+                            const newDeployment = {name: name,template_id: template.id, stack_id: deploy.StackId} as IInDeploymentStack;
                             await this.deployedService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined, id: newDeployment.id};
                         } catch (e:any) {
