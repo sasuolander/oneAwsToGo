@@ -3,7 +3,7 @@ import ITemplate, {TemplateFormat} from "../../interfaces/templateInterface";
 import emptysite from "../../../dummy_db/emptysite.json"
 import wordpresssite from "../../../dummy_db/wordpresssite.json"
 
-const templates: ITemplate[] = [
+const templates = [
     {
         id : 1,
         name: "Website in S3 bucket",

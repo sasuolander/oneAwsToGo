@@ -41,7 +41,7 @@ export default class TriggerController extends CommonControllerConfig {
                     const deployed = await this.deployTemplate(toBeInDeployment.deploymentName, template,toBeInDeployment.parameters);
                     if (deployed.httpStatus) {
                         res.status(deployed.httpStatus).send(deployed);
-
+                        
                     } else {
                         res.status(500).send("Something failed")
                     }
@@ -61,7 +61,9 @@ export default class TriggerController extends CommonControllerConfig {
                         try{
                             const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
                             console.log(deploy);
-                            const newDeployment = {name: name, stackId: deploy.StackId} as IInDeploymentStack;
+                            //TODO fix this
+                            //@ts-ignore
+                            const newDeployment = {template_id: template.id, stack_id: deploy.StackId} as IInDeploymentStack;
                             this.deployedStackService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined, id: newDeployment.id};
                         } catch (e:any) {

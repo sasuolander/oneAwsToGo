@@ -8,7 +8,8 @@
     "start": "ts-node-dev ./src/index.ts",
     "build": "webpack",
     "starWebpackBuild": "node ./build/app.js",
-    "migrate":"npx knex --knexfile ./knexConfig.ts migrate:latest && npx knex --knexfile ./src/database/knexfile.ts seed:run",
+    "migrate":"npx knex --knexfile ./knexConfig.ts migrate:latest",
+    "seed":"npx knex --knexfile ./knexConfig.ts seed:run",
     "buildTcs": "tcs -p .",
     "eslint": "eslint ."
   },

@@ -14,7 +14,7 @@ export default class InDeploymentStackService {
     async checkDeploymentStatus(payload: IStatusPayload) {
         const stack = await InDeploymentStackDao.getInDeploymentStackById(payload.id);
         if(stack) {
-            const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+            const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stack_id);
             if(currentStatus.StackEvents) {
                 //@ts-ignore
                 await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
@@ -31,7 +31,7 @@ export default class InDeploymentStackService {
             while(status !== "CREATE_COMPLETE" && status !== "CREATE_FAILED") {
                 await this.timeout(5000)
                 console.log("Polling....");
-                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stackId);
+                const currentStatus : DescribeStackEventsCommandOutput = await this.stackStatusService.checkStatus(stack.stack_id);
                 if(currentStatus.StackEvents) {
                     //@ts-ignore
                     await this.updateDeploymentStatus(stack.id, currentStatus.StackEvents[0].ResourceStatus);
