@@ -1,4 +1,4 @@
-import IDeployed from "../interfaces/inDeploymentStackInterface";
+import IDeployedStack from "../interfaces/deployedStackInterface";
 import {db} from "../database/configDb";
 export default class DeployedDao {
 
@@ -6,33 +6,33 @@ export default class DeployedDao {
         console.log("DeployedDao created");
     }
 
-    async addDeployedStack(deployedStack: IDeployed) {
+    async addDeployedStack(deployedStack: IDeployedStack) {
         const newId : any = await db.select(db.raw(`nextval('serial')`)).first();
         deployedStack.status = "CREATE_IN_PROGRESS";
         console.log(newId.nextval);
         deployedStack.id = newId.nextval;
-        await db<IDeployed>("deployed").insert(deployedStack);
+        await db<IDeployedStack>("deployed").insert(deployedStack);
         return deployedStack;
     }
 
     async getDeployedStacks() {
         const allDeployed= await db.select("*")
-        .from<IDeployed>("deployed")
+        .from<IDeployedStack>("deployed")
         .then();
         return allDeployed;
     }
 
     async getDeployedStackById(inDeploymentStackId: number) {
-        const foundDeployed = await db<IDeployed>("deployed").where("id", inDeploymentStackId).first();
+        const foundDeployed = await db<IDeployedStack>("deployed").where("id", inDeploymentStackId).first();
         return foundDeployed;
     }
 
     async getDeployedStackByStackId(stackId: string) {
-        const foundDeployed = await db<IDeployed>("deployed").where("stack_id", stackId).first();
+        const foundDeployed = await db<IDeployedStack>("deployed").where("stack_id", stackId).first();
         return foundDeployed;
     }
 
-    async putDeployedStackById(deployedStackId: number, deployedStack: IDeployed) {
+    async putDeployedStackById(deployedStackId: number, deployedStack: IDeployedStack) {
         deployedStack.id = deployedStackId;
         const updated = await db("deployed")
         .returning("id")

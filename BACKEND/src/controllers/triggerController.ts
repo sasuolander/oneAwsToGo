@@ -5,7 +5,7 @@ import GithubClient from "../utils/githubClient";
 import IPostPayload from "../interfaces/postpayloadinterface";
 import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDeploy";
 import ITemplate, {TemplateFormat, TemplateInput} from "../interfaces/templateInterface";
-import IDeployedStack from "../interfaces/DeployedStackInterface";
+import IDeployedStack from "../interfaces/deployedStackInterface";
 import DeployedService from "../services/deployedService";
 
 interface IDeploymentResult {

@@ -1,4 +1,4 @@
-import IDeployedStack from "../interfaces/inDeploymentStackInterface";
+import IDeployedStack from "../interfaces/deployedStackInterface";
 import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
 import Utils from "../utils/utils";
 import DeployedDao from "../dao/deployedDao";
