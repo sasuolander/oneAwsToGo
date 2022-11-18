@@ -78,7 +78,7 @@ function DynamicForm({defaultValues, config, submitFormExec, metaData, buttonLoa
                         ))
                         : null}
                     <LoadingButton type="submit" startIcon={<CloudUpload/>} loading={buttonLoading} 
-                    loadingPosition="start" className="btn btn-primary" variant="contained">Submit</LoadingButton>    
+                    loadingPosition="start" className="btn btn-primary" variant="contained">Create</LoadingButton>    
                 </form>
             </div>
         </FormContext.Provider>

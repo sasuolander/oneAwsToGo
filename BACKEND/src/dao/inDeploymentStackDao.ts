@@ -41,7 +41,7 @@ class InDeploymentStackDao {
         .returning("id")
         .where({id: deployedStackId})
         .update(deployedStack)
-        
+
         return `${deployedStack.id} updated via put`;
     }
 
@@ -53,7 +53,7 @@ class InDeploymentStackDao {
         if(updated.length > 0) {
             return true;
         }
-        
+
         return false;
     }
 
