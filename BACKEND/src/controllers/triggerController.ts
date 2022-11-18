@@ -4,10 +4,9 @@ import {Application, Request, Response} from 'express';
 import GithubClient from "../utils/githubClient";
 import IPostPayload from "../interfaces/postpayloadinterface";
 import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDeploy";
-import ITemplate, {TemplateFormat, TemplateInput, Template} from "../interfaces/templateInterface";
-import InDeploymentStackService from "../services/inDeploymentStackService";
-import IInDeploymentStack from "../interfaces/inDeploymentStackInterface";
-import { AlreadyExistsException } from "@aws-sdk/client-cloudformation";
+import ITemplate, {TemplateFormat, TemplateInput} from "../interfaces/templateInterface";
+import IDeployedStack from "../interfaces/deployedStackInterface";
+import DeployedService from "../services/deployedService";
 
 interface IDeploymentResult {
     httpStatus: number | undefined,
@@ -20,13 +19,13 @@ interface IDeploymentResult {
 export default class TriggerController extends CommonControllerConfig {
     private triggerService: TriggerService;
     private githubClient: GithubClient;
-    private deployedStackService : InDeploymentStackService;
+    private deployedService : DeployedService;
 
-    constructor(app: Application, triggerService: TriggerService, githubClient: GithubClient, deployedStackService: InDeploymentStackService) {
+    constructor(app: Application, triggerService: TriggerService, githubClient: GithubClient, deployedService: DeployedService) {
         super(app, "TriggerController");
         this.triggerService = triggerService;
         this.githubClient = githubClient;
-        this.deployedStackService = deployedStackService;
+        this.deployedService = deployedService;
     }
 
     configureRoutes(): Application {
@@ -41,7 +40,7 @@ export default class TriggerController extends CommonControllerConfig {
                     const deployed = await this.deployTemplate(toBeInDeployment.deploymentName, template,toBeInDeployment.parameters);
                     if (deployed.httpStatus) {
                         res.status(deployed.httpStatus).send(deployed);
-                        
+
                     } else {
                         res.status(500).send("Something failed")
                     }
@@ -63,16 +62,14 @@ export default class TriggerController extends CommonControllerConfig {
                             console.log(deploy);
                             //TODO fix this
                             //@ts-ignore
-                            const newDeployment = {template_id: template.id, stack_id: deploy.StackId} as IInDeploymentStack;
-                            this.deployedStackService.create(newDeployment);
+                            const newDeployment = {name: name,template_id: template.id, stack_id: deploy.StackId} as IDeployedStack;
+                            await this.deployedService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined, id: newDeployment.id};
                         } catch (e:any) {
                             console.log(e)
                             return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id: undefined}
-                               
-                        }                    
-                            
 
+                        }
                     case TemplateFormat.CDK:
                         throw  Error("Not Implemented")
                     case TemplateFormat.TerraForm:

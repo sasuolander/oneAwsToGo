@@ -25,6 +25,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("name").notNullable();
         table.string("password",10000).notNullable();
     });
+    await knex.schema.raw("CREATE SEQUENCE serial START 101;")
 }
 
 

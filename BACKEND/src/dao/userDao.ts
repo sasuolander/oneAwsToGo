@@ -1,9 +1,6 @@
 import IUser from "../interfaces/userInterface";
 import {db} from "../database/configDb";
-import knex from "knex";
-class UserDao {
-    idCount: number = 0;
-
+export default class UserDao {
     constructor() {
         console.log("UserDao created");
     }
@@ -44,5 +41,3 @@ class UserDao {
     }
 
 }
-
-export default new UserDao;

@@ -12,7 +12,8 @@ import TriggerService from "./services/triggerService";
 import GithubClient from "./utils/githubClient";
 import InDeploymentStackService from "./services/inDeploymentStackService";
 import InDeploymentStackController from "./controllers/deploymentStatusController";
-import StackStatusService from "./services/deploymentstatus/stackStatusService";
+import DeployedService from "./services/deployedService";
+import DeployedController from "./controllers/deployedController";
 
 export const app: Application = express();
 const port = process.env.SERVER_PORT;
@@ -26,11 +27,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //Add routes to the app
+const templateService =  new TemplateService()
+const deployedService = new DeployedService()
+const inDeploymentStackService = new InDeploymentStackService(deployedService)
 routes.push(new UserController(app, new UserService()));
-routes.push(new TemplateController(app, new TemplateService()));
-routes.push(new TriggerController(app, new TriggerService( new TemplateService), new GithubClient(), new InDeploymentStackService(new StackStatusService)));
-routes.push(new InDeploymentStackController(app, new InDeploymentStackService(new StackStatusService)));
-
+routes.push(new TemplateController(app, templateService));
+routes.push(new TriggerController(app, new TriggerService(templateService), new GithubClient(), deployedService));
+routes.push(new InDeploymentStackController(app, inDeploymentStackService));
+routes.push(new DeployedController(app, deployedService));
 app.get("/",
     async (req: Request, res: Response): Promise<Response> => {
         return res.status(200).send({

@@ -1,6 +1,6 @@
 import {CommonControllerConfig} from '../utils/CommonRoutesConfig';
 import TemplateService from '../services/templateService';
-import {Application, Request, Response, NextFunction} from 'express';
+import {Application, Request, Response} from 'express';
 import {TemplateFormat} from "../interfaces/templateInterface";
 import {HealthController} from "./healthController";
 

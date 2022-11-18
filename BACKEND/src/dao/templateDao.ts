@@ -1,12 +1,7 @@
-import ITemplate, {TemplateFormat} from "../interfaces/templateInterface";
-import emptysite from "../../dummy_db/emptysite.json"
-import wordpresssite from "../../dummy_db/wordpresssite.json"
+import ITemplate from "../interfaces/templateInterface";
 import {db} from "../database/configDb";
 
-class TemplateDao {
-    templates: Array<ITemplate> = [];
-    idCount: number = 1;
-
+export default class TemplateDao {
     constructor() {
         console.log("TemplateDao created");
     }
@@ -47,5 +42,3 @@ class TemplateDao {
     }
 
 }
-
-export default new TemplateDao;

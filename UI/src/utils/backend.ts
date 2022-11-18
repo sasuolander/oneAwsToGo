@@ -117,16 +117,16 @@ export default class Backend {
     static fetchDeployed():Promise<DeployedPayload[]> {
         return axios.get(baseApi as string + "/deployed")
             .then(response => {
-                return response.data.map((response:any) =>{ return new DeployedPayload(response.name, response.stackId, response.id, response.status)})
+                return response.data.map((response:any) =>{ return new DeployedPayload(response.name, response.stack_id, response.id, response.status)})
         })
     }
 
     static fetchDevelopmentStatus(id: Number): Promise<any> {
-        return axios.post(baseApi as string + "/checkdeployed/", new StatusPayload(id)).then(response => {
+        return axios.post(baseApi as string + "/checkdeployed", new StatusPayload(id)).then(response => {
             return {status: response.data, httpStatus: response.status, text: response.statusText};
         })
     }
-    
+
     static deleteDeployment(id: Number): Promise<any> {
         return axios.delete(baseApi as string + "/deployed/", new DeletePayload(id)).then(response => {
             return {response};

@@ -1,5 +1,5 @@
 import {CommonControllerConfig} from '../utils/CommonRoutesConfig';
-import {Application, Request, Response, NextFunction} from 'express';
+import {Application, Request, Response} from 'express';
 import UserService from '../services/userService';
 
 export default class UserController extends CommonControllerConfig {
@@ -28,7 +28,7 @@ export default class UserController extends CommonControllerConfig {
         })
         .put(async (req: Request, res: Response) => {
             const responseMessage = await this.userService.putById(parseInt(req.params.id), req.body);
-            res.status(204).send(); 
+            res.status(204).send();
         })
         .delete(async (req: Request, res: Response) => {
             const responseMessage = await this.userService.deleteById(parseInt(req.params.id));
