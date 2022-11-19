@@ -14,10 +14,7 @@ ${APP TITLE}    OneAWStoGo
 # Also checks that user can change selected template
 # TC-RU-1
 Test Template Selection
-    Input Text    username-field    username
-    Input Text    password-field    password
-    Click Element    login-submit
-    Element Should Be Visible    template-dropdown
+    Login
     Click Element    template-dropdown
     Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')]
     Page Should Contain Element    xpath://h3[contains(text(),'Website in S3 bucket')]
@@ -28,33 +25,17 @@ Test Template Selection
 # Note this deploys to aws but doesen't delete
 # TC-RU-4
 Test Deployment
-    Input Text    username-field    username
-    Input Text    password-field    password
-    Click Element    login-submit
-    Element Should Be Visible    template-dropdown
-    Click Element       template-dropdown
-    Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')] 
-    Page Should Contain Element     xpath://h2[contains(text(), "Create an environment")]
-    Input Text  formGroupExampleInput  test-s3-deployment
-    Click Element       xpath://button[contains(text(),'Create')]
+    Login
+    Deploy S3 Template    test-s3-deployment
     Wait Until Element Is Visible    info-card
 
 # Note the success of this test requires the success of TC-RU-4
 # TC-RU-6
 Test Duplicate Deployment Error
-    Input Text    username-field    username
-    Input Text    password-field    password
-    Click Element    login-submit
-    Element Should Be Visible    template-dropdown
-    Click Element       template-dropdown
-    Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')] 
-    Page Should Contain Element     xpath://h2[contains(text(), "Create an environment")]
-    Input Text  formGroupExampleInput  test-s3-deployment
-    Click Element       xpath://button[contains(text(),'Create')]
-    Page Should Contain Element    info-card
+    Login
+    Deploy S3 Template    test-s3-deployment
     Wait Until Element Is Visible    info-card
-    Element Should Be Visible    info-card
-    Element Should Contain    info-card    Error: Stack [test-s3-deployment] already exists
+    Wait Until Element Contains    info-card    Error: Stack [test-s3-deployment] already exists
 
 # TC-RU-11
 Verify Deployment From UI
@@ -113,6 +94,7 @@ Open My Environments Page
     Element Should Be Visible    my-envs-title
 
 Find Deployment
+    Sleep    5s
     [Arguments]    ${id}    ${name}    ${stackId}    ${status}=${None}    ${check_status}=${false}   
     ${to_find}=    Set Variable If    ${check_status}    ${id} ${name} ${stackId} ${status}    ${id} ${name} ${stackId}    
     ${row}=    Get WebElement    row-${id}  
