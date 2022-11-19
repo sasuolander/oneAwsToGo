@@ -109,3 +109,9 @@ Find Deployment
     ${row_text}=    Get Text    ${row}    
     ${found}=    Evaluate    "${to_find}" in """${row_text}"""
     Should Be True    ${found}
+
+Delete Deployment
+    Sleep    5s
+    [Arguments]    ${id}
+    ${del_btn_id}=    Catenate    SEPARATOR=-    remove    ${id}
+    Click Button    ${del_btn_id}
