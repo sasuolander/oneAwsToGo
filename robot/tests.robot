@@ -37,6 +37,14 @@ Test Duplicate Deployment Error
     Wait Until Element Is Visible    info-card
     Wait Until Element Contains    info-card    Error: Stack [test-s3-deployment] already exists
 
+# Other test for errors
+# TC-RU-6
+Test Invalid Deployment Name
+    Login
+    Deploy S3 Template     $invalid-deployment-name
+    Wait Until Element Is Visible    info-card
+    Wait Until Element Contains    info-card    Error: 1 validation error detected:
+
 # TC-RU-11
 Verify Deployment From UI
     Login
