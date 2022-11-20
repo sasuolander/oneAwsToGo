@@ -1,15 +1,29 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response, Application } from "express";
 import { db } from "../database/configDb";
+import {CommonControllerConfig} from '../utils/CommonRoutesConfig';
 
-export async function HealthController(
-  _request: Request,
-  response: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    await db.from("information_schema.tables").select();
-    response.sendStatus(204);
-  } catch (error) {
-    next(error);
+export default class HealthController extends CommonControllerConfig {
+
+
+  constructor(app: Application) {
+      super(app, 'HealthController');
+
   }
+
+  configureRoutes() : Application {
+      this.app.route(`/health`)
+      .get(async (req: Request, res: Response) => {
+
+        try {
+          await db.from("information_schema.tables").select();
+          res.sendStatus(204);
+        } catch (error) {
+          res.sendStatus(500);
+        }
+      })
+
+
+      return this.app;
+  }
+
 }
