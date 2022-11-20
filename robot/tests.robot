@@ -1,6 +1,7 @@
 *** Settings ***
 Library    SeleniumLibrary
 Library    String
+Library    Collections
 
 Test Setup    Open Login Page
 Test Teardown    Close Browser
@@ -66,6 +67,18 @@ Verify Completed Creation From UI
     Open My Environments Page
     Find Deployment    ${id}    ${deployment_name}    ${stackId}    CREATE_COMPLETE    ${true}
 
+# TC-RU-10
+# This deletes specific deployment
+Delete Deployment
+    Login
+    Deploy S3 Template    testDelete
+    Wait For Deployment To Succeed
+    ${id}    ${stackId}=    Get Deployment Ids
+    Open My Environments Page
+    Delete Deployment    ${id}
+    Wait Until Page Contains    Successfully removed environment with id ${id}!    15m
+    
+
 *** Keywords ***
 
 Open Login Page
@@ -111,7 +124,7 @@ Find Deployment
     Should Be True    ${found}
 
 Delete Deployment
-    Sleep    5s
     [Arguments]    ${id}
     ${del_btn_id}=    Catenate    SEPARATOR=-    remove    ${id}
     Click Button    ${del_btn_id}
+    Sleep    1s
