@@ -77,7 +77,21 @@ Delete Deployment
     Open My Environments Page
     Delete Deployment    ${id}
     Wait Until Page Contains    Successfully removed environment with id ${id}!    15m
-    
+
+# TC-RU-10
+# Note this deletes every deployment even ones outside of test cases
+Delete All Deployments
+    Login
+    Open My Environments Page
+    @{id_list}=    Create List
+    ${row_count}=    Get Element Count    xpath://tr
+    FOR    ${index}    IN RANGE    1    ${row_count}
+        ${current_id}    Get Text    xpath://table/tbody/tr[${index}]/td[1]
+        Append To List    ${id_list}    ${current_id}
+    END
+    FOR    ${id}    IN    @{id_list}
+        Delete Deployment    ${id}
+    END    
 
 *** Keywords ***
 
