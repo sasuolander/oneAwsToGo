@@ -11,13 +11,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import DeploymentStatusService from '../service/deploymentStatusService';
-import FetchDeployedService from "../service/fetchDeployedService";
 
 // TODO think out injection or provider system when using service in react
 const deployService = new DeployService();
 const templateService = new FetchTemplateService();
 const deploymentStatusService = new DeploymentStatusService();
-const fetchDeployedService = new FetchDeployedService();
 
 interface IEventChange extends React.ChangeEvent<HTMLInputElement> {
 
@@ -107,7 +105,7 @@ function CreateEnvironment() {
             setTemplatesReady(true);
         }
 
-    }, []);
+    }, [templatesReady]);
 
     const nameForNewTemplate = {
         field_id: "deployment_name",
@@ -135,9 +133,9 @@ function CreateEnvironment() {
                     })}
                 </TextField>
             </div>
-            {typeof templates.find(r => r.id == templId) !== "undefined" ?
+            {typeof templates.find(r => r.id === String(templId)) !== "undefined" ?
                 <DynamicForm defaultValues={nameForNewTemplate} metaData={templId} buttonLoading={loading}
-                             config={templates.find(r => r.id == templId)?.data.formConfig} submitFormExec={sendData}
+                             config={templates.find(r => r.id === String(templId))?.data.formConfig} submitFormExec={sendData}
                 /> : <div></div>
             }
             {<Card id="info-card" className="infoCard" variant="outlined" style={{visibility: cardVisible ? "visible" : "hidden", backgroundColor: cardColor}}>
