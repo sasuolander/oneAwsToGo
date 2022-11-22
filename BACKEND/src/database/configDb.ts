@@ -1,12 +1,12 @@
 import { Knex } from "knex";
-require('dotenv').config()
+require('dotenv').config();
+import { logger } from "../utils/logger";
 export interface Config {
     environment:string;
     database: Knex.PgConnectionConfig;
 }
 export function getConfigDB(): Config {
-    console.log("getConfigDB")
-    console.log(process.env.dbPassword)
+    logger.info("getConfigDB")
     return {
         environment: "local",
         // ...

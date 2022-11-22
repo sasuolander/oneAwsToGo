@@ -1,14 +1,14 @@
 import ITemplate from "../interfaces/templateInterface";
 import {db} from "../database/configDb";
+import { logger } from "../utils/logger";
 
 export default class TemplateDao {
     constructor() {
-        console.log("TemplateDao created");
+        logger.info("TemplateDao created");
     }
 
     async addTemplate(template: ITemplate) {
         const newId : any = await db.select(db.raw(`nextval('serial')`)).first();
-        console.log(newId.nextval);
         template.id = newId.nextval;
         await db<ITemplate>("user").insert(template);
         return template;

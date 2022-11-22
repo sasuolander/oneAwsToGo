@@ -2,6 +2,7 @@ import { Knex } from "knex";
 import ITemplate, {TemplateFormat} from "../../interfaces/templateInterface";
 import emptysite from "../../../dummy_db/emptysite.json"
 import wordpresssite from "../../../dummy_db/wordpresssite.json"
+import { logger } from "../../utils/logger";
 
 const templates = [
     {
@@ -21,9 +22,9 @@ const templates = [
   ];
   
   export async function seed(knex: Knex): Promise<void> {
-    console.log("Seeding")
+    logger.info("Seeding")
     //await knex("template").truncate();
     await knex("template").insert(templates).then(()=>{
-      console.log("Inserting seed")
+      logger.info("Inserting seed")
     });
   }

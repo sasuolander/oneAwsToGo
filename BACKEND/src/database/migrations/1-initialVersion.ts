@@ -1,7 +1,8 @@
 import { Knex } from "knex";
+import { logger } from "../../utils/logger";
 
 export async function up(knex: Knex): Promise<void> {
-    console.log("Migrating schema")
+    logger.info("Migrating schema")
     await knex.schema.createTable("template", (table) => {
         table.integer("id").primary();
         table.string("name").notNullable();
