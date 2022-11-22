@@ -10,19 +10,17 @@ import CloudUpload from '@mui/icons-material/CloudUpload';
 function DynamicForm({defaultValues, config, submitFormExec, metaData, buttonLoading}) {
     const [elements, setElements] = useState(null);
     const [formErrors, setFormErrors] = useState({});
-    const [isSubmit, setIsSubmit] = useState(false);
 
     useEffect(() => {
         const json = JSON.parse(config)
         json[0].fields.unshift(defaultValues)
         setElements(json[0]);
-    }, [config, formErrors]);
+    }, [config, formErrors, defaultValues]);
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setFormErrors(validate(elements));
-        setIsSubmit(true);
         const parameters = elements.fields.map((r) => {
             return {field_id: r.field_id, field_value: r.field_value}
         })
@@ -31,8 +29,7 @@ function DynamicForm({defaultValues, config, submitFormExec, metaData, buttonLoa
     const handleChange = (id, event) => {
         const newElements = {...elements};
         newElements.fields.forEach((field) => {
-            const {field_type, field_id, field_value, field_error} = field;
-            if (id === field_id) {
+             if (id === field["field_id"]) {
                 field["field_error"] = "";
                 field["field_value"] = event.target.value;
                 var regex = new RegExp(field["field_regex"]);
@@ -56,7 +53,6 @@ function DynamicForm({defaultValues, config, submitFormExec, metaData, buttonLoa
         const newElements = {...elements};
         const errors = {};
         newElements.fields.forEach((field) => {
-            const {field_type, field_id, field_value, field_error} = field;
             if (field["field_error"]) {
                 errors.errorvalue = field["field_error"];
             }

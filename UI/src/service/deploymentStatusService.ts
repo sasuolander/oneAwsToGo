@@ -1,4 +1,4 @@
-import Backend, {IDeploymentResult} from "../utils/backend";
+import Backend from "../utils/backend";
 
 export default class DeploymentStatusService {
     fetchDeploymentStatus(id: Number): Promise<any> {

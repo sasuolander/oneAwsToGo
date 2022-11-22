@@ -12,10 +12,10 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert, { AlertColor } from '@mui/material/Alert';
 
+const fetchObj = new FetchDeployedService();
+const deleteService = new DeleteService();
 
 function ShowEnvironment() {
-    const fetchObj = new FetchDeployedService();
-    const deleteService = new DeleteService();
     const [envs, setEnvs] = useState<DeployedPayload[]>([]);
     const [envsReady, setEnvsReady] = useState(false);
     const [notificationOpen, setNotificationOpen] = useState(false);
@@ -25,10 +25,14 @@ function ShowEnvironment() {
 
     useEffect(() => {
         if(!envsReady) {
-            getDeployed();
+            let deployed = fetchObj.getDeployed();
+            deployed.then((result) => {
+                setEnvs(result);
+                setEnvsReady(true);
+            })
         }
 
-    }, []);
+    }, [envsReady]);
 
     const getDeployed = async () => {
         let deployed = fetchObj.getDeployed();
