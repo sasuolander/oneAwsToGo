@@ -15,6 +15,7 @@ import InDeploymentStackController from "./controllers/deploymentStatusControlle
 import DeployedService from "./services/deployedService";
 import DeployedController from "./controllers/deployedController";
 import { logger } from "./utils/logger";
+import HealthController from "./controllers/healthController";
 export const app: Application = express();
 const port = process.env.SERVER_PORT;
 const routes: Array<CommonControllerConfig> = [];
@@ -35,6 +36,7 @@ routes.push(new TemplateController(app, templateService));
 routes.push(new TriggerController(app, new TriggerService(templateService), new GithubClient(), deployedService));
 routes.push(new InDeploymentStackController(app, inDeploymentStackService));
 routes.push(new DeployedController(app, deployedService));
+routes.push(new HealthController(app));
 app.get("/",
     async (req: Request, res: Response): Promise<Response> => {
         return res.status(200).send({
