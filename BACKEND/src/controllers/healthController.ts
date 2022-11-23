@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Application } from "express";
 import { db } from "../database/configDb";
-import { logger } from "../utils/logger";
+import { logger } from "./../utils/logger";
 
 import {CommonControllerConfig} from '../utils/CommonRoutesConfig';
 
