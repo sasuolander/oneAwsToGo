@@ -3,6 +3,7 @@ import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
 import Utils from "../utils/utils";
 import DeployedDao from "../dao/deployedDao";
 import AWSCommand from "../utils/AWSCommand";
+import {logger} from "../utils/logger";
 require('dotenv').config()
 
 export default class DeployedService {
@@ -48,7 +49,8 @@ export default class DeployedService {
                         }
 
                     }   else{
-                        console.log("undefined error")
+                        logger.error("Current status undefined");
+                        throw Error("Current status undefined")
                     }
                 }
             }

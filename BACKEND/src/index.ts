@@ -14,8 +14,8 @@ import InDeploymentStackService from "./services/inDeploymentStackService";
 import InDeploymentStackController from "./controllers/deploymentStatusController";
 import DeployedService from "./services/deployedService";
 import DeployedController from "./controllers/deployedController";
+import { logger } from "./utils/logger";
 import HealthController from "./controllers/healthController";
-
 export const app: Application = express();
 const port = process.env.SERVER_PORT;
 const routes: Array<CommonControllerConfig> = [];
@@ -48,7 +48,7 @@ app.get("/",
 app.listen(port, () => {
     //Log routes
     routes.forEach((route: CommonControllerConfig) => {
-        console.log(`Routes configured for ${route.getName()}`);
+        logger.info(`Routes configured for ${route.getName()}`);
     });
-    console.log(`OneAWStoGo app listening on port ${port}!`)
+    logger.info(`OneAWStoGo app listening on port ${port}!`)
 })

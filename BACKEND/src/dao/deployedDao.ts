@@ -1,15 +1,15 @@
 import IDeployedStack from "../interfaces/deployedStackInterface";
 import {db} from "../database/configDb";
+import { logger } from "../utils/logger";
 export default class DeployedDao {
 
     constructor() {
-        console.log("DeployedDao created");
+        logger.info("DeployedDao created");
     }
 
     async addDeployedStack(deployedStack: IDeployedStack) {
         const newId : any = await db.select(db.raw(`nextval('serial')`)).first();
         deployedStack.status = "CREATE_IN_PROGRESS";
-        console.log(newId.nextval);
         deployedStack.id = newId.nextval;
         await db<IDeployedStack>("deployed").insert(deployedStack);
         return deployedStack;

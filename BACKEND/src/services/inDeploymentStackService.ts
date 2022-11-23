@@ -4,6 +4,7 @@ import {DescribeStackEventsCommandOutput} from "@aws-sdk/client-cloudformation";
 import Utils from "../utils/utils";
 import DeployedService from "./deployedService";
 import AWSCommand from "../utils/AWSCommand";
+import { logger } from "../utils/logger";
 require('dotenv').config()
 
 export default class InDeploymentStackService {
@@ -33,7 +34,7 @@ export default class InDeploymentStackService {
         try {
             while(status !== "CREATE_COMPLETE" && status !== "CREATE_FAILED") {
                 await Utils.timeout(Number(process.env.POLLTIMEOUT))
-                console.log("Polling....");
+                logger.info("Polling....");
                 const currentStatus : DescribeStackEventsCommandOutput = await AWSCommand.checkStatus(stack.stack_id);
                 if(currentStatus.StackEvents) {
                     // @ts-ignore
@@ -42,7 +43,7 @@ export default class InDeploymentStackService {
                 }
             }
         }catch(e) {
-            console.log(e)
+           logger.error(e);
         }
 
     }

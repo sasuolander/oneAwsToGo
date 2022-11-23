@@ -10,18 +10,9 @@
     text-decoration: none;
     margin-left: 10px;
     margin-right: 10px;
-
-}
-
-.nav-link:hover {
-    color: cornflowerblue !important;
 }
 
 .navbarLogo {
     max-width: 200px;
     margin-right: 10px;
-}
-
-.navbar-indicator {
-    background-color:  blue !important;
 }

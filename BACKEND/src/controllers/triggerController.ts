@@ -7,6 +7,7 @@ import CloudFormationDeploy, {Output} from "../services/deploy/cloudFormationDep
 import ITemplate, {TemplateFormat, TemplateInput} from "../interfaces/templateInterface";
 import IDeployedStack from "../interfaces/deployedStackInterface";
 import DeployedService from "../services/deployedService";
+import { logger } from "../utils/logger";
 
 interface IDeploymentResult {
     httpStatus: number | undefined,
@@ -59,26 +60,28 @@ export default class TriggerController extends CommonControllerConfig {
                     case TemplateFormat.CloudFormation:
                         try{
                             const deploy = await this.triggerService.deployTemplate<Output>(name, template.templateSourceCode,parameters, new CloudFormationDeploy);
-                            console.log(deploy);
                             //TODO fix this
                             //@ts-ignore
                             const newDeployment = {name: name,template_id: template.id, stack_id: deploy.StackId} as IDeployedStack;
                             await this.deployedService.create(newDeployment);
                             return {httpStatus: deploy.$metadata.httpStatusCode, deploymentId: deploy.StackId, errorMessage: undefined, id: newDeployment.id};
                         } catch (e:any) {
-                            console.log(e)
+                            logger.error(e)
                             return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id: undefined}
 
                         }
                     case TemplateFormat.CDK:
+                        logger.error("Not implemented")
                         throw  Error("Not Implemented")
                     case TemplateFormat.TerraForm:
+                        logger.error("Not implemented")
                         throw  Error("Not Implemented")
                     default :
+                        logger.error("Unknown type")
                         throw  Error("Unknown type")
                 }
             } catch (e:any) {
-                console.log(e);
+                logger.error(e)
                 return {httpStatus: 500, deploymentId:undefined, errorMessage: e.message, id:undefined};
             }
 

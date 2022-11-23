@@ -1,13 +1,13 @@
 import IUser from "../interfaces/userInterface";
 import {db} from "../database/configDb";
+import { logger } from "../utils/logger";
 export default class UserDao {
     constructor() {
-        console.log("UserDao created");
+        logger.info("UserDao created");
     }
 
     async addUser(user: IUser) {
         const newId : any = await db.select(db.raw(`nextval('serial')`)).first();
-        console.log(newId.nextval);
         user.id = newId.nextval;
         await db<IUser>("user").insert(user);
         return user;
