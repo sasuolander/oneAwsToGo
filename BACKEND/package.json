@@ -24,7 +24,9 @@
     "knex": "^2.3.0",
     "log4js": "^6.7.0",
     "pg": "^8.8.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "pg-native": "^3.0.1",
+    "pg-query-stream": "^4.2.4"
   },
   "devDependencies": {
     "@types/pg": "^8.6.5",

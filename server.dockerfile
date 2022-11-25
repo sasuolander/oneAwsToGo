@@ -9,7 +9,12 @@ FROM node:17-alpine AS buildbackeng
 
 WORKDIR /app
 COPY BACKEND .
+RUN apk update && apk upgrade --available
+RUN apk add --update python3
+RUN apk add --no-cache --virtual .gyp make g++
+RUN apk add libpq-dev
 RUN npm install
+RUN apk del .gyp
 RUN npm run build
 
 FROM nginx:alpine AS buildserver
