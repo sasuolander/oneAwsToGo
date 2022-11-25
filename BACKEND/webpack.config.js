@@ -27,7 +27,14 @@ module.exports = {
         clean:true
     },
     resolve: {
-        fallback: { path: require.resolve("path-browserify"), 'aws-crt': false},
+        fallback: { path: require.resolve("path-browserify"),
+            'aws-crt': false,
+            'better-sqlite3':false,
+            'mysql':false,
+            'mysql2':false,
+            'oracledb':false,
+            'sqlite3':false,
+            'tedious':false},
         extensions: ['.ts', '.js','.json','.mjs'],
         modules: [
             path.resolve(__dirname, 'node_modules'),
