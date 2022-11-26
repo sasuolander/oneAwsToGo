@@ -1,6 +1,7 @@
 import IUser from "../interfaces/userInterface";
 import {db} from "../database/configDb";
 import { logger } from "../utils/logger";
+import { use } from "chai";
 export default class UserDao {
     constructor() {
         logger.info("UserDao created");
@@ -22,6 +23,14 @@ export default class UserDao {
 
     async getUserById(userId: number) {
         const foundUser = await db<IUser>("user").where("id", userId).first();
+        return foundUser;
+    }
+
+    async checkCredentials(username: string, password: string) {
+        const foundUser = await db<IUser>("user")
+        .where("name", username)
+        .where("password", password)
+        .first()
         return foundUser;
     }
 
