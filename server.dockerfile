@@ -24,8 +24,8 @@ RUN mkdir "/backend_server"
 COPY --from=buildbackeng /app/build /backend_server
 RUN apk add nodejs=16.17.1-r0 && npm=8.19.1-r0
 
-#ENV AWS_PROFILE=""
-#ENV AWS_REGION=""
+ENV aws_access_key_id=""
+ENV aws_secret_access_key=""
 ENV SERVER_PORT=3001
 
 COPY nginx-conf/server.conf /etc/nginx/conf.d/server.conf
