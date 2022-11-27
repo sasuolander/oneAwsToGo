@@ -4,7 +4,7 @@ import {Construct} from 'constructs';
 import {DockerImageAsset} from "aws-cdk-lib/aws-ecr-assets";
 import {Cluster, ContainerImage, FargateTaskDefinition, LogDriver} from "aws-cdk-lib/aws-ecs";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
-import {Vpc} from "aws-cdk-lib/aws-ec2";
+import {SubnetSelection, Vpc} from "aws-cdk-lib/aws-ec2";
 import {ApplicationLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-patterns";
 import {PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import * as rds from 'aws-cdk-lib/aws-rds';
@@ -27,8 +27,13 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             maxAzs: 2,
             subnetConfiguration: [
                 {
-                    name: 'isolated-subnet-1',
+                    name: 'public-subnet-1',
                     subnetType: ec2.SubnetType.PUBLIC,
+                    cidrMask: 24,
+                },
+                {
+                    name: 'isolated-subnet-1',
+                    subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
                     cidrMask: 28,
                 },
             ],
@@ -82,6 +87,9 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             //redirectHTTP: true,
             //sslPolicy:SslPolicy.RECOMMENDED,
             publicLoadBalancer:false, // remember turn this off after testing
+            taskSubnets:   {
+                subnetType:ec2.SubnetType.PUBLIC,
+                 }as SubnetSelection
         })
         // check this configuration for security whole, in actual production add firewall/WAF and other security systems
 
