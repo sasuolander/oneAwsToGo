@@ -27,11 +27,6 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             maxAzs: 2,
             subnetConfiguration: [
                 {
-                    name: 'public-subnet-1',
-                    subnetType: ec2.SubnetType.PUBLIC,
-                    cidrMask: 24,
-                },
-                {
                     name: 'isolated-subnet-1',
                     subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
                     cidrMask: 28,
@@ -67,7 +62,7 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             resources: ['*'],
         }))
         const taskDefinition = new FargateTaskDefinition(this,appName,{cpu:256,executionRole:execRole,taskRole:containerTaskRole})
-
+        // some strange problem with pulling from ECR when using private VPC
         taskDefinition.addContainer(appName+"taskDefinition",{
             cpu:256,
             memoryLimitMiB:512 ,
