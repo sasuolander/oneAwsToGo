@@ -28,7 +28,7 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             subnetConfiguration: [
                 {
                     name: 'isolated-subnet-1',
-                    subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+                    subnetType: ec2.SubnetType.PUBLIC,
                     cidrMask: 28,
                 },
             ],
