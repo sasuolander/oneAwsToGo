@@ -3,9 +3,11 @@ import {aws_ec2, aws_logs, IgnoreMode} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {DockerImageAsset} from "aws-cdk-lib/aws-ecr-assets";
 import {Cluster, ContainerImage, FargateTaskDefinition, LogDriver} from "aws-cdk-lib/aws-ecs";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
 import {Vpc} from "aws-cdk-lib/aws-ec2";
-import {NetworkLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-patterns";
+import {ApplicationLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-patterns";
 import {PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
+import * as rds from 'aws-cdk-lib/aws-rds';
 
 export class RuntimeEnviromentStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -19,7 +21,24 @@ export class RuntimeEnviromentStack extends cdk.Stack {
         });
 
         const appName = 'oneAwsToGo-';
-        const vpc =new  Vpc(this, appName+"VPC", {maxAzs:2})
+
+        const vpc = new ec2.Vpc(this, appName+"VPC", {
+            natGateways: 0,
+            maxAzs: 2,
+            subnetConfiguration: [
+                {
+                    name: 'public-subnet-1',
+                    subnetType: ec2.SubnetType.PUBLIC,
+                    cidrMask: 24,
+                },
+                {
+                    name: 'isolated-subnet-1',
+                    subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+                    cidrMask: 28,
+                },
+            ],
+        });
+
         const serviceCluster = new Cluster(this, appName+"ServiceCluster",{vpc:vpc})
         serviceCluster.addDefaultCloudMapNamespace({name:"service.local"})
 
@@ -57,15 +76,17 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             logging: LogDriver.awsLogs({logRetention:aws_logs.RetentionDays.FIVE_DAYS,streamPrefix:"aws"})
         }).addPortMappings({hostPort:80,containerPort:80})
 
-        const loadBalancedFargateService = new NetworkLoadBalancedFargateService(this,appName+"serverloadbancer",{
+        const loadBalancedFargateService = new ApplicationLoadBalancedFargateService(this,appName+"loadBalancer",{
             serviceName: "oneAWSGoService",
             cluster : serviceCluster,
             cpu:256,
-            desiredCount:2,
+            desiredCount:1,
             taskDefinition:taskDefinition,
             memoryLimitMiB:512 ,
             listenerPort: 80,
-            publicLoadBalancer:true // remember turn this off after testing
+            //redirectHTTP: true,
+            //sslPolicy:SslPolicy.RECOMMENDED,
+            publicLoadBalancer:false, // remember turn this off after testing
         })
         // check this configuration for security whole, in actual production add firewall/WAF and other security systems
 
@@ -79,5 +100,50 @@ export class RuntimeEnviromentStack extends cdk.Stack {
         loadBalancedFargateService.service.connections.allowInternally(aws_ec2.Port.tcp(443)) // https
 
         loadBalancedFargateService.service.connections.allowInternally(aws_ec2.Port.tcp(5432)) // postgresql
+
+   /*     const  securityGroup = new SecurityGroup(this,appName+"securityGroupPublic",{vpc:vpc})
+
+        securityGroup.addIngressRule(aws_ec2.Peer.ipv4("85.76.87.24/32"),aws_ec2.Port.tcp(80))
+
+        const publicLoadBalancer = new ApplicationLoadBalancer(this,appName+"publicLoadBalancer",{internetFacing:true,vpc:vpc,
+            })
+
+        const target = new AutoScalingGroup(this,appName+"autoScalingGroup",
+            {vpc:vpc,
+            instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO),
+            machineImage: new ec2.AmazonLinuxImage()})
+
+        publicLoadBalancer.connections.allowFrom(new aws_ec2.Connections({securityGroups:[securityGroup]}),aws_ec2.Port.tcp(80))
+        target.attachToApplicationTargetGroup(loadBalancedFargateService.targetGroup)*/
+
+
+        // create RDS instance
+        const dbInstance = new rds.DatabaseInstance(this, 'db-instance', {
+            vpc,
+            vpcSubnets: {
+                subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+            },
+            engine: rds.DatabaseInstanceEngine.postgres({
+                version: rds.PostgresEngineVersion.VER_14_1,
+            }),
+            instanceType: ec2.InstanceType.of(
+                ec2.InstanceClass.BURSTABLE3,
+                ec2.InstanceSize.MICRO,
+            ),
+            credentials: rds.Credentials.fromGeneratedSecret('postgres'),
+            multiAz: false,
+            allocatedStorage: 100,
+            maxAllocatedStorage: 105,
+            allowMajorVersionUpgrade: false,
+            autoMinorVersionUpgrade: true,
+            backupRetention: cdk.Duration.days(0),
+            deleteAutomatedBackups: true,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            deletionProtection: false,
+            databaseName: 'oneAWSDatabase',
+            publiclyAccessible: false,
+        });
+
+
     }
 }
