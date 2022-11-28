@@ -25,7 +25,7 @@ Test Template Selection
 
 #Testing different parameters for Wordpress site, expects specific form to fill
 #TC-RU-2
-Test Template Configuration parameters
+Test Template Configuration Parameters
     Login
     Click Element    template-dropdown
     Click Element       xpath://ul/li[contains(text(),'Wordpress site')]
