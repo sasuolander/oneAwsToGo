@@ -109,7 +109,7 @@ function ShowEnvironment() {
         <div id="my-envs-container" className="myEnvsContainer">
             <h2 id="my-envs-title">My environments</h2>
             <Snackbar id="notification" action={notificationAction} open={notificationOpen} onClose={notificationClose} 
-            autoHideDuration={10000}>
+            autoHideDuration={10000} anchorOrigin={{vertical: "top", horizontal: "center"}}>
                 <MuiAlert severity={notificationSeverity} onClose={notificationClose}>{notificationMessage}</MuiAlert>
             </Snackbar>
             <div>
