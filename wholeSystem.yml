@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+  server:
+    container_name: server
+    image: oneawsimage
+    build:
+      dockerfile: server.dockerfile
+      context: .
+    environment:
+      - SERVER_PORT=3001
+      - POLLTIMEOUT=240000
+      - dbUser=oneawstogo
+      - dbHost=postgres
+      - dbDatabase=oneawstogo
+      - dbPort=5432
+      - dbPassword=oneawstogo
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+    networks:
+      - backend
+    ports:
+      - 8080:80
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: oneawstogo
+      POSTGRES_PASSWORD: oneawstogo
+      POSTGRES_DB: oneawstogo
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  data:
