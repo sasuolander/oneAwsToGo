@@ -75,7 +75,6 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             resources: ['*'],
         }))
         const taskDefinition = new FargateTaskDefinition(this,appName,{cpu:256,executionRole:execRole,taskRole:containerTaskRole})
-        // some strange problem with pulling from ECR when using private VPC
         taskDefinition.addContainer(appName+"taskDefinition",{
             cpu:256,
             memoryLimitMiB:512 ,
