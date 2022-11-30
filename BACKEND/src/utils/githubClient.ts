@@ -20,7 +20,7 @@ export default class GithubClient {
     }
 
     // TODO add logic to use cache if needed
-    async getTemplate(templateURL: string | undefined, cache: boolean = false,templateName: string = ""): Promise<string> {
+    async getTemplate(templateURL: string | undefined, cache = false,templateName = ""): Promise<string> {
         const response = await this.fetchTemplate(templateURL)
         if (cache) {
             const dirr = process.env.TEMP_FOLDER + "\\" + templateName
