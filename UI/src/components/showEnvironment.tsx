@@ -1,7 +1,6 @@
 import FetchDeployedService from "../service/fetchDeployedService";
 import { useState, useEffect} from "react";
 import { DeployedPayload } from "../utils/backend";
-import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LoadingButton from "@mui/lab/LoadingButton"
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,6 +10,13 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert, { AlertColor } from '@mui/material/Alert';
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
 
 const fetchObj = new FetchDeployedService();
 const deleteService = new DeleteService();
@@ -88,19 +94,21 @@ function ShowEnvironment() {
         spliced[Number(id)] = status;
         setLoadingStatuses(spliced);     
     }
+  
+
     const tableRows = envs.map(
         (element) => {
 
             return (
 
-                <tr id={"row-".concat(String(element.id))}>
-                    <td id={"id-".concat(String(element.id))}>{String(element.id)}</td>
-                    <td id={"name-".concat(String(element.id))}>{element.name}</td>
-                    <td id={"stackId-".concat(String(element.id))}>{element.stackId}</td>
-                    <td id={"status-".concat(String(element.id))}>{element.status}</td>
-                    <td ><LoadingButton startIcon={<DeleteIcon />} className="removeButton" id={"remove-".concat(String(element.id))} 
-                    variant="contained" loadingPosition="start" loading={loadingStatuses[Number(element.id)] || false} onClick={() =>handleClick(Number(element.id))}>Remove</LoadingButton></td>
-                </tr>
+                <TableRow id={"row-".concat(String(element.id))}>
+                    <TableCell id={"id-".concat(String(element.id))}>{String(element.id)}</TableCell>
+                    <TableCell id={"name-".concat(String(element.id))}>{element.name}</TableCell>
+                    <TableCell id={"stackId-".concat(String(element.id))}>{element.stackId}</TableCell>
+                    <TableCell id={"status-".concat(String(element.id))}>{element.status}</TableCell>
+                    <TableCell ><LoadingButton startIcon={<DeleteIcon />} className="removeButton" id={"remove-".concat(String(element.id))} 
+                    variant="contained" loadingPosition="start" loading={loadingStatuses[Number(element.id)] || false} onClick={() =>handleClick(Number(element.id))}>Remove</LoadingButton></TableCell>
+                </TableRow>
             )
 
         }
@@ -113,19 +121,23 @@ function ShowEnvironment() {
                 <MuiAlert severity={notificationSeverity} onClose={notificationClose}>{notificationMessage}</MuiAlert>
             </Snackbar>
             <div>
-                <Table hover>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Stack ID</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tableRows}
-                    </tbody>
-                </Table>
+                <Card id="my-envs-card" className="myEnvsCard">
+                    <CardContent>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>ID</TableCell>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Stack ID</TableCell>
+                                    <TableCell>Status</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {tableRows}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     )
