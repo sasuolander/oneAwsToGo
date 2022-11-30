@@ -19,6 +19,7 @@ Test Template Selection
     Click Element    template-dropdown
     Click Element       xpath://ul/li[contains(text(),'Website in S3 bucket')]
     Page Should Contain Element    xpath://h3[contains(text(),'Website in S3 bucket')]
+    Sleep    1s
     Click Element    template-dropdown
     Click Element       xpath://ul/li[contains(text(),'Wordpress site')]
     Page Should Contain Element    xpath://h3[contains(text(),'Wordpress site')]
