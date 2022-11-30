@@ -24,6 +24,10 @@ class UserService {
         return this.userDao.putUserById(id, user);
     }
 
+    async checkCredentials(username: string, password: string) {
+        return this.userDao.checkCredentials(username, password);
+    }
+
 }
 
 export default UserService;

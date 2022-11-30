@@ -14,6 +14,10 @@ To run the tests:
    For example, to run the test in localhost:3000 and in Firefox, one would run the following command:
    robot --variable APP_URL:http://localhost:3000 --variable BROWSER:firefox tests.robot
 
+To run only one test use command:
+- robot --variable APP_URL:*url* --variable BROWSER:*browser* -t *"Test name"* tests.robot
 
+   - NOTE: some tests deploy to AWS but don't delete deployments. Deployment deletion tests are run after such deployment tests when running all of the tests. Thus when running tests manually one might need to delete AWS deployments manually.
 
-
+   - For example, to run test for template selection in Chrome and in localhost:300 one would use the following command:
+   robot  --variable APP_URL:http://localhost:3000 --variable BROWSER:chrome -t "Test Template Selection" tests.robot   

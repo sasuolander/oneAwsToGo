@@ -19,7 +19,10 @@ cdk destroy RuntimeEnvironmentStack --profile <profile name> --require-approval 
 start database:
 
 docker-compose -f .\system.yml -p oneawssystem up
-
 You can use dbeaver to connect to database.
+
+start whole systems
+
+docker-compose --env-file .env -f .\wholeSystem.yml -p oneawssystem up
 
 

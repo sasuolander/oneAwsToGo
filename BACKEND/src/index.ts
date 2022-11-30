@@ -16,6 +16,7 @@ import DeployedService from "./services/deployedService";
 import DeployedController from "./controllers/deployedController";
 import { logger } from "./utils/logger";
 import HealthController from "./controllers/healthController";
+import LoginController from "./controllers/loginController";
 export const app: Application = express();
 const port = process.env.SERVER_PORT;
 const routes: Array<CommonControllerConfig> = [];
@@ -37,6 +38,7 @@ routes.push(new TriggerController(app, new TriggerService(templateService), new 
 routes.push(new InDeploymentStackController(app, inDeploymentStackService));
 routes.push(new DeployedController(app, deployedService));
 routes.push(new HealthController(app));
+routes.push(new LoginController(app, new UserService()));
 app.get("/",
     async (req: Request, res: Response): Promise<Response> => {
         return res.status(200).send({

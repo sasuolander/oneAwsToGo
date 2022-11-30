@@ -16,3 +16,11 @@
     max-width: 200px;
     margin-right: 10px;
 }
+
+.nav-link:hover {
+    color: cornflowerblue !important;
+}
+
+.navbar-indicator {
+    background-color:  blue !important;
+}
