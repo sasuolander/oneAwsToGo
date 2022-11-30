@@ -23,14 +23,22 @@ export class RuntimeEnviromentStack extends cdk.Stack {
         const appName = 'oneAwsToGo-';
 
         const vpc = new ec2.Vpc(this, appName+"VPC", {
-            natGateways: 0,
+            enableDnsHostnames: true,
+            enableDnsSupport:true,
+            natGateways: 1,
             maxAzs: 2,
             subnetConfiguration: [
                 {
                     name: 'public-subnet-1',
-                    subnetType: ec2.SubnetType.PUBLIC,
+                    subnetType: ec2.SubnetType.PUBLIC ,
+                    cidrMask: 22,
+                },
+                {
+                    name: 'private-subnet-',
+                    subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS ,
                     cidrMask: 24,
                 },
+
                 {
                     name: 'isolated-subnet-1',
                     subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
@@ -88,7 +96,7 @@ export class RuntimeEnviromentStack extends cdk.Stack {
             //sslPolicy:SslPolicy.RECOMMENDED,
             publicLoadBalancer:false, // remember turn this off after testing
             taskSubnets:   {
-                subnetType:ec2.SubnetType.PUBLIC,
+                subnetType:ec2.SubnetType.PRIVATE_WITH_EGRESS,
                  }as SubnetSelection
         })
         // check this configuration for security whole, in actual production add firewall/WAF and other security systems
