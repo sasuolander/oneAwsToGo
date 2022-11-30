@@ -1,7 +1,6 @@
 import FetchDeployedService from "../service/fetchDeployedService";
 import { useState, useEffect} from "react";
 import { DeployedPayload } from "../utils/backend";
-/*import Table from "react-bootstrap/Table";*/
 import "bootstrap/dist/css/bootstrap.min.css";
 import LoadingButton from "@mui/lab/LoadingButton"
 import DeleteIcon from "@mui/icons-material/Delete";
