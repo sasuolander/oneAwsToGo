@@ -37,6 +37,9 @@ describe('Handle requests for /templates', () => {
         (0, chai_1.expect)(response).to.be.json;
     }));
 });
+
+/* global after:readonly */
 after(() => __awaiter(void 0, void 0, void 0, function* () {
-    process.exit(1);
+    yield process.exit(1);
 }));
+
