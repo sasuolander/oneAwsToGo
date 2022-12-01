@@ -97,6 +97,21 @@ export class DeletePayload implements IDeletePayLoad{
     }
 }
 
+export interface ICredentialPayload {
+    username: string | undefined;
+    password: string | undefined;
+}
+
+export class CredentialPayload implements ICredentialPayload{
+    username: string | undefined;
+    password: string | undefined;
+
+    constructor(username: string, password: string){
+        this.username = username;
+        this.password = password;
+    }
+}
+
 export const baseApi = "/api"
 export default class Backend {
 
@@ -129,6 +144,12 @@ export default class Backend {
 
     static deleteDeployment(id: Number): Promise<any> {
         return axios.delete(baseApi as string + "/deployed/", new DeletePayload(id)).then(response => {
+            return {response};
+        })
+    }
+
+    static sendCredentials(username: string, password: string): Promise<any> {
+        return axios.post(baseApi as string + "/login", new CredentialPayload(username, password)).then(response => {
             return {response};
         })
     }
