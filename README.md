@@ -25,4 +25,9 @@ start whole systems
 
 docker-compose --env-file .env -f .\wholeSystem.yml -p oneawssystem up
 
+to create and populate database into container postgresql above when container is up. 
+NOTE Drops related tables if exist!
+
+docker exec -i oneawssystem-postgres-1 psql -U oneawstogo < initial_db_create.sql
+
 
