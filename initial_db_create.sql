@@ -15,6 +15,7 @@ CREATE TABLE public.template (
 CREATE TABLE public.deployed (
     id  INTEGER PRIMARY KEY,
     template_id INTEGER NOT NULL,
+    name VARCHAR(10000) NOT NULL,
     stack_id    VARCHAR(10000) NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT now(),
     status VARCHAR(255) NOT NULL,
