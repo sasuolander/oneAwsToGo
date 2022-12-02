@@ -32,3 +32,5 @@ NOTE Does not work in powershell.
 
 docker exec -i oneawssystem_postgres_1 psql -U oneawstogo < initial_db_create.sql
 
+Use the username "Dummy" and the password "dummy" to login to the service (without quotation marks).
+
