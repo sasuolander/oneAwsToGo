@@ -6,13 +6,13 @@ https://robotframework.org/SeleniumLibrary/
 
 To run the tests:
 1. Create a file called credentials.py in this folder.
-   The file must contain the following lines:
-   USERNAME = ""
-   PASSWORD = ""
+   The file must contain the following lines:  
+   USERNAME = ""  
+   PASSWORD = ""  
 
-   where you must add the login credentials used in the tests. For example:
-   USERNAME = "username"
-   PASSWORD = "password"
+   where you must add the login credentials used in the tests. For example:  
+   USERNAME = "username"  
+   PASSWORD = "password"  
 
 2. Make sure that the backend and the frontend are already running.
 3. Using a command line interface, change the working directory to this folder.
