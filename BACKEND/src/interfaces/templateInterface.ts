@@ -12,14 +12,14 @@ interface ITemplate {
     formConfig:string;
     templateFormat:TemplateFormat;
     templateSourceCode:string;
-  };
+  }
 interface ITemplateInput {
     id: number;
     name: string;
     url: string;
     templateFormat:TemplateFormat;
     templateSourceCode:string;
-};
+}
 export class Template implements ITemplate {
     id: number;
     name: string;

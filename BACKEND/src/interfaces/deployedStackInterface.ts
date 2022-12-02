@@ -4,7 +4,7 @@ interface IDeployedStack {
     template_id: number;
     stack_id: string;
     status: string;
-  };
+  }
 export class DeployedStack implements IDeployedStack {
     id: number;
     name: string;
