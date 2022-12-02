@@ -2,6 +2,7 @@
 Library    SeleniumLibrary
 Library    String
 Library    Collections
+Variables    credentials.py
 
 Test Setup    Open Login Page
 Test Teardown    Close Browser
@@ -163,8 +164,10 @@ Open Login Page
     Title Should Be    ${APP_TITLE}
 
 Login    
-    Input Text    username-field    username
-    Input Text    password-field    password
+    Set Log Level    None
+    Input Text    username-field    ${USERNAME}
+    Input Text    password-field    ${PASSWORD}
+    Set Log Level    Info
     Click Element    login-submit
     Element Should Be Visible    template-dropdown
 

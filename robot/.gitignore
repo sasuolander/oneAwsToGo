@@ -4,3 +4,4 @@ report.html
 log
 *driver.exe
 *.png
+credentials.py
