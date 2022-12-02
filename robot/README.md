@@ -5,8 +5,18 @@ https://robotframework.org/
 https://robotframework.org/SeleniumLibrary/
 
 To run the tests:
-1. Using a command line interface, change the working directory to this folder.
-2. Run the following command: 
+1. Create a file called credentials.py in this folder.
+   The file must contain the following lines:
+   USERNAME = ""
+   PASSWORD = ""
+
+   where you must add the login credentials used in the tests. For example:
+   USERNAME = "username"
+   PASSWORD = "password"
+
+2. Make sure that the backend and the frontend are already running.
+3. Using a command line interface, change the working directory to this folder.
+4. Run the following command: 
    robot --variable APP_URL:*url* --variable BROWSER:*browser* tests.robot
 
    NOTE: You need to replace *url* with your app URL and *browser* with the browser of your choice (without asterisks).
