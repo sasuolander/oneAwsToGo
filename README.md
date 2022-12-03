@@ -27,7 +27,7 @@ docker-compose --env-file .env -f .\wholeSystem.yml -p oneawssystem up
 
 On Linux 
 
-sudo docker compose --env-file .env -f ./wholeSystem.yml -p oneawssystem up
+sudo docker-compose --env-file .env -f ./wholeSystem.yml -p oneawssystem up
 
 To create and populate database into container postgresql above when container is up. 
 NOTE Script drops related tables if those exist!
@@ -38,7 +38,7 @@ docker exec -i oneawssystem_postgres_1 psql -U oneawstogo < initial_db_create.sq
 
 On Linux based systems use
 
-sudo docker exec -i oneawssystem-postgres-1 psql -U oneawstogo < initial_db_create.sql
+sudo docker exec -i oneawssystem_postgres_1 psql -U oneawstogo < initial_db_create.sql
 
 Use the username "Dummy" and the password "dummy" to login to the service (without quotation marks).
 
