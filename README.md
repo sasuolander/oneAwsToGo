@@ -21,9 +21,13 @@ start database:
 docker-compose -f .\database.yml -p oneawsdatabase up
 You can use dbeaver to connect to database.
 
-start whole systems
+On Windows start whole systems
 
 docker-compose --env-file .env -f .\wholeSystem.yml -p oneawssystem up
+
+On Linux 
+
+sudo docker compose --env-file .env -f ./wholeSystem.yml -p oneawssystem up
 
 To create and populate database into container postgresql above when container is up. 
 NOTE Script drops related tables if those exist!
@@ -32,9 +36,9 @@ NOTE Does not work in powershell.
 
 docker exec -i oneawssystem_postgres_1 psql -U oneawstogo < initial_db_create.sql
 
-NOTE On Linux based systems use
+On Linux based systems use
 
-docker exec -i oneawssystem-postgres-1 psql -U oneawstogo < initial_db_create.sql
+sudo docker exec -i oneawssystem-postgres-1 psql -U oneawstogo < initial_db_create.sql
 
 Use the username "Dummy" and the password "dummy" to login to the service (without quotation marks).
 
