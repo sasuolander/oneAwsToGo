@@ -32,5 +32,6 @@ COPY nginx-conf/nginx.conf /etc/nginx/
 
 COPY scripts/startup.sh /startup.sh
 EXPOSE 80
+RUN chmod +x /startup.sh
 ENTRYPOINT ["/startup.sh"]
 #CMD ["nginx", "-g", "daemon off;"]
