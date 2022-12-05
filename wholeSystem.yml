@@ -2,10 +2,11 @@ version: "3.3"
 services:
   server:
     container_name: server
-    image: oneawsimage
-    build:
-      dockerfile: server.dockerfile
-      context: .
+    image: orientgame/oneawstogo:oneawsimage
+    #image: oneawsimage
+    #build:
+    #  dockerfile: server.dockerfile
+    #  context: .
     environment:
       - SERVER_PORT=3001
       - POLLTIMEOUT=5000
