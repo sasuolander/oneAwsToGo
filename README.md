@@ -34,7 +34,7 @@ NOTE Script drops related tables if those exist!
 
 NOTE Does not work in powershell.
 
-docker exec -i oneawssystem_postgres_1 psql -U oneawstogo < initial_db_create.sql
+docker exec -i oneawssystem-postgres-1 psql -U oneawstogo < initial_db_create.sql
 
 On Linux based systems use
 
